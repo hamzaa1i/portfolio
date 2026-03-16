@@ -1,259 +1,124 @@
 ---
-// Layout.astro — Base layout for the entire portfolio
-// Includes: meta, fonts, schema, global styles, cursor, scroll progress, lightbox
-
-import DarkModeScript from '@components/DarkModeScript.astro';
+import { activeTheme as t } from '../config/theme';
 import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
-  ogImage?: string;
-  canonicalURL?: string;
 }
 
 const {
   title = 'Hamza Ali — Digital Solutions Architect',
-  description = '17-year-old developer who builds production websites, ERP systems, and brand identities for international businesses. AI-powered development from Faisalabad, Pakistan.',
-  ogImage = '/og-image.jpg',
-  canonicalURL = 'https://hamzaali.vercel.app',
+  description = '17-year-old developer who builds production websites, ERP systems, and brand identities for international businesses.',
 } = Astro.props;
 
-const siteURL = 'https://hamzaali.vercel.app';
-const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteURL}${ogImage}`;
+const siteURL = 'https://hamzaali-dev.vercel.app';
+
+/* Build CSS custom-property string from active theme */
+const themeStyle = [
+  `background-color:${t.void}`,
+  `color:${t.textPrimary}`,
+  `color-scheme:${t.isDark ? 'dark' : 'light'}`,
+  `--void:${t.void}`,
+  `--midnight:${t.midnight}`,
+  `--surface:${t.surface}`,
+  `--elevated:${t.elevated}`,
+  `--glass-bg:${t.glassBg}`,
+  `--glass-border:${t.glassBorder}`,
+  `--glass-hover:${t.glassHover}`,
+  `--glass-hover-border:${t.glassHoverBorder}`,
+  `--text-primary:${t.textPrimary}`,
+  `--text-secondary:${t.textSecondary}`,
+  `--text-muted:${t.textMuted}`,
+  `--text-dim:${t.textDim}`,
+  `--accent:${t.accent}`,
+  `--accent-hover:${t.accentHover}`,
+  `--accent-dim:${t.accentDim}`,
+  `--accent-glow:${t.accentGlow}`,
+  `--accent-subtle:${t.accentSubtle}`,
+  `--accent-contrast:${t.accentContrast}`,
+  `--accent-success:${t.success}`,
+  `--gradient-accent-text:${t.gradientText}`,
+].join(';');
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class={t.isDark ? 'dark' : ''} style={themeStyle}>
   <head>
-    <!-- Dark mode FIRST — prevents flash -->
-    <DarkModeScript />
+    <!-- Prevent FOUC -->
+    <script is:inline>
+      (function(){ document.documentElement.classList.add(document.documentElement.classList.contains('dark') ? 'dark' : 'light'); })();
+    </script>
 
-    <!-- Core Meta -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <!-- SEO Meta -->
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Hamza Ali" />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#030305" />
-    <meta name="color-scheme" content="dark" />
-    <link rel="canonical" href={canonicalURL} />
+    <meta name="theme-color" content={t.void} />
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:url" content={siteURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={fullOgImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="Hamza Ali Portfolio" />
-
-    <!-- Twitter Card -->
+    <meta property="og:image" content={`${siteURL}/og-image.jpg`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={fullOgImage} />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
-
-    <!-- Font Preconnect — Critical for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    <!-- Google Fonts — display=swap for performance -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Schema.org Person Markup -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Hamza Ali",
       "jobTitle": "Digital Solutions Architect",
       "url": siteURL,
-      "sameAs": [
-        "https://github.com/hamzaa1i"
-      ],
-      "knowsAbout": [
-        "Web Development",
-        "ERP Systems",
-        "UI/UX Design",
-        "Brand Identity",
-        "AI-Powered Development"
-      ],
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Faisalabad",
-        "addressRegion": "Punjab",
-        "addressCountry": "PK"
-      },
-      "description": description
+      "sameAs": ["https://github.com/hamzaa1i"],
+      "knowsAbout": ["Web Development", "ERP Systems", "UI/UX Design", "Brand Identity"],
+      "address": { "@type": "PostalAddress", "addressLocality": "Faisalabad", "addressRegion": "Punjab", "addressCountry": "PK" }
     })} />
-
-    <!-- Preload critical assets -->
-    <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2" crossorigin />
   </head>
 
   <body class="bg-void text-text-primary font-body antialiased overflow-x-hidden">
-    <!-- 
-      =============================================
-      CSS BACKGROUND FALLBACK (Mobile — No WebGL)
-      Shows on < 1024px, hidden on desktop
-      =============================================
-    -->
-    <div class="css-bg-fallback" aria-hidden="true">
-      <div class="css-bg-orb css-bg-orb-1"></div>
-    </div>
+    <div class="css-bg-fallback" aria-hidden="true"></div>
 
-    <!-- 
-      =============================================
-      CUSTOM CURSOR (Desktop Only)
-      Hidden via CSS on touch/mobile devices
-      =============================================
-    -->
-    <div class="cursor-dot" aria-hidden="true"></div>
-    <div class="cursor-follower" aria-hidden="true"></div>
-    <div class="cursor-label" aria-hidden="true"></div>
+    <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar"></div></div>
+    <div class="page-blur-overlay" aria-hidden="true"></div>
 
-    <!-- 
-      =============================================
-      SCROLL PROGRESS BAR
-      Fixed right edge, gradient fill
-      =============================================
-    -->
-    <div class="scroll-progress" aria-hidden="true">
-      <div class="scroll-progress-bar"></div>
-    </div>
-
-    <!-- 
-      =============================================
-      MAIN CONTENT — All sections slot in here
-      =============================================
-    -->
     <main class="content-layer relative z-content">
       <slot />
     </main>
 
-    <!-- 
-      =============================================
-      LIGHTBOX OVERLAY
-      Click-to-expand project images
-      =============================================
-    -->
     <div class="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Image viewer">
-      <button class="lightbox-close" aria-label="Close image viewer">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+      <button class="lightbox-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-      <img class="lightbox-image" src="" alt="Project screenshot" loading="lazy" />
+      <img class="lightbox-image" src="" alt="Screenshot" loading="lazy" />
     </div>
 
-    <!-- 
-      =============================================
-      SCROLL-TO-TOP BUTTON
-      Appears after 400px scroll
-      =============================================
-    -->
-    <button
-      data-scroll-top
-      class="scroll-to-top glass"
-      aria-label="Scroll to top"
-      data-magnetic
-      data-magnetic-strength="0.2"
-      data-magnetic-distance="60"
-    >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="18 15 12 9 6 15"></polyline>
-      </svg>
+    <button data-scroll-top class="scroll-to-top glass" aria-label="Scroll to top">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </button>
 
-    <!-- 
-      =============================================
-      ANIMATION ENGINE
-      Loads GSAP + Lenis + all modules
-      =============================================
-    -->
     <script>
-      import { initAnimations } from '@scripts/animations.js';
-
-      // Ensure DOM is fully ready
+      import { initAnimations } from '../scripts/animations.js';
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-          // Small delay to ensure all components are mounted
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              initAnimations();
-            });
-          });
-        });
+        document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(() => requestAnimationFrame(() => initAnimations())));
       } else {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            initAnimations();
-          });
-        });
+        requestAnimationFrame(() => requestAnimationFrame(() => initAnimations()));
       }
-
-      // Handle Astro view transitions (if ever added)
-      document.addEventListener('astro:after-swap', () => {
-        requestAnimationFrame(() => {
-          initAnimations();
-        });
-      });
     </script>
 
-    <!-- 
-      =============================================
-      PERFORMANCE: Defer non-critical operations
-      =============================================
-    -->
     <script is:inline>
-      // Detect touch device and add class for CSS targeting
-      if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-        document.documentElement.classList.add('is-touch');
-      } else {
-        document.documentElement.classList.add('is-pointer');
-      }
-
-      // Detect if device supports hover
-      if (window.matchMedia('(hover: hover)').matches) {
-        document.documentElement.classList.add('has-hover');
-      }
-
-      // Detect reduced motion preference
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.classList.add('reduced-motion');
-      }
-
-      // Report Web Vitals (development only)
-      if (window.location.hostname === 'localhost') {
-        window.addEventListener('load', () => {
-          if ('PerformanceObserver' in window) {
-            try {
-              const observer = new PerformanceObserver((list) => {
-                for (const entry of list.getEntries()) {
-                  console.log(`[Perf] ${entry.name}: ${Math.round(entry.startTime)}ms`);
-                }
-              });
-              observer.observe({ type: 'paint', buffered: true });
-            } catch (e) {
-              // Observer not supported
-            }
-          }
-        });
-      }
+      if ('ontouchstart' in window || navigator.maxTouchPoints > 0) document.documentElement.classList.add('is-touch');
+      else document.documentElement.classList.add('is-pointer');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduced-motion');
     </script>
   </body>
 </html>

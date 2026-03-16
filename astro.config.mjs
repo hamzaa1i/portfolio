@@ -3,14 +3,12 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  site: 'https://hamzaali.vercel.app',
+  site: 'https://hamzaali-dev.vercel.app',
   output: 'static',
 
   integrations: [
     react(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
+    tailwind({ applyBaseStyles: false }),
   ],
 
   vite: {

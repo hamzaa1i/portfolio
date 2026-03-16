@@ -1,18 +1,16 @@
 ---
-// index.astro — Complete Single-Page Portfolio
-// Sections: Hero → Story → Arsenal → Selected Works → Contact
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import InteractiveBackground from '../components/InteractiveBackground.tsx';
+import TypeWriter from '../components/TypeWriter.astro';
+import ScrollIndicator from '../components/ScrollIndicator.astro';
+import SkillOrb from '../components/SkillOrb.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ContactForm from '../components/ContactForm.tsx';
 
-import Layout from '@layouts/Layout.astro';
-import Header from '@components/Header.astro';
-import Footer from '@components/Footer.astro';
-import InteractiveBackground from '@components/InteractiveBackground.tsx';
-import TypeWriter from '@components/TypeWriter.astro';
-import ScrollIndicator from '@components/ScrollIndicator.astro';
-import SkillOrb from '@components/SkillOrb.astro';
-import ProjectCard from '@components/ProjectCard.astro';
-import MagneticButton from '@components/MagneticButton.astro';
+/* ── Data ── */
 
-// Typing effect roles
 const roles = [
   'Digital Solutions Architect',
   'UI/UX Enthusiast',
@@ -21,94 +19,29 @@ const roles = [
   'Brand Designer',
 ];
 
-// Stats data
 const stats = [
-  { value: 3, suffix: '+', label: 'Projects Delivered' },
-  { value: 300000, suffix: '+', label: 'Garments Tracked Monthly' },
-  { value: 95, suffix: '', label: 'WPM Typing Speed' },
-  { value: 17, suffix: '', label: 'Years Old' },
+  { value: 3,   suffix: '+', label: 'Projects Delivered' },
+  { value: 300, suffix: 'K+', label: 'Garments Tracked' },
+  { value: 95,  suffix: '',   label: 'WPM Typing Speed' },
+  { value: 17,  suffix: '',   label: 'Years Old' },
 ];
 
-// Skills data grouped by category
-const skills = {
-  Build: [
-    { name: 'Astro', icon: '🚀' },
-    { name: 'React', icon: '⚛️' },
-    { name: 'Tailwind CSS', icon: '🎨' },
-    { name: 'JavaScript', icon: '⚡' },
-    { name: 'HTML/CSS', icon: '🌐' },
-  ],
-  Animate: [
-    { name: 'GSAP', icon: '✨' },
-    { name: 'Three.js', icon: '🎲' },
-    { name: 'Lenis', icon: '🧈' },
-    { name: 'ScrollTrigger', icon: '📜' },
-  ],
-  Backend: [
-    { name: 'ERPNext', icon: '🏭' },
-    { name: 'Python', icon: '🐍' },
-    { name: 'Supabase', icon: '💚' },
-    { name: 'PostgreSQL', icon: '🐘' },
-  ],
-  Design: [
-    { name: 'Brand Identity', icon: '💎' },
-    { name: 'UI/UX', icon: '🎯', learning: true },
-    { name: 'Figma', icon: '🖌️', learning: true },
-  ],
-  Tools: [
-    { name: 'Git & GitHub', icon: '🔀' },
-    { name: 'Vercel', icon: '▲' },
-    { name: 'VS Code', icon: '💻' },
-    { name: 'AI (Claude/GPT)', icon: '🤖' },
-  ],
-};
-
-// Flatten skills for scattered layout
-const allSkills = Object.entries(skills).flatMap(([category, items]) =>
-  items.map((item) => ({ ...item, category: category as any }))
-);
-
-// Float animation classes for scattered visual
-const floatClasses = [
-  'animate-float',
-  'animate-float-delayed',
-  'animate-float-slow',
-  'animate-float-reverse',
-  'animate-float',
-  'animate-float-delayed',
-  'animate-float-slow',
-  'animate-float-reverse',
-  'animate-float',
-  'animate-float-delayed',
-  'animate-float-slow',
-  'animate-float-reverse',
-  'animate-float',
-  'animate-float-delayed',
-  'animate-float-slow',
-  'animate-float-reverse',
-  'animate-float',
-  'animate-float-delayed',
-  'animate-float-slow',
-  'animate-float-reverse',
-];
-
-// Projects data
 const projects = [
   {
     title: 'Reve Stitching — Corporate Website',
-    description: 'Premium B2B manufacturing website with scroll-driven animations, pinned process sections, horizontal product scroll, interactive price calculator, AI-powered chat widget, quote/sample request system with email notifications, full admin dashboard, and dark mode support.',
-    type: 'Full Production Website',
+    description: 'Premium B2B manufacturing website with scroll animations, AI chat, quote system, admin dashboard, and dark mode.',
+    type: 'Production Website',
     role: 'Sole Developer & Designer',
-    stack: ['Astro 5', 'Tailwind CSS', 'GSAP', 'ScrollTrigger', 'Lenis', 'Supabase', 'Vercel', 'Resend API'],
+    stack: ['Astro 5', 'Tailwind', 'GSAP', 'Supabase', 'Vercel'],
     liveUrl: 'https://revestitching.com',
     githubUrl: 'https://github.com/hamzaa1i/reve-stitching',
     placeholderClass: 'project-placeholder-1',
   },
   {
     title: 'Factory ERP System',
-    description: 'Digitized an entire factory\'s store operations. Migrated dyeing gatepasses from paper to digital (50+ daily). Built fabric stock management, issuance tracking, and automated reporting. The system is actively used daily by factory staff. Saved ₨500K–2M vs hiring a software house.',
-    type: 'Enterprise Resource Planning',
-    role: 'Sole ERP Implementation Lead',
+    description: 'Digitized store operations — 50+ daily paper gatepasses to real-time digital tracking. Fabric stock, issuance, and automated reporting.',
+    type: 'Enterprise ERP',
+    role: 'ERP Implementation Lead',
     stack: ['ERPNext', 'Python', 'PostgreSQL', 'Custom Scripts'],
     liveUrl: undefined,
     githubUrl: undefined,
@@ -116,8 +49,8 @@ const projects = [
   },
   {
     title: 'Brand Identity Design',
-    description: 'Created complete brand identity for an international garment exporter: logo system (primary, secondary, icon variants), color palette, typography system, business cards, letterhead, social media templates, and brand guidelines document.',
-    type: 'Complete Brand Identity',
+    description: 'Complete brand identity for an international garment exporter — logo system, color palette, typography, business cards, and brand guidelines.',
+    type: 'Brand Identity',
     role: 'Brand Designer',
     stack: ['AI-Assisted Design', 'Brand Strategy', 'Visual Identity'],
     liveUrl: 'https://revestitching.com',
@@ -125,222 +58,318 @@ const projects = [
     placeholderClass: 'project-placeholder-3',
   },
 ];
+
+/* ── Skills with desktop positions ── */
+
+interface SkillItem {
+  name: string;
+  icon: string;
+  cat: string;
+  top: string;
+  left: string;
+  float: string;
+  learning?: boolean;
+}
+
+const allSkills: SkillItem[] = [
+  /* Build */
+  { name: 'Astro',        icon: '🚀', cat: 'Build',    top: '4%',  left: '3%',  float: 'animate-float' },
+  { name: 'React',        icon: '⚛️', cat: 'Build',    top: '1%',  left: '22%', float: 'animate-float-delayed' },
+  { name: 'Tailwind CSS', icon: '🎨', cat: 'Build',    top: '6%',  left: '46%', float: 'animate-float-slow' },
+  { name: 'JavaScript',   icon: '⚡', cat: 'Build',    top: '2%',  left: '70%', float: 'animate-float-reverse' },
+  { name: 'HTML / CSS',   icon: '🌐', cat: 'Build',    top: '9%',  left: '88%', float: 'animate-float' },
+
+  /* Animate */
+  { name: 'GSAP',          icon: '✨', cat: 'Animate',  top: '22%', left: '2%',  float: 'animate-float-delayed' },
+  { name: 'Three.js',      icon: '🎲', cat: 'Animate',  top: '19%', left: '24%', float: 'animate-float-reverse' },
+  { name: 'Lenis',         icon: '🧈', cat: 'Animate',  top: '25%', left: '48%', float: 'animate-float' },
+  { name: 'ScrollTrigger', icon: '📜', cat: 'Animate',  top: '18%', left: '73%', float: 'animate-float-slow' },
+
+  /* Backend */
+  { name: 'ERPNext',    icon: '🏭', cat: 'Backend',  top: '40%', left: '6%',  float: 'animate-float-slow' },
+  { name: 'Python',     icon: '🐍', cat: 'Backend',  top: '43%', left: '28%', float: 'animate-float' },
+  { name: 'Supabase',   icon: '💚', cat: 'Backend',  top: '38%', left: '54%', float: 'animate-float-delayed' },
+  { name: 'PostgreSQL', icon: '🐘', cat: 'Backend',  top: '44%', left: '78%', float: 'animate-float-reverse' },
+
+  /* Design */
+  { name: 'Brand Identity', icon: '💎', cat: 'Design', top: '59%', left: '4%',  float: 'animate-float-reverse' },
+  { name: 'UI / UX',        icon: '🎯', cat: 'Design', top: '63%', left: '32%', float: 'animate-float', learning: true },
+  { name: 'Figma',          icon: '🖌️', cat: 'Design', top: '57%', left: '58%', float: 'animate-float-delayed', learning: true },
+
+  /* Tools */
+  { name: 'Git & GitHub',   icon: '🔀', cat: 'Tools',  top: '77%', left: '3%',  float: 'animate-float' },
+  { name: 'Vercel',         icon: '▲',  cat: 'Tools',  top: '80%', left: '26%', float: 'animate-float-slow' },
+  { name: 'VS Code',        icon: '💻', cat: 'Tools',  top: '75%', left: '50%', float: 'animate-float-delayed' },
+  { name: 'AI (Claude/GPT)',icon: '🤖', cat: 'Tools',  top: '82%', left: '74%', float: 'animate-float-reverse' },
+];
+
+const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
 ---
 
 <Layout>
-  <!-- ============================================================
-       WEBGL INTERACTIVE BACKGROUND
-       React island — loads on client, fixed behind all content
-       Hidden on mobile (<1024px) via CSS
-       ============================================================ -->
+  <!-- WebGL Background (desktop only) -->
   <InteractiveBackground client:load />
 
-  <!-- ============================================================
-       HEADER — Fixed scrollspy nav
-       ============================================================ -->
+  <!-- Floating Header -->
   <Header />
 
-  <!-- ============================================================
-       SECTION 1: HERO
-       Full viewport · WebGL visible · Typing effect · CTA
-       ============================================================ -->
+   <!-- ================================================================
+       SECTION 1 — HERO (with cursor reveal effect)
+       ================================================================ -->
   <section
     id="hero"
     data-section
-    class="section-full relative flex items-center justify-center min-h-screen"
+    class="section-snap relative"
+    style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 2rem);"
   >
-    <!-- Ambient background orbs (behind content, visible through glass elements) -->
-    <div class="ambient-orbs" aria-hidden="true">
-      <div
-        class="ambient-orb ambient-orb-cyan"
-        style="width: clamp(250px, 40vw, 500px); height: clamp(250px, 40vw, 500px); top: 15%; left: 5%;"
-      ></div>
-      <div
-        class="ambient-orb ambient-orb-purple"
-        style="width: clamp(200px, 35vw, 400px); height: clamp(200px, 35vw, 400px); bottom: 20%; right: 8%;"
-      ></div>
+    <!-- Ambient glow — animated, z-index below reveal -->
+    <div class="absolute inset-0 pointer-events-none" style="z-index: 2;" aria-hidden="true">
+      <div class="ambient-orb hero-orb-1" style="width: clamp(320px, 45vw, 600px); height: clamp(320px, 45vw, 600px); top: 5%; left: 5%;"></div>
+      <div class="ambient-orb hero-orb-2" style="width: clamp(260px, 35vw, 480px); height: clamp(260px, 35vw, 480px); bottom: 12%; right: 6%;"></div>
+      <div class="ambient-orb hero-orb-3" style="width: clamp(180px, 25vw, 350px); height: clamp(180px, 25vw, 350px); top: 55%; left: 50%;"></div>
     </div>
 
-    <div class="relative z-10 max-w-4xl mx-auto text-center">
-      <!-- Eyebrow tag -->
+    <!-- ── REVEAL LAYER — dense code matrix ── -->
+    <div class="hero-reveal-layer" aria-hidden="true">
+
+      <!-- ═══════ CODE BLOCK 1 — top-left: Hamza config ═══════ -->
+      <span style="top:4%; left:3%; opacity:0.5; font-size:0.72rem; color:var(--accent);">const developer = {</span>
+      <span style="top:7%; left:5%; opacity:0.35; font-size:0.65rem;">  name: 'Hamza Ali',</span>
+      <span style="top:10%; left:5%; opacity:0.35; font-size:0.65rem;">  age: 17,</span>
+      <span style="top:13%; left:5%; opacity:0.35; font-size:0.65rem;">  location: 'Faisalabad, PK',</span>
+      <span style="top:16%; left:5%; opacity:0.4; font-size:0.65rem;">  role: 'Digital Solutions Architect',</span>
+      <span style="top:19%; left:5%; opacity:0.3; font-size:0.65rem;">  ai: true,</span>
+      <span style="top:22%; left:5%; opacity:0.35; font-size:0.65rem;">  coffee: Infinity,</span>
+      <span style="top:25%; left:3%; opacity:0.5; font-size:0.72rem; color:var(--accent);">};</span>
+
+      <!-- ═══════ CODE BLOCK 2 — top-right: build function ═══════ -->
+      <span style="top:3%; right:5%; opacity:0.3; font-size:0.6rem; color:var(--text-dim);">// what I do every day</span>
+      <span style="top:6%; right:5%; opacity:0.5; font-size:0.7rem; color:var(--accent);">async function build(idea) {'{'}</span>
+      <span style="top:9%; right:3%; opacity:0.35; font-size:0.65rem;">  const stack = await selectStack(idea);</span>
+      <span style="top:12%; right:3%; opacity:0.35; font-size:0.65rem;">  const design = await craftUI(idea);</span>
+      <span style="top:15%; right:3%; opacity:0.35; font-size:0.65rem;">  const system = await architect(stack, design);</span>
+      <span style="top:18%; right:3%; opacity:0.4; font-size:0.65rem; color:var(--accent);">  return deploy(system);</span>
+      <span style="top:21%; right:5%; opacity:0.5; font-size:0.7rem; color:var(--accent);">{'}'}</span>
+
+      <!-- ═══════ CODE BLOCK 3 — mid-left: skills array ═══════ -->
+      <span style="top:34%; left:2%; opacity:0.45; font-size:0.68rem; color:var(--accent);">const skills = [</span>
+      <span style="top:37%; left:4%; opacity:0.3; font-size:0.62rem;">  'Astro',    'React',     'Tailwind',</span>
+      <span style="top:40%; left:4%; opacity:0.3; font-size:0.62rem;">  'GSAP',     'Three.js',  'Lenis',</span>
+      <span style="top:43%; left:4%; opacity:0.3; font-size:0.62rem;">  'Python',   'ERPNext',   'Supabase',</span>
+      <span style="top:46%; left:4%; opacity:0.3; font-size:0.62rem;">  'Figma',    'Git',       'Vercel',</span>
+      <span style="top:49%; left:2%; opacity:0.45; font-size:0.68rem; color:var(--accent);">];</span>
+
+      <!-- ═══════ CODE BLOCK 4 — mid-right: factory class ═══════ -->
+      <span style="top:30%; right:4%; opacity:0.3; font-size:0.58rem; color:var(--text-dim);">// real impact, real numbers</span>
+      <span style="top:33%; right:4%; opacity:0.5; font-size:0.7rem; color:var(--accent);">class Factory {'{'}</span>
+      <span style="top:36%; right:2%; opacity:0.35; font-size:0.63rem;">  garments = 300_000;  // per month</span>
+      <span style="top:39%; right:2%; opacity:0.35; font-size:0.63rem;">  clients = ['Boohoo', 'Pull&Bear'];</span>
+      <span style="top:42%; right:2%; opacity:0.35; font-size:0.63rem;">  gatepasses = 50;     // daily, digitized</span>
+      <span style="top:45%; right:2%; opacity:0.3; font-size:0.63rem;">  softwareQuote = '₨2,000,000';</span>
+      <span style="top:48%; right:2%; opacity:0.45; font-size:0.63rem; color:var(--accent);">  hamzaCost = '₨0';   // delivered solo</span>
+      <span style="top:51%; right:4%; opacity:0.5; font-size:0.7rem; color:var(--accent);">{'}'}</span>
+
+      <!-- ═══════ CODE BLOCK 5 — bottom-left: deploy pipeline ═══════ -->
+      <span style="bottom:30%; left:2%; opacity:0.3; font-size:0.58rem; color:var(--text-dim);">// ship it</span>
+      <span style="bottom:27%; left:2%; opacity:0.45; font-size:0.68rem; color:var(--accent);">const pipeline = [</span>
+      <span style="bottom:24%; left:4%; opacity:0.3; font-size:0.62rem;">  'design()',</span>
+      <span style="bottom:21%; left:4%; opacity:0.3; font-size:0.62rem;">  'develop()',</span>
+      <span style="bottom:18%; left:4%; opacity:0.3; font-size:0.62rem;">  'test()',</span>
+      <span style="bottom:15%; left:4%; opacity:0.35; font-size:0.62rem;">  'deploy()',</span>
+      <span style="bottom:12%; left:4%; opacity:0.4; font-size:0.62rem; color:var(--accent);">  'iterate()',</span>
+      <span style="bottom:9%; left:2%; opacity:0.45; font-size:0.68rem; color:var(--accent);">];</span>
+
+      <!-- ═══════ CODE BLOCK 6 — bottom-right: export ═══════ -->
+      <span style="bottom:28%; right:3%; opacity:0.3; font-size:0.58rem; color:var(--text-dim);">// ready for your project</span>
+      <span style="bottom:25%; right:3%; opacity:0.5; font-size:0.7rem; color:var(--accent);">export default {'{'}</span>
+      <span style="bottom:22%; right:1%; opacity:0.35; font-size:0.63rem;">  available: true,</span>
+      <span style="bottom:19%; right:1%; opacity:0.35; font-size:0.63rem;">  response: '24-48h',</span>
+      <span style="bottom:16%; right:1%; opacity:0.35; font-size:0.63rem;">  stack: 'modern',</span>
+      <span style="bottom:13%; right:1%; opacity:0.4; font-size:0.63rem; color:var(--accent);">  approach: 'AI-powered',</span>
+      <span style="bottom:10%; right:3%; opacity:0.5; font-size:0.7rem; color:var(--accent);">{'}'}</span>
+
+      <!-- ═══════ FLOATING KEYWORDS — scattered across center ═══════ -->
+      <span style="top:28%; left:38%; opacity:0.15; font-size:1.1rem; color:var(--accent); transform:rotate(-12deg);">async</span>
+      <span style="top:55%; left:42%; opacity:0.12; font-size:1rem; color:var(--text-dim); transform:rotate(8deg);">await</span>
+      <span style="top:62%; left:25%; opacity:0.14; font-size:0.95rem; color:var(--accent); transform:rotate(-5deg);">deploy</span>
+      <span style="top:20%; left:45%; opacity:0.1; font-size:1.2rem; color:var(--text-dim); transform:rotate(15deg);">import</span>
+      <span style="top:72%; left:55%; opacity:0.12; font-size:1rem; color:var(--accent); transform:rotate(-8deg);">export</span>
+      <span style="top:38%; left:60%; opacity:0.1; font-size:1.1rem; color:var(--text-dim); transform:rotate(10deg);">return</span>
+      <span style="top:80%; left:35%; opacity:0.13; font-size:0.9rem; color:var(--accent); transform:rotate(-3deg);">render</span>
+      <span style="top:15%; left:58%; opacity:0.11; font-size:1rem; color:var(--text-dim); transform:rotate(6deg);">const</span>
+      <span style="top:68%; left:70%; opacity:0.12; font-size:0.95rem; color:var(--accent); transform:rotate(-10deg);">function</span>
+      <span style="top:45%; left:30%; opacity:0.1; font-size:1.15rem; color:var(--text-dim); transform:rotate(4deg);">class</span>
+
+      <!-- ═══════ SYMBOLS — brackets, arrows, operators ═══════ -->
+      <span style="top:5%; left:35%; opacity:0.2; font-size:1.8rem; color:var(--accent); transform:rotate(5deg);">{'{'}</span>
+      <span style="top:5%; left:40%; opacity:0.2; font-size:1.8rem; color:var(--accent); transform:rotate(-5deg);">{'}'}</span>
+      <span style="top:85%; left:60%; opacity:0.18; font-size:1.8rem; color:var(--accent); transform:rotate(8deg);">{'<'}/{'>'}</span>
+      <span style="top:50%; left:15%; opacity:0.15; font-size:1.5rem; color:var(--text-dim); transform:rotate(-15deg);">=&gt;</span>
+      <span style="top:75%; left:80%; opacity:0.15; font-size:1.5rem; color:var(--accent); transform:rotate(12deg);">===</span>
+      <span style="top:10%; left:75%; opacity:0.12; font-size:1.6rem; color:var(--text-dim); transform:rotate(-8deg);">&&</span>
+      <span style="top:60%; left:85%; opacity:0.14; font-size:1.4rem; color:var(--accent); transform:rotate(6deg);">||</span>
+      <span style="top:32%; left:82%; opacity:0.1; font-size:1.5rem; color:var(--text-dim); transform:rotate(-10deg);">...</span>
+      <span style="top:88%; left:15%; opacity:0.16; font-size:1.3rem; color:var(--accent); transform:rotate(3deg);">::</span>
+      <span style="top:42%; left:92%; opacity:0.12; font-size:1.4rem; color:var(--text-dim); transform:rotate(-6deg);">?.</span>
+      <span style="top:90%; left:45%; opacity:0.15; font-size:1.6rem; color:var(--accent); transform:rotate(10deg);">#</span>
+      <span style="top:2%; left:55%; opacity:0.13; font-size:1.5rem; color:var(--text-dim); transform:rotate(-12deg);">@</span>
+
+      <!-- ═══════ DOT GRID — subtle pattern layer ═══════ -->
+      <span style="top:8%; left:48%; opacity:0.08; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · · ·</span>
+      <span style="top:11%; left:48%; opacity:0.06; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · · ·</span>
+      <span style="top:14%; left:48%; opacity:0.08; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · · ·</span>
+      <span style="top:17%; left:48%; opacity:0.06; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · · ·</span>
+
+      <span style="top:55%; left:5%; opacity:0.07; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · ·</span>
+      <span style="top:58%; left:5%; opacity:0.05; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · ·</span>
+      <span style="top:61%; left:5%; opacity:0.07; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · ·</span>
+
+      <span style="top:70%; right:5%; opacity:0.06; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · ·</span>
+      <span style="top:73%; right:5%; opacity:0.08; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · ·</span>
+      <span style="top:76%; right:5%; opacity:0.06; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · ·</span>
+
+      <!-- ═══════ LINE NUMBERS — left gutter feel ═══════ -->
+      <span style="top:35%; left:36%; opacity:0.08; font-size:0.55rem; color:var(--text-dim); line-height:1.8;">01<br/>02<br/>03<br/>04<br/>05<br/>06<br/>07<br/>08<br/>09<br/>10<br/>11<br/>12</span>
+      <span style="top:5%; left:70%; opacity:0.06; font-size:0.55rem; color:var(--text-dim); line-height:1.8;">14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22</span>
+      <span style="bottom:5%; left:50%; opacity:0.07; font-size:0.55rem; color:var(--text-dim); line-height:1.8;">31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37</span>
+
+      <!-- ═══════ TERMINAL PROMPTS — scattered ═══════ -->
+      <span style="top:83%; left:5%; opacity:0.25; font-size:0.62rem; color:var(--accent);">~/hamza $</span>
+      <span style="top:83%; left:16%; opacity:0.2; font-size:0.62rem;">npm run build</span>
+      <span style="top:86%; left:5%; opacity:0.15; font-size:0.6rem; color:var(--text-muted);">✓ Built in 1.2s</span>
+      <span style="top:89%; left:5%; opacity:0.25; font-size:0.62rem; color:var(--accent);">~/hamza $</span>
+      <span style="top:89%; left:16%; opacity:0.2; font-size:0.62rem;">git push origin main</span>
+      <span style="top:92%; left:5%; opacity:0.15; font-size:0.6rem; color:var(--text-muted);">✓ Deployed to production</span>
+
+      <span style="top:55%; right:2%; opacity:0.2; font-size:0.6rem; color:var(--accent);">▶</span>
+      <span style="top:55%; right:5%; opacity:0.18; font-size:0.6rem;">node server.js</span>
+      <span style="top:58%; right:2%; opacity:0.12; font-size:0.58rem; color:var(--text-muted);">listening on :4321</span>
+
+      <!-- ═══════ COMMENT ANNOTATIONS — scattered wisdom ═══════ -->
+      <span style="top:30%; left:22%; opacity:0.15; font-size:0.58rem; color:var(--text-dim); transform:rotate(-2deg);">// TODO: change the world</span>
+      <span style="top:65%; left:40%; opacity:0.12; font-size:0.56rem; color:var(--text-dim); transform:rotate(3deg);">/* built with AI, architected by me */</span>
+      <span style="top:78%; left:58%; opacity:0.14; font-size:0.58rem; color:var(--text-dim); transform:rotate(-4deg);">// no shortcuts, just solutions</span>
+      <span style="top:48%; left:48%; opacity:0.1; font-size:0.55rem; color:var(--text-dim); transform:rotate(2deg);">/** @author hamza — age 17 */</span>
+      <span style="top:25%; left:65%; opacity:0.13; font-size:0.57rem; color:var(--text-dim); transform:rotate(-6deg);">// from paper to digital</span>
+      <span style="top:93%; left:40%; opacity:0.12; font-size:0.56rem; color:var(--text-dim); transform:rotate(1deg);">// 300K garments. Zero bugs.</span>
+    </div>
+
+    <div class="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center">
+      <!-- Availability tag -->
       <div data-animate="fade-up" class="mb-6 sm:mb-8">
-        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs sm:text-sm font-mono tracking-wider text-text-secondary">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-glow"></span>
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-[0.7rem] font-mono tracking-wider text-text-secondary">
+          <span class="w-1.5 h-1.5 rounded-full bg-accent-success animate-glow-pulse"></span>
           Available for projects
         </span>
       </div>
 
-      <!-- Main heading -->
+      <!-- Name — letter hover pop -->
       <h1
-        data-split
+        data-hover-letters
         class="text-display font-heading font-bold text-text-primary mb-4 sm:mb-6"
       >
         Hamza Ali
       </h1>
 
-      <!-- Typing effect -->
+      <!-- Typewriter -->
       <div data-animate="fade-up" class="mb-6 sm:mb-8">
-        <TypeWriter
-          roles={roles}
-          textClass="text-heading-3 sm:text-heading-2 text-gradient"
-        />
+        <TypeWriter roles={roles} textClass="text-heading-3 sm:text-heading-2" />
       </div>
 
-      <!-- One-liner paragraph -->
-      <p
-        data-animate="fade-up"
-        class="text-body-lg sm:text-lg text-text-secondary max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed"
-      >
-        I architect digital solutions and leverage AI to build systems
-        that businesses depend on.
+      <!-- Tagline -->
+      <p data-animate="fade-up" class="text-body-lg text-text-secondary max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed">
+        I architect digital solutions and leverage AI to build systems that businesses depend on.
       </p>
 
-      <!-- CTA buttons -->
-      <div
-        data-animate="fade-up"
-        class="flex flex-col sm:flex-row items-center justify-center gap-4"
-      >
-        <MagneticButton
-          href="#work"
-          text="Explore My Work"
-          variant="accent"
-          icon="chevron-down"
-          magneticStrength={0.3}
-          magneticDistance={80}
-          ariaLabel="Scroll to my work section"
-        />
-        <MagneticButton
-          href="#contact"
-          text="Get in Touch"
-          variant="default"
-          icon="arrow"
-          magneticStrength={0.25}
-          magneticDistance={70}
-          ariaLabel="Scroll to contact section"
-        />
+      <!-- CTAs -->
+      <div data-animate="fade-up" class="flex flex-col sm:flex-row items-center gap-4">
+        <a href="#work" data-nav-link class="btn-primary">
+          <span>explore my work</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <a href="#contact" data-nav-link class="btn-secondary">
+          <span>get in touch</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
       </div>
     </div>
 
-    <!-- Scroll indicator at bottom -->
-    <div class="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2">
+    <!-- Scroll hint -->
+    <div class="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2">
       <ScrollIndicator />
     </div>
   </section>
 
-  <!-- ============================================================
-       SECTION 2: THE STORY
-       Split layout · Line-by-line reveal · Counter stats
-       ============================================================ -->
+  <!-- ================================================================
+       SECTION 2 — THE STORY
+       ================================================================ -->
   <section
     id="story"
     data-section
-    class="section-full relative flex items-center min-h-screen"
+    class="section-snap relative"
   >
-    <!-- Ambient orbs -->
-    <div class="ambient-orbs" aria-hidden="true">
-      <div
-        class="ambient-orb ambient-orb-purple"
-        style="width: clamp(200px, 30vw, 400px); height: clamp(200px, 30vw, 400px); top: 20%; right: 15%;"
-      ></div>
-      <div
-        class="ambient-orb ambient-orb-blue"
-        style="width: clamp(150px, 25vw, 350px); height: clamp(150px, 25vw, 350px); bottom: 25%; left: 10%;"
-      ></div>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div class="ambient-orb ambient-orb-gold" style="width: clamp(220px, 30vw, 420px); height: clamp(220px, 30vw, 420px); top: 15%; right: 12%;"></div>
+      <div class="ambient-orb ambient-orb-dim" style="width: clamp(180px, 25vw, 360px); height: clamp(180px, 25vw, 360px); bottom: 20%; left: 8%;"></div>
     </div>
 
-    <div class="relative z-10 w-full max-w-7xl mx-auto">
-      <div class="flex items-stretch gap-8 lg:gap-16">
-        <!-- Left: Vertical decorative text (desktop only) -->
-        <div class="hidden lg:flex items-center justify-center flex-shrink-0" style="width: 80px;">
+    <div class="relative z-10 section-inner">
+      <div class="flex items-stretch gap-8 lg:gap-14">
+        <!-- Vertical text (desktop) -->
+        <div class="hidden lg:flex items-center justify-center flex-shrink-0" style="width: 70px;">
           <span class="vertical-text">The Story</span>
         </div>
 
-        <!-- Right: Content -->
-        <div class="flex-1 max-w-3xl">
-          <!-- Section heading (mobile: visible since vertical-text is hidden) -->
-          <div class="lg:hidden mb-8">
-            <span class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-3 block">
-              About
-            </span>
-            <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary">
-              The Story
-            </h2>
+        <!-- Content column -->
+        <div class="flex-1 max-w-2xl">
+          <!-- Mobile heading -->
+          <div class="lg:hidden mb-6">
+            <span class="section-label mb-2 block">About</span>
+            <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary">The Story</h2>
           </div>
 
-          <!-- Story paragraphs — each reveals individually -->
-          <div class="space-y-6 sm:space-y-8">
-            <p
-              data-story-line
-              class="text-body-lg text-text-secondary leading-relaxed"
-            >
-              At 17, I walked into a garment factory in Faisalabad and saw a
-              business exporting
+          <!-- Paragraphs -->
+          <div class="space-y-5">
+            <p data-story-line class="text-body text-text-secondary leading-relaxed">
+              At 17, I walked into a garment factory in Faisalabad and saw a business exporting
               <span class="text-text-primary font-medium">300,000 garments monthly</span>
-              to Boohoo, Pull&Bear, and Yours Clothing — running entirely on
-              paper and Excel.
+              to Boohoo, Pull&Bear, and Yours Clothing — running entirely on paper and Excel.
             </p>
 
-            <p
-              data-story-line
-              class="text-body-lg text-text-secondary leading-relaxed"
-            >
+            <p data-story-line class="text-body text-text-secondary leading-relaxed">
               I had zero coding experience. But I had a hypothesis:
               <span class="text-gradient font-medium">AI could be the bridge</span>
-              between my ideas and their execution. So I volunteered to digitize
-              everything.
+              between my ideas and their execution. So I volunteered to digitize everything.
             </p>
 
-            <p
-              data-story-line
-              class="text-body-lg text-text-secondary leading-relaxed"
-            >
-              I built their website from scratch — premium scroll animations,
-              real-time quote systems, AI-powered chat. I implemented an
-              enterprise ERP system that replaced
+            <p data-story-line class="text-body text-text-secondary leading-relaxed">
+              I built their website from scratch — premium scroll animations, real-time quote systems, AI chat. Implemented an ERP that replaced
               <span class="text-text-primary font-medium">50 daily paper gatepasses</span>
-              with real-time digital tracking. I designed their entire brand
-              identity.
+              with digital tracking. Designed their entire brand identity.
             </p>
 
-            <p
-              data-story-line
-              class="text-body-lg text-text-secondary leading-relaxed"
-            >
+            <p data-story-line class="text-body text-text-secondary leading-relaxed">
               A software house quoted
-              <span class="text-accent-cyan font-medium">₨2 million</span>.
+              <span class="text-accent-primary font-semibold">₨2 million</span>.
               I delivered it alone, at 17, using AI as my execution engine.
             </p>
 
-            <!-- The Edge — highlighted quote -->
-            <blockquote
-              data-story-line
-              class="glass p-5 sm:p-6 mt-4 border-l-2 border-accent-cyan/40"
-              style="border-radius: 0 1rem 1rem 0;"
-            >
-              <p class="text-body text-text-primary italic leading-relaxed">
-                "The thinking behind giving correct prompts to AI was me. I
-                don't just use tools — I architect solutions."
+            <!-- Quote -->
+            <blockquote data-story-line class="glass p-4 sm:p-5 mt-2" style="border-left: 2px solid var(--accent); border-radius: 0 0.75rem 0.75rem 0;">
+              <p class="text-sm text-text-primary italic leading-relaxed font-body">
+                "The thinking behind giving correct prompts to AI was me. I don't just use tools — I architect solutions."
               </p>
             </blockquote>
           </div>
 
-          <!-- Stats Row -->
-          <div
-            class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-12 sm:mt-16"
-            data-animate="stagger"
-          >
-            {stats.map((stat) => (
+          <!-- Stats -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 sm:mt-10" data-animate="stagger">
+            {stats.map((s) => (
               <div class="stat-card glass">
-                <div class="stat-number text-gradient">
-                  <span
-                    data-counter={stat.value.toString()}
-                    data-counter-suffix={stat.suffix}
-                    class="counter-number"
-                  >
-                    0{stat.suffix}
-                  </span>
+                <div class="stat-number">
+                  <span data-counter={s.value.toString()} data-counter-suffix={s.suffix}>0{s.suffix}</span>
                 </div>
-                <div class="stat-label">{stat.label}</div>
+                <div class="stat-label">{s.label}</div>
               </div>
             ))}
           </div>
@@ -349,581 +378,294 @@ const projects = [
     </div>
   </section>
 
-  <!-- ============================================================
-       SECTION 3: THE ARSENAL (Skills)
-       Floating glass orbs · Scattered layout · Proximity tilt
-       ============================================================ -->
+  <!-- ================================================================
+       SECTION 3 — THE ARSENAL  (Skills)
+       Desktop: scattered floating orbs with proximity tilt
+       Mobile:  categorised grid
+       ================================================================ -->
   <section
     id="skills"
     data-section
-    class="section-full relative flex items-center min-h-screen"
+    class="section-snap relative"
   >
-    <!-- Ambient orbs -->
-    <div class="ambient-orbs" aria-hidden="true">
-      <div
-        class="ambient-orb ambient-orb-cyan"
-        style="width: clamp(180px, 30vw, 380px); height: clamp(180px, 30vw, 380px); top: 10%; left: 20%;"
-      ></div>
-      <div
-        class="ambient-orb ambient-orb-purple"
-        style="width: clamp(220px, 35vw, 420px); height: clamp(220px, 35vw, 420px); bottom: 10%; right: 15%;"
-      ></div>
-      <div
-        class="ambient-orb ambient-orb-blue"
-        style="width: clamp(130px, 20vw, 280px); height: clamp(130px, 20vw, 280px); top: 50%; left: 60%;"
-      ></div>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div class="ambient-orb ambient-orb-gold" style="width: clamp(200px, 30vw, 400px); height: clamp(200px, 30vw, 400px); top: 8%; left: 18%;"></div>
+      <div class="ambient-orb ambient-orb-dim" style="width: clamp(240px, 35vw, 440px); height: clamp(240px, 35vw, 440px); bottom: 8%; right: 12%;"></div>
     </div>
 
-    <div class="relative z-10 w-full max-w-7xl mx-auto">
-      <!-- Section Header -->
-      <div class="text-center mb-12 sm:mb-16 lg:mb-20">
-        <span
-          data-animate="fade-up"
-          class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-3 block"
-        >
-          Technologies
-        </span>
-        <h2
-          data-split
-          class="text-heading-1 font-heading font-bold text-text-primary mb-4"
-        >
-          The Arsenal
-        </h2>
-        <p
-          data-animate="fade-up"
-          class="text-body text-text-secondary max-w-md mx-auto"
-        >
+    <div class="relative z-10 section-inner">
+      <!-- Header -->
+      <div class="text-center mb-6 lg:mb-4">
+        <span data-animate="fade-up" class="section-label mb-2 block">Technologies</span>
+        <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary mb-3">The Arsenal</h2>
+        <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-sm mx-auto">
           Technologies I use to build solutions that businesses depend on.
         </p>
       </div>
 
-      <!-- Skills Grid — Scattered on desktop, grid on mobile -->
-      <!-- Desktop: Scattered absolute positioning -->
-      <div class="hidden lg:block relative" style="height: 520px;">
-        <!-- Row 1 — Top area -->
-        <div class="absolute" style="top: 0; left: 2%;" data-animate="scale">
-          <SkillOrb name="Astro" icon="🚀" category="Build" animationClass="animate-float" />
-        </div>
-        <div class="absolute" style="top: 10px; left: 22%;" data-animate="scale">
-          <SkillOrb name="React" icon="⚛️" category="Build" animationClass="animate-float-delayed" />
-        </div>
-        <div class="absolute" style="top: 25px; left: 44%;" data-animate="scale">
-          <SkillOrb name="GSAP" icon="✨" category="Animate" animationClass="animate-float-slow" />
-        </div>
-        <div class="absolute" style="top: 5px; left: 64%;" data-animate="scale">
-          <SkillOrb name="Three.js" icon="🎲" category="Animate" animationClass="animate-float-reverse" />
-        </div>
-        <div class="absolute" style="top: 15px; right: 2%;" data-animate="scale">
-          <SkillOrb name="ERPNext" icon="🏭" category="Backend" animationClass="animate-float" />
-        </div>
+      <!-- ─── Desktop: Scattered floating orbs ─── -->
+      <div class="hidden lg:block relative w-full" style="height: clamp(380px, 55vh, 620px);">
+        {allSkills.map((skill) => (
+          <div
+            class="absolute"
+            style={`top: ${skill.top}; left: ${skill.left};`}
+          >
+            <SkillOrb
+              name={skill.name}
+              icon={skill.icon}
+              category={skill.cat as any}
+              learning={skill.learning || false}
+              floatClass={skill.float}
+            />
+          </div>
+        ))}
 
-        <!-- Row 2 — Upper-middle area -->
-        <div class="absolute" style="top: 120px; left: 8%;" data-animate="scale">
-          <SkillOrb name="Tailwind CSS" icon="🎨" category="Build" animationClass="animate-float-reverse" />
-        </div>
-        <div class="absolute" style="top: 130px; left: 35%;" data-animate="scale">
-          <SkillOrb name="ScrollTrigger" icon="📜" category="Animate" animationClass="animate-float-delayed" />
-        </div>
-        <div class="absolute" style="top: 115px; left: 58%;" data-animate="scale">
-          <SkillOrb name="Python" icon="🐍" category="Backend" animationClass="animate-float" />
-        </div>
-        <div class="absolute" style="top: 125px; right: 5%;" data-animate="scale">
-          <SkillOrb name="Supabase" icon="💚" category="Backend" animationClass="animate-float-slow" />
-        </div>
-
-        <!-- Row 3 — Middle area -->
-        <div class="absolute" style="top: 240px; left: 3%;" data-animate="scale">
-          <SkillOrb name="JavaScript" icon="⚡" category="Build" animationClass="animate-float-slow" />
-        </div>
-        <div class="absolute" style="top: 250px; left: 24%;" data-animate="scale">
-          <SkillOrb name="Lenis" icon="🧈" category="Animate" animationClass="animate-float" />
-        </div>
-        <div class="absolute" style="top: 235px; left: 48%;" data-animate="scale">
-          <SkillOrb name="PostgreSQL" icon="🐘" category="Backend" animationClass="animate-float-reverse" />
-        </div>
-        <div class="absolute" style="top: 245px; right: 8%;" data-animate="scale">
-          <SkillOrb name="Brand Identity" icon="💎" category="Design" animationClass="animate-float-delayed" />
-        </div>
-
-        <!-- Row 4 — Lower-middle area -->
-        <div class="absolute" style="top: 350px; left: 10%;" data-animate="scale">
-          <SkillOrb name="HTML/CSS" icon="🌐" category="Build" animationClass="animate-float-delayed" />
-        </div>
-        <div class="absolute" style="top: 360px; left: 33%;" data-animate="scale">
-          <SkillOrb name="Git & GitHub" icon="🔀" category="Tools" animationClass="animate-float-reverse" />
-        </div>
-        <div class="absolute" style="top: 345px; left: 55%;" data-animate="scale">
-          <SkillOrb name="Vercel" icon="▲" category="Tools" animationClass="animate-float-slow" />
-        </div>
-        <div class="absolute" style="top: 355px; right: 3%;" data-animate="scale">
-          <SkillOrb name="UI/UX" icon="🎯" category="Design" learning={true} animationClass="animate-float" />
-        </div>
-
-        <!-- Row 5 — Bottom area -->
-        <div class="absolute" style="top: 450px; left: 18%;" data-animate="scale">
-          <SkillOrb name="VS Code" icon="💻" category="Tools" animationClass="animate-float" />
-        </div>
-        <div class="absolute" style="top: 460px; left: 45%;" data-animate="scale">
-          <SkillOrb name="AI (Claude/GPT)" icon="🤖" category="Tools" animationClass="animate-float-delayed" />
-        </div>
-        <div class="absolute" style="top: 445px; right: 15%;" data-animate="scale">
-          <SkillOrb name="Figma" icon="🖌️" category="Design" learning={true} animationClass="animate-float-reverse" />
-        </div>
+        <!-- Category hints — faint labels behind orbs -->
+        <span class="absolute font-mono text-[0.6rem] tracking-[0.2em] uppercase text-text-dim/30 select-none pointer-events-none" style="top: 0%; left: 0%;">build</span>
+        <span class="absolute font-mono text-[0.6rem] tracking-[0.2em] uppercase text-text-dim/30 select-none pointer-events-none" style="top: 17%; left: 0%;">animate</span>
+        <span class="absolute font-mono text-[0.6rem] tracking-[0.2em] uppercase text-text-dim/30 select-none pointer-events-none" style="top: 36%; left: 0%;">backend</span>
+        <span class="absolute font-mono text-[0.6rem] tracking-[0.2em] uppercase text-text-dim/30 select-none pointer-events-none" style="top: 55%; left: 0%;">design</span>
+        <span class="absolute font-mono text-[0.6rem] tracking-[0.2em] uppercase text-text-dim/30 select-none pointer-events-none" style="top: 73%; left: 0%;">tools</span>
       </div>
 
-      <!-- Mobile: Simple responsive grid -->
-      <div class="lg:hidden">
-        <!-- Category groups -->
-        {Object.entries(skills).map(([category, items]) => (
-          <div class="mb-8">
-            <h3 class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted mb-3 pl-1">
-              {category}
+      <!-- ─── Mobile: Categorised grid ─── -->
+      <div class="lg:hidden space-y-6 mt-4">
+        {categories.map((cat) => (
+          <div>
+            <h3 class="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-text-dim mb-3 pl-0.5">
+              {cat}
             </h3>
-            <div class="flex flex-wrap gap-2 sm:gap-2.5" data-animate="stagger">
-              {items.map((item, i) => (
-                <SkillOrb
-                  name={item.name}
-                  icon={item.icon}
-                  category={category as any}
-                  learning={(item as any).learning || false}
-                  animationClass={floatClasses[i % floatClasses.length]}
-                />
-              ))}
+            <div class="flex flex-wrap gap-2" data-animate="stagger">
+              {allSkills
+                .filter((s) => s.cat === cat)
+                .map((skill) => (
+                  <SkillOrb
+                    name={skill.name}
+                    icon={skill.icon}
+                    category={cat as any}
+                    learning={skill.learning || false}
+                    floatClass=""
+                  />
+                ))}
             </div>
           </div>
         ))}
       </div>
-
-      <!-- Category legend (desktop only) -->
-      <div
-        class="hidden lg:flex items-center justify-center gap-6 mt-6"
-        data-animate="fade-up"
-      >
-        <div class="flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-accent-cyan/60"></span>
-          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Build</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-accent-purple/60"></span>
-          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Animate</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-accent-blue/60"></span>
-          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Backend</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-pink-400/60"></span>
-          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Design</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-amber-400/60"></span>
-          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Tools</span>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       SECTION 4: SELECTED WORKS
-       Horizontal scroll on desktop · Vertical stack on mobile
-       Pinned heading + scrolling cards
-       ============================================================ -->
+  <!-- ================================================================
+       SECTION 4 — SELECTED WORKS
+       ================================================================ -->
   <section
     id="work"
     data-section
-    data-horizontal-scroll
-    class="relative min-h-screen"
+    class="section-snap relative"
   >
-    <!-- Ambient orbs -->
-    <div class="ambient-orbs" aria-hidden="true">
-      <div
-        class="ambient-orb ambient-orb-cyan"
-        style="width: clamp(200px, 30vw, 400px); height: clamp(200px, 30vw, 400px); top: 15%; left: 5%;"
-      ></div>
-      <div
-        class="ambient-orb ambient-orb-purple"
-        style="width: clamp(180px, 25vw, 350px); height: clamp(180px, 25vw, 350px); bottom: 20%; right: 30%;"
-      ></div>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div class="ambient-orb ambient-orb-dim" style="width: clamp(200px, 28vw, 380px); height: clamp(200px, 28vw, 380px); top: 12%; left: 5%;"></div>
+      <div class="ambient-orb ambient-orb-gold" style="width: clamp(180px, 25vw, 350px); height: clamp(180px, 25vw, 350px); bottom: 15%; right: 8%;"></div>
     </div>
 
-    <div class="relative z-10 flex items-center min-h-screen" style="padding-top: var(--header-height);">
-      <!-- Desktop: Horizontal scroll layout -->
-      <div class="hidden lg:flex items-center w-full">
-        <!-- Pinned left heading area -->
-        <div
-          class="flex-shrink-0 flex flex-col justify-center pr-12 xl:pr-16"
-          style="padding-left: var(--section-padding-x); width: clamp(320px, 25vw, 420px);"
-        >
-          <span
-            data-animate="fade-up"
-            class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-3 block"
-          >
-            Portfolio
-          </span>
-          <h2
-            data-split
-            class="text-heading-1 font-heading font-bold text-text-primary mb-4"
-          >
-            Selected Works
-          </h2>
-          <p
-            data-animate="fade-up"
-            class="text-body text-text-secondary mb-8 leading-relaxed"
-          >
-            Real projects. Real businesses. Real impact. Each one delivered solo, powered by AI.
-          </p>
-
-          <!-- Project counter -->
-          <div data-animate="fade-up" class="flex items-center gap-3">
-            <div class="flex items-baseline gap-1">
-              <span class="font-heading text-3xl font-bold text-gradient">03</span>
-              <span class="font-mono text-xs text-text-muted tracking-wider">projects</span>
-            </div>
-            <div class="w-12 h-px bg-gradient-to-r from-accent-cyan/30 to-transparent"></div>
-          </div>
-        </div>
-
-        <!-- Horizontal scroll track -->
-        <div data-horizontal-track class="horizontal-track flex items-center py-8">
-          {projects.map((project, index) => (
-            <ProjectCard
-              title={project.title}
-              description={project.description}
-              type={project.type}
-              role={project.role}
-              stack={project.stack}
-              liveUrl={project.liveUrl}
-              githubUrl={project.githubUrl}
-              placeholderClass={project.placeholderClass}
-              index={index}
-            />
-          ))}
-
-          <!-- End card — CTA to connect -->
-          <div
-            class="flex-shrink-0 w-[320px] lg:w-[360px] flex flex-col items-center justify-center glass p-8 text-center min-h-[400px]"
-            data-animate="fade-up"
-          >
-            <div class="w-16 h-16 rounded-full glass flex items-center justify-center mb-6">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-            </div>
-            <h3 class="font-heading text-lg font-semibold text-text-primary mb-2">
-              Your Project?
-            </h3>
-            <p class="text-sm text-text-secondary mb-6 leading-relaxed">
-              Have an idea that needs to become real? Let's build it together.
-            </p>
-            <MagneticButton
-              href="#contact"
-              text="Start a Conversation"
-              variant="accent"
-              size="sm"
-              icon="arrow"
-              magneticStrength={0.2}
-              magneticDistance={60}
-            />
-          </div>
-        </div>
+    <div class="relative z-10 section-inner">
+      <!-- Header -->
+      <div class="mb-6 lg:mb-8">
+        <span data-animate="fade-up" class="section-label mb-2 block">Portfolio</span>
+        <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary mb-3">Selected Works</h2>
+        <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-md">
+          Real projects. Real businesses. Real impact. Each delivered solo, powered by AI.
+        </p>
       </div>
 
-      <!-- Mobile: Vertical stack -->
-      <div class="lg:hidden w-full" style="padding-left: var(--section-padding-x); padding-right: var(--section-padding-x);">
-        <!-- Heading -->
-        <div class="mb-10">
-          <span
-            data-animate="fade-up"
-            class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-3 block"
-          >
-            Portfolio
-          </span>
-          <h2
-            data-split
-            class="text-heading-1 font-heading font-bold text-text-primary mb-4"
-          >
-            Selected Works
-          </h2>
-          <p
-            data-animate="fade-up"
-            class="text-body text-text-secondary leading-relaxed"
-          >
-            Real projects. Real businesses. Real impact.
-          </p>
-        </div>
+      <!-- 2×2 Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
+        {projects.map((p) => (
+          <ProjectCard
+            title={p.title}
+            description={p.description}
+            type={p.type}
+            role={p.role}
+            stack={p.stack}
+            liveUrl={p.liveUrl}
+            githubUrl={p.githubUrl}
+            placeholderClass={p.placeholderClass}
+          />
+        ))}
 
-        <!-- Vertical project cards -->
-        <div class="flex flex-col gap-6">
-          {projects.map((project, index) => (
-            <ProjectCard
-              title={project.title}
-              description={project.description}
-              type={project.type}
-              role={project.role}
-              stack={project.stack}
-              liveUrl={project.liveUrl}
-              githubUrl={project.githubUrl}
-              placeholderClass={project.placeholderClass}
-              index={index}
-            />
-          ))}
-
-          <!-- End CTA card -->
-          <div
-            class="flex flex-col items-center justify-center glass p-6 sm:p-8 text-center"
-            data-animate="fade-up"
-          >
-            <div class="w-14 h-14 rounded-full glass flex items-center justify-center mb-5">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-            </div>
-            <h3 class="font-heading text-lg font-semibold text-text-primary mb-2">
-              Your Project?
-            </h3>
-            <p class="text-sm text-text-secondary mb-5 leading-relaxed">
-              Have an idea? Let's build it together.
-            </p>
-            <MagneticButton
-              href="#contact"
-              text="Let's Talk"
-              variant="accent"
-              size="sm"
-              icon="arrow"
-              magneticStrength={0.2}
-              magneticDistance={60}
-            />
+        <!-- CTA card -->
+        <div class="project-card-interactive glass flex flex-col items-center justify-center p-6 text-center" data-animate="fade-up" style="min-height: 260px;">
+          <div class="w-12 h-12 rounded-xl glass-strong flex items-center justify-center mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-primary">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
           </div>
+          <h3 class="font-heading text-sm font-semibold text-text-primary mb-1.5">Your Project?</h3>
+          <p class="text-xs text-text-secondary mb-4 leading-relaxed max-w-[200px]">
+            Have an idea that needs to become real? Let's build it.
+          </p>
+          <a href="#contact" data-nav-link class="btn-primary btn-sm" onclick="event.stopPropagation()">
+            <span>start a conversation</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       SECTION 5: LET'S CONNECT (Contact)
-       Full viewport · Glowing contact links · CTA
-       ============================================================ -->
+  <!-- ================================================================
+       SECTION 5 — CONTACT
+       ================================================================ -->
   <section
     id="contact"
     data-section
-    class="section-full relative flex items-center justify-center min-h-screen"
+    class="section-snap relative"
   >
-    <!-- Ambient orbs -->
-    <div class="ambient-orbs" aria-hidden="true">
-      <div
-        class="ambient-orb ambient-orb-cyan"
-        style="width: clamp(250px, 40vw, 500px); height: clamp(250px, 40vw, 500px); top: 20%; right: 10%;"
-      ></div>
-      <div
-        class="ambient-orb ambient-orb-purple"
-        style="width: clamp(200px, 30vw, 400px); height: clamp(200px, 30vw, 400px); bottom: 15%; left: 15%;"
-      ></div>
-      <div
-        class="ambient-orb ambient-orb-blue"
-        style="width: clamp(150px, 20vw, 300px); height: clamp(150px, 20vw, 300px); top: 50%; left: 50%;"
-      ></div>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div class="ambient-orb ambient-orb-gold" style="width: clamp(260px, 38vw, 500px); height: clamp(260px, 38vw, 500px); top: 15%; right: 8%;"></div>
+      <div class="ambient-orb ambient-orb-dim" style="width: clamp(200px, 28vw, 380px); height: clamp(200px, 28vw, 380px); bottom: 12%; left: 12%;"></div>
     </div>
 
-    <div class="relative z-10 w-full max-w-3xl mx-auto text-center">
-      <!-- Eyebrow -->
-      <span
-        data-animate="fade-up"
-        class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-4 block"
-      >
-        Contact
-      </span>
-
-      <!-- Heading -->
-      <h2
-        data-split
-        class="text-heading-1 sm:text-display font-heading font-bold text-text-primary mb-4 sm:mb-6"
-      >
-        Let's Build Something Extraordinary
-      </h2>
-
-      <!-- Subtitle -->
-      <p
-        data-animate="fade-up"
-        class="text-body-lg text-text-secondary max-w-xl mx-auto mb-12 sm:mb-16 leading-relaxed"
-      >
-        Available for freelance projects — websites, UI/UX design, branding,
-        and digital solutions. Let's talk about your next big idea.
-      </p>
-
-      <!-- Contact links grid -->
-      <div
-        class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 mb-12 sm:mb-16"
-        data-animate="stagger"
-      >
-        <!-- WhatsApp -->
-        <a
-          href="https://wa.me/923329555786"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="contact-link glass p-6 sm:p-7 flex flex-col items-center gap-4 group"
-          data-magnetic
-          data-magnetic-strength="0.15"
-          data-magnetic-distance="80"
-          data-cursor="click"
+    <div class="relative z-10 section-inner">
+      <!-- Header -->
+      <div class="text-center mb-8 lg:mb-10">
+        <span data-animate="fade-up" class="section-label mb-2 block">Contact</span>
+        <h2
+          data-hover-letters
+          class="text-heading-1 font-heading font-bold text-text-primary mb-3"
         >
-          <div class="w-14 h-14 rounded-2xl glass-strong flex items-center justify-center group-hover:border-emerald-500/30 transition-all duration-400">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" class="text-emerald-400 group-hover:scale-110 transition-transform duration-300">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-            </svg>
-          </div>
-          <div>
-            <span class="font-heading text-sm font-semibold text-text-primary block mb-0.5">
-              Chat on WhatsApp
-            </span>
-            <span class="font-mono text-[0.625rem] tracking-wider text-text-muted">
-              Quick response
-            </span>
-          </div>
-        </a>
-
-        <!-- Email -->
-        <a
-          href="mailto:hamzaali.dev@proton.me"
-          class="contact-link glass p-6 sm:p-7 flex flex-col items-center gap-4 group"
-          data-magnetic
-          data-magnetic-strength="0.15"
-          data-magnetic-distance="80"
-          data-cursor="click"
-        >
-          <div class="w-14 h-14 rounded-2xl glass-strong flex items-center justify-center group-hover:border-accent-cyan/30 transition-all duration-400">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan group-hover:scale-110 transition-transform duration-300">
-              <rect x="2" y="4" width="20" height="16" rx="2" />
-              <path d="M22 7l-10 7L2 7" />
-            </svg>
-          </div>
-          <div>
-            <span class="font-heading text-sm font-semibold text-text-primary block mb-0.5">
-              Send an Email
-            </span>
-            <span class="font-mono text-[0.625rem] tracking-wider text-text-muted">
-              hamzaali.dev@proton.me
-            </span>
-          </div>
-        </a>
-
-        <!-- GitHub -->
-        <a
-          href="https://github.com/hamzaa1i"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="contact-link glass p-6 sm:p-7 flex flex-col items-center gap-4 group"
-          data-magnetic
-          data-magnetic-strength="0.15"
-          data-magnetic-distance="80"
-          data-cursor="click"
-        >
-          <div class="w-14 h-14 rounded-2xl glass-strong flex items-center justify-center group-hover:border-text-primary/20 transition-all duration-400">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-text-primary group-hover:scale-110 transition-transform duration-300">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-            </svg>
-          </div>
-          <div>
-            <span class="font-heading text-sm font-semibold text-text-primary block mb-0.5">
-              View GitHub
-            </span>
-            <span class="font-mono text-[0.625rem] tracking-wider text-text-muted">
-              @hamzaa1i
-            </span>
-          </div>
-        </a>
+          Let's Build Something Extraordinary
+        </h2>
+        <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-lg mx-auto">
+          Have a project in mind or need help shipping faster? Share a few details and I'll reply with next steps.
+        </p>
       </div>
 
-      <!-- Availability status -->
-      <div
-        data-animate="fade-up"
-        class="inline-flex items-center gap-3 px-5 py-3 rounded-full glass"
-      >
-        <div class="relative flex items-center justify-center">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 absolute animate-ping opacity-75"></span>
+      <!-- Two-column: Form + Quick Links -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10">
+        <!-- Form (3 cols) -->
+        <div class="lg:col-span-3" data-animate="fade-up">
+          <div class="glass p-5 sm:p-7">
+            <ContactForm client:load />
+          </div>
         </div>
-        <span class="font-body text-sm text-text-secondary">
-          Currently available for new projects
-        </span>
+
+        <!-- Sidebar (2 cols) -->
+        <div class="lg:col-span-2 flex flex-col gap-3" data-animate="stagger">
+          <!-- WhatsApp -->
+          <a
+            href="https://wa.me/923329555786"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact-link glass p-4 flex items-center gap-3.5 group"
+          >
+            <div class="w-10 h-10 rounded-lg glass-strong flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-accent-success">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <span class="text-sm font-semibold text-text-primary block leading-tight">WhatsApp</span>
+              <span class="font-mono text-[0.6rem] tracking-wider text-text-dim">quick response</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-dim ml-auto opacity-0 group-hover:opacity-100 transition-opacity"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+
+          <!-- Email -->
+          <a
+            href="mailto:hamzaali.dev@proton.me"
+            class="contact-link glass p-4 flex items-center gap-3.5 group"
+          >
+            <div class="w-10 h-10 rounded-lg glass-strong flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-primary">
+                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <span class="text-sm font-semibold text-text-primary block leading-tight">Email</span>
+              <span class="font-mono text-[0.6rem] tracking-wider text-text-dim truncate">hamzaali.dev@proton.me</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-dim ml-auto opacity-0 group-hover:opacity-100 transition-opacity"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+
+          <!-- GitHub -->
+          <a
+            href="https://github.com/hamzaa1i"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact-link glass p-4 flex items-center gap-3.5 group"
+          >
+            <div class="w-10 h-10 rounded-lg glass-strong flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" class="text-text-primary">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <span class="text-sm font-semibold text-text-primary block leading-tight">GitHub</span>
+              <span class="font-mono text-[0.6rem] tracking-wider text-text-dim">@hamzaa1i</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-dim ml-auto opacity-0 group-hover:opacity-100 transition-opacity"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+
+          <!-- Availability -->
+          <div class="glass p-4 flex items-center gap-3 mt-1">
+            <div class="relative flex items-center justify-center">
+              <span class="w-2 h-2 rounded-full bg-accent-success"></span>
+              <span class="w-2 h-2 rounded-full bg-accent-success absolute animate-ping opacity-75"></span>
+            </div>
+            <span class="text-xs text-text-secondary font-body">
+              Currently available for new projects
+            </span>
+          </div>
+
+          <p class="text-center lg:text-left text-[0.65rem] font-mono text-text-dim mt-0.5">
+            usually replies within 24-48 hours
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       FOOTER
-       ============================================================ -->
+  <!-- Floating Footer -->
   <Footer />
 </Layout>
 
+<!-- ================================================================
+     SCOPED STYLES
+     ================================================================ -->
 <style>
-  /* ---- Hero section specifics ---- */
+  /* Hero needs extra top padding for floating header */
   #hero {
-    padding-top: calc(var(--header-height) + 2rem);
+    padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 2rem);
   }
 
-  /* ---- Work section: ensure full-height for horizontal scroll ---- */
-  #work {
-    overflow: hidden;
+  /* Non-hero snapping sections get gentle top padding to avoid header overlap */
+  #story, #skills, #work, #contact {
+    padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 1.5rem);
   }
 
-  @media (min-width: 1024px) {
-    #work {
-      overflow: visible;
-    }
-  }
-
-  /* ---- Mobile project cards: full width ---- */
-  @media (max-width: 1023px) {
-    #work .project-card {
-      width: 100% !important;
-    }
-  }
-
-  /* ---- Contact links hover glow per type ---- */
+  /* ─── Contact link hover states ─── */
   .contact-link:nth-child(1):hover {
-    border-color: rgba(52, 211, 153, 0.25) !important;
-    box-shadow: 0 0 30px rgba(52, 211, 153, 0.06),
-                0 0 60px rgba(52, 211, 153, 0.03) !important;
+    border-color: rgba(16, 185, 129, 0.15) !important;
+    background: rgba(16, 185, 129, 0.03) !important;
   }
-
   .contact-link:nth-child(2):hover {
-    border-color: rgba(0, 240, 255, 0.25) !important;
-    box-shadow: 0 0 30px rgba(0, 240, 255, 0.06),
-                0 0 60px rgba(0, 240, 255, 0.03) !important;
+    border-color: rgba(200, 162, 78, 0.15) !important;
+    background: rgba(200, 162, 78, 0.03) !important;
   }
-
   .contact-link:nth-child(3):hover {
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.04),
-                0 0 60px rgba(255, 255, 255, 0.02) !important;
+    border-color: rgba(250, 250, 250, 0.08) !important;
+    background: rgba(250, 250, 250, 0.02) !important;
   }
 
-  /* ---- Stat cards responsive ---- */
+  /* ─── Desktop stat sizes ─── */
   @media (max-width: 639px) {
-    .stat-card {
-      padding: 1rem;
-    }
-
-    .stat-card .stat-number {
-      font-size: clamp(1.5rem, 6vw, 2rem);
-    }
-
-    .stat-card .stat-label {
-      font-size: 0.6875rem;
-    }
+    .stat-card { padding: 1rem 0.75rem; }
+    .stat-card .stat-number { font-size: clamp(1.5rem, 6vw, 2rem); }
+    .stat-card .stat-label { font-size: 0.625rem; }
   }
 
-  /* ---- Scattered skills overflow control ---- */
-  @media (min-width: 1024px) {
-    #skills .ambient-orbs {
-      z-index: -1;
-    }
-  }
-
-  /* ---- Contact section bottom padding for footer ---- */
-  #contact {
-    padding-bottom: 2rem;
+  /* ─── Arsenal orb container — overflow visible for float ─── */
+  #skills .relative[style*="height"] {
+    overflow: visible;
   }
 </style>

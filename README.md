@@ -2,8 +2,6 @@
 
 An immersive, story-driven developer portfolio featuring WebGL interactive backgrounds, scroll-driven GSAP animations, and premium UI interactions.
 
-![Portfolio Preview](https://via.placeholder.com/1200x630/030305/00f0ff?text=Hamza+Ali+Portfolio)
-
 **Live Site:** [hamzaali.vercel.app](https://hamzaali.vercel.app)
 
 ---
@@ -96,7 +94,7 @@ portfolio/
 --text-primary:  #ffffff
 --text-secondary: #71717a
 
-Typography
+### Typography
 Headings: Space Grotesk (500, 600, 700)
 Body: Inter (400, 500, 600)
 Monospace: JetBrains Mono (400)
@@ -325,5 +323,3 @@ Built with ❤️ in Faisalabad, Pakistan
 "I don't just write code — I architect solutions."
 
 Last Updated: March 2026
-
----

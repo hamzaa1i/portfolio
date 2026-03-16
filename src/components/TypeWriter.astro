@@ -1,51 +1,19 @@
 ---
-// TypeWriter.astro — Typing effect with blinking cyan caret
-// Animation handled by animations.js Module 15 (initTypingEffect)
-// Attributes:
-//   data-typewriter       = JSON array of role strings
-//   data-typewriter-text  = span that receives typed text
-
 interface Props {
   roles: string[];
   class?: string;
   textClass?: string;
 }
 
-const {
-  roles,
-  class: className = '',
-  textClass = 'text-heading-3 sm:text-heading-2',
-} = Astro.props;
-
-const rolesJson = JSON.stringify(roles);
+const { roles, class: className = '', textClass = 'text-heading-3 sm:text-heading-2' } = Astro.props;
 ---
 
-<div
-  class:list={['typewriter-container', className]}
-  data-typewriter={rolesJson}
->
-  <span
-    data-typewriter-text
-    class:list={['typewriter-text', textClass]}
-    aria-label={roles[0]}
-    role="text"
-  ></span>
+<div class:list={['typewriter-container', className]} data-typewriter={JSON.stringify(roles)}>
+  <span data-typewriter-text class:list={['typewriter-text', textClass]} aria-label={roles[0]} role="text"></span>
   <span class="typewriter-caret" aria-hidden="true"></span>
 </div>
-
-<!-- Accessibility: screen readers see the first role immediately -->
 <span class="sr-only">{roles[0]}</span>
 
 <style>
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
+  .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
 </style>
