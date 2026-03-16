@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import InteractiveBackground from '../components/InteractiveBackground.tsx';
 import TypeWriter from '../components/TypeWriter.astro';
 import ScrollIndicator from '../components/ScrollIndicator.astro';
 import SkillOrb from '../components/SkillOrb.astro';
@@ -108,7 +107,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
 
 <Layout>
   <!-- WebGL Background (desktop only) -->
-  <InteractiveBackground client:load />
 
   <!-- Floating Header -->
   <Header />
@@ -122,175 +120,264 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     class="section-snap relative"
     style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 2rem);"
   >
-    <!-- Ambient glow — animated, z-index below reveal -->
-    <div class="absolute inset-0 pointer-events-none" style="z-index: 2;" aria-hidden="true">
-      <div class="ambient-orb hero-orb-1" style="width: clamp(320px, 45vw, 600px); height: clamp(320px, 45vw, 600px); top: 5%; left: 5%;"></div>
-      <div class="ambient-orb hero-orb-2" style="width: clamp(260px, 35vw, 480px); height: clamp(260px, 35vw, 480px); bottom: 12%; right: 6%;"></div>
-      <div class="ambient-orb hero-orb-3" style="width: clamp(180px, 25vw, 350px); height: clamp(180px, 25vw, 350px); top: 55%; left: 50%;"></div>
-    </div>
 
-    <!-- ── REVEAL LAYER — dense code matrix ── -->
+    <!-- ── Reveal layer — dense code matrix ── -->
     <div class="hero-reveal-layer" aria-hidden="true">
 
-      <!-- ═══════ CODE BLOCK 1 — top-left: Hamza config ═══════ -->
-      <span style="top:4%; left:3%; opacity:0.5; font-size:0.72rem; color:var(--accent);">const developer = {</span>
-      <span style="top:7%; left:5%; opacity:0.35; font-size:0.65rem;">  name: 'Hamza Ali',</span>
-      <span style="top:10%; left:5%; opacity:0.35; font-size:0.65rem;">  age: 17,</span>
-      <span style="top:13%; left:5%; opacity:0.35; font-size:0.65rem;">  location: 'Faisalabad, PK',</span>
-      <span style="top:16%; left:5%; opacity:0.4; font-size:0.65rem;">  role: 'Digital Solutions Architect',</span>
-      <span style="top:19%; left:5%; opacity:0.3; font-size:0.65rem;">  ai: true,</span>
-      <span style="top:22%; left:5%; opacity:0.35; font-size:0.65rem;">  coffee: Infinity,</span>
-      <span style="top:25%; left:3%; opacity:0.5; font-size:0.72rem; color:var(--accent);">};</span>
+      <!-- ═══ TOP-LEFT: config ═══ -->
+      <span style="top:2%; left:2%; opacity:0.75; font-size:0.82rem; color:var(--accent);">const developer = {'{'}</span>
+      <span style="top:5.5%; left:4%; opacity:0.5; font-size:0.75rem;">  name: 'Hamza Ali',</span>
+      <span style="top:9%; left:4%; opacity:0.5; font-size:0.75rem;">  age: 17,</span>
+      <span style="top:12.5%; left:4%; opacity:0.5; font-size:0.75rem;">  location: 'Faisalabad, PK',</span>
+      <span style="top:16%; left:4%; opacity:0.55; font-size:0.75rem;">  role: 'Solutions Architect',</span>
+      <span style="top:19.5%; left:4%; opacity:0.45; font-size:0.75rem;">  ai: true, coffee: Infinity,</span>
+      <span style="top:23%; left:2%; opacity:0.75; font-size:0.82rem; color:var(--accent);">{'}'}</span>
 
-      <!-- ═══════ CODE BLOCK 2 — top-right: build function ═══════ -->
-      <span style="top:3%; right:5%; opacity:0.3; font-size:0.6rem; color:var(--text-dim);">// what I do every day</span>
-      <span style="top:6%; right:5%; opacity:0.5; font-size:0.7rem; color:var(--accent);">async function build(idea) {'{'}</span>
-      <span style="top:9%; right:3%; opacity:0.35; font-size:0.65rem;">  const stack = await selectStack(idea);</span>
-      <span style="top:12%; right:3%; opacity:0.35; font-size:0.65rem;">  const design = await craftUI(idea);</span>
-      <span style="top:15%; right:3%; opacity:0.35; font-size:0.65rem;">  const system = await architect(stack, design);</span>
-      <span style="top:18%; right:3%; opacity:0.4; font-size:0.65rem; color:var(--accent);">  return deploy(system);</span>
-      <span style="top:21%; right:5%; opacity:0.5; font-size:0.7rem; color:var(--accent);">{'}'}</span>
+      <!-- ═══ TOP-CENTER-LEFT: imports ═══ -->
+      <span style="top:2%; left:28%; opacity:0.6; font-size:0.78rem; color:var(--accent);">import {'{'} Astro {'}'} from 'astro';</span>
+      <span style="top:5.5%; left:28%; opacity:0.45; font-size:0.72rem;">import React from 'react';</span>
+      <span style="top:9%; left:28%; opacity:0.45; font-size:0.72rem;">import gsap from 'gsap';</span>
+      <span style="top:12.5%; left:28%; opacity:0.45; font-size:0.72rem;">import * as THREE from 'three';</span>
+      <span style="top:16%; left:28%; opacity:0.45; font-size:0.72rem;">import Lenis from 'lenis';</span>
+      <span style="top:19.5%; left:28%; opacity:0.4; font-size:0.72rem;">import {'{'} createClient {'}'} from '@supabase/supabase-js';</span>
+      <span style="top:23%; left:28%; opacity:0.4; font-size:0.72rem;">import {'{'} ScrollTrigger {'}'} from 'gsap/ScrollTrigger';</span>
 
-      <!-- ═══════ CODE BLOCK 3 — mid-left: skills array ═══════ -->
-      <span style="top:34%; left:2%; opacity:0.45; font-size:0.68rem; color:var(--accent);">const skills = [</span>
-      <span style="top:37%; left:4%; opacity:0.3; font-size:0.62rem;">  'Astro',    'React',     'Tailwind',</span>
-      <span style="top:40%; left:4%; opacity:0.3; font-size:0.62rem;">  'GSAP',     'Three.js',  'Lenis',</span>
-      <span style="top:43%; left:4%; opacity:0.3; font-size:0.62rem;">  'Python',   'ERPNext',   'Supabase',</span>
-      <span style="top:46%; left:4%; opacity:0.3; font-size:0.62rem;">  'Figma',    'Git',       'Vercel',</span>
-      <span style="top:49%; left:2%; opacity:0.45; font-size:0.68rem; color:var(--accent);">];</span>
+      <!-- ═══ TOP-CENTER-RIGHT: interface ═══ -->
+      <span style="top:2%; left:60%; opacity:0.6; font-size:0.78rem; color:var(--accent);">interface Project {'{'}</span>
+      <span style="top:5.5%; left:62%; opacity:0.45; font-size:0.72rem;">  title: string;</span>
+      <span style="top:9%; left:62%; opacity:0.45; font-size:0.72rem;">  stack: Technology[];</span>
+      <span style="top:12.5%; left:62%; opacity:0.45; font-size:0.72rem;">  impact: 'high' | 'critical';</span>
+      <span style="top:16%; left:62%; opacity:0.45; font-size:0.72rem;">  solo: true;</span>
+      <span style="top:19.5%; left:60%; opacity:0.6; font-size:0.78rem; color:var(--accent);">{'}'}</span>
 
-      <!-- ═══════ CODE BLOCK 4 — mid-right: factory class ═══════ -->
-      <span style="top:30%; right:4%; opacity:0.3; font-size:0.58rem; color:var(--text-dim);">// real impact, real numbers</span>
-      <span style="top:33%; right:4%; opacity:0.5; font-size:0.7rem; color:var(--accent);">class Factory {'{'}</span>
-      <span style="top:36%; right:2%; opacity:0.35; font-size:0.63rem;">  garments = 300_000;  // per month</span>
-      <span style="top:39%; right:2%; opacity:0.35; font-size:0.63rem;">  clients = ['Boohoo', 'Pull&Bear'];</span>
-      <span style="top:42%; right:2%; opacity:0.35; font-size:0.63rem;">  gatepasses = 50;     // daily, digitized</span>
-      <span style="top:45%; right:2%; opacity:0.3; font-size:0.63rem;">  softwareQuote = '₨2,000,000';</span>
-      <span style="top:48%; right:2%; opacity:0.45; font-size:0.63rem; color:var(--accent);">  hamzaCost = '₨0';   // delivered solo</span>
-      <span style="top:51%; right:4%; opacity:0.5; font-size:0.7rem; color:var(--accent);">{'}'}</span>
+      <!-- ═══ TOP-RIGHT: build function ═══ -->
+      <span style="top:2%; right:2%; opacity:0.35; font-size:0.68rem; color:var(--text-dim);">// what I do every day</span>
+      <span style="top:5.5%; right:2%; opacity:0.7; font-size:0.8rem; color:var(--accent);">async function build(idea: Idea) {'{'}</span>
+      <span style="top:9%; right:0%; opacity:0.5; font-size:0.74rem;">  const requirements = await analyze(idea);</span>
+      <span style="top:12.5%; right:0%; opacity:0.5; font-size:0.74rem;">  const stack = await selectStack(requirements);</span>
+      <span style="top:16%; right:0%; opacity:0.5; font-size:0.74rem;">  const ui = await craftInterface(idea);</span>
+      <span style="top:19.5%; right:0%; opacity:0.5; font-size:0.74rem;">  const system = await architect(stack, ui);</span>
+      <span style="top:23%; right:0%; opacity:0.6; font-size:0.74rem; color:var(--accent);">  return deploy(system, 'production');</span>
+      <span style="top:26.5%; right:2%; opacity:0.7; font-size:0.8rem; color:var(--accent);">{'}'}</span>
 
-      <!-- ═══════ CODE BLOCK 5 — bottom-left: deploy pipeline ═══════ -->
-      <span style="bottom:30%; left:2%; opacity:0.3; font-size:0.58rem; color:var(--text-dim);">// ship it</span>
-      <span style="bottom:27%; left:2%; opacity:0.45; font-size:0.68rem; color:var(--accent);">const pipeline = [</span>
-      <span style="bottom:24%; left:4%; opacity:0.3; font-size:0.62rem;">  'design()',</span>
-      <span style="bottom:21%; left:4%; opacity:0.3; font-size:0.62rem;">  'develop()',</span>
-      <span style="bottom:18%; left:4%; opacity:0.3; font-size:0.62rem;">  'test()',</span>
-      <span style="bottom:15%; left:4%; opacity:0.35; font-size:0.62rem;">  'deploy()',</span>
-      <span style="bottom:12%; left:4%; opacity:0.4; font-size:0.62rem; color:var(--accent);">  'iterate()',</span>
-      <span style="bottom:9%; left:2%; opacity:0.45; font-size:0.68rem; color:var(--accent);">];</span>
+      <!-- ═══ ROW 2 LEFT: React component ═══ -->
+      <span style="top:28%; left:2%; opacity:0.65; font-size:0.78rem; color:var(--accent);">const Portfolio = () =&gt; {'{'}</span>
+      <span style="top:31.5%; left:4%; opacity:0.45; font-size:0.72rem;">  const [projects] = useState([]);</span>
+      <span style="top:35%; left:4%; opacity:0.45; font-size:0.72rem;">  const [loading] = useState(true);</span>
+      <span style="top:38.5%; left:4%; opacity:0.4; font-size:0.72rem;">  const ref = useRef&lt;HTMLCanvasElement&gt;(null);</span>
+      <span style="top:42%; left:4%; opacity:0.45; font-size:0.72rem;">  useEffect(() =&gt; {'{'}</span>
+      <span style="top:45.5%; left:6%; opacity:0.4; font-size:0.7rem;">    initParticles(ref.current);</span>
+      <span style="top:49%; left:6%; opacity:0.4; font-size:0.7rem;">    fetchProjects().then(setProjects);</span>
+      <span style="top:52.5%; left:4%; opacity:0.45; font-size:0.72rem;">  {'}'}, []);</span>
 
-      <!-- ═══════ CODE BLOCK 6 — bottom-right: export ═══════ -->
-      <span style="bottom:28%; right:3%; opacity:0.3; font-size:0.58rem; color:var(--text-dim);">// ready for your project</span>
-      <span style="bottom:25%; right:3%; opacity:0.5; font-size:0.7rem; color:var(--accent);">export default {'{'}</span>
-      <span style="bottom:22%; right:1%; opacity:0.35; font-size:0.63rem;">  available: true,</span>
-      <span style="bottom:19%; right:1%; opacity:0.35; font-size:0.63rem;">  response: '24-48h',</span>
-      <span style="bottom:16%; right:1%; opacity:0.35; font-size:0.63rem;">  stack: 'modern',</span>
-      <span style="bottom:13%; right:1%; opacity:0.4; font-size:0.63rem; color:var(--accent);">  approach: 'AI-powered',</span>
-      <span style="bottom:10%; right:3%; opacity:0.5; font-size:0.7rem; color:var(--accent);">{'}'}</span>
+      <!-- ═══ ROW 2 CENTER: type + enum ═══ -->
+      <span style="top:28%; left:32%; opacity:0.6; font-size:0.78rem; color:var(--accent);">type Stack = {'{'}</span>
+      <span style="top:31.5%; left:34%; opacity:0.45; font-size:0.72rem;">  frontend: 'Astro' | 'React';</span>
+      <span style="top:35%; left:34%; opacity:0.45; font-size:0.72rem;">  animation: 'GSAP' | 'Three.js';</span>
+      <span style="top:38.5%; left:34%; opacity:0.45; font-size:0.72rem;">  backend: 'Supabase' | 'ERPNext';</span>
+      <span style="top:42%; left:34%; opacity:0.45; font-size:0.72rem;">  deploy: 'Vercel';</span>
+      <span style="top:45.5%; left:32%; opacity:0.6; font-size:0.78rem; color:var(--accent);">{'}'}</span>
+      <span style="top:49%; left:32%; opacity:0.55; font-size:0.76rem; color:var(--accent);">enum Status {'{'}</span>
+      <span style="top:52.5%; left:34%; opacity:0.4; font-size:0.7rem;">  DESIGNING = 'designing',</span>
+      <span style="top:56%; left:34%; opacity:0.4; font-size:0.7rem;">  BUILDING = 'building',</span>
+      <span style="top:59.5%; left:34%; opacity:0.4; font-size:0.7rem;">  DEPLOYING = 'deploying',</span>
+      <span style="top:63%; left:34%; opacity:0.5; font-size:0.7rem; color:var(--accent);">  SHIPPED = 'shipped ✓',</span>
+      <span style="top:66.5%; left:32%; opacity:0.55; font-size:0.76rem; color:var(--accent);">{'}'}</span>
 
-      <!-- ═══════ FLOATING KEYWORDS — scattered across center ═══════ -->
-      <span style="top:28%; left:38%; opacity:0.15; font-size:1.1rem; color:var(--accent); transform:rotate(-12deg);">async</span>
-      <span style="top:55%; left:42%; opacity:0.12; font-size:1rem; color:var(--text-dim); transform:rotate(8deg);">await</span>
-      <span style="top:62%; left:25%; opacity:0.14; font-size:0.95rem; color:var(--accent); transform:rotate(-5deg);">deploy</span>
-      <span style="top:20%; left:45%; opacity:0.1; font-size:1.2rem; color:var(--text-dim); transform:rotate(15deg);">import</span>
-      <span style="top:72%; left:55%; opacity:0.12; font-size:1rem; color:var(--accent); transform:rotate(-8deg);">export</span>
-      <span style="top:38%; left:60%; opacity:0.1; font-size:1.1rem; color:var(--text-dim); transform:rotate(10deg);">return</span>
-      <span style="top:80%; left:35%; opacity:0.13; font-size:0.9rem; color:var(--accent); transform:rotate(-3deg);">render</span>
-      <span style="top:15%; left:58%; opacity:0.11; font-size:1rem; color:var(--text-dim); transform:rotate(6deg);">const</span>
-      <span style="top:68%; left:70%; opacity:0.12; font-size:0.95rem; color:var(--accent); transform:rotate(-10deg);">function</span>
-      <span style="top:45%; left:30%; opacity:0.1; font-size:1.15rem; color:var(--text-dim); transform:rotate(4deg);">class</span>
+      <!-- ═══ ROW 2 RIGHT: class ═══ -->
+      <span style="top:28%; right:2%; opacity:0.35; font-size:0.68rem; color:var(--text-dim);">// real impact, real numbers</span>
+      <span style="top:31.5%; right:2%; opacity:0.7; font-size:0.8rem; color:var(--accent);">class ReveStitching {'{'}</span>
+      <span style="top:35%; right:0%; opacity:0.5; font-size:0.74rem;">  readonly garments = 300_000;</span>
+      <span style="top:38.5%; right:0%; opacity:0.5; font-size:0.74rem;">  readonly clients = ['Boohoo', 'Pull&Bear'];</span>
+      <span style="top:42%; right:0%; opacity:0.5; font-size:0.74rem;">  readonly gatepasses = 50;</span>
+      <span style="top:45.5%; right:0%; opacity:0.45; font-size:0.74rem;">  private quote = '₨2,000,000';</span>
+      <span style="top:49%; right:0%; opacity:0.55; font-size:0.74rem; color:var(--accent);">  private cost = '₨0';</span>
+      <span style="top:52.5%; right:0%; opacity:0.5; font-size:0.74rem;">  async digitize() {'{'}</span>
+      <span style="top:56%; right:-1%; opacity:0.4; font-size:0.7rem;">    await this.buildWebsite();</span>
+      <span style="top:59.5%; right:-1%; opacity:0.4; font-size:0.7rem;">    await this.implementERP();</span>
+      <span style="top:63%; right:-1%; opacity:0.4; font-size:0.7rem;">    await this.designBrand();</span>
+      <span style="top:66.5%; right:-1%; opacity:0.5; font-size:0.7rem; color:var(--accent);">    return 'delivered_solo';</span>
+      <span style="top:70%; right:0%; opacity:0.5; font-size:0.74rem;">  {'}'}</span>
+      <span style="top:73.5%; right:2%; opacity:0.7; font-size:0.8rem; color:var(--accent);">{'}'}</span>
 
-      <!-- ═══════ SYMBOLS — brackets, arrows, operators ═══════ -->
-      <span style="top:5%; left:35%; opacity:0.2; font-size:1.8rem; color:var(--accent); transform:rotate(5deg);">{'{'}</span>
-      <span style="top:5%; left:40%; opacity:0.2; font-size:1.8rem; color:var(--accent); transform:rotate(-5deg);">{'}'}</span>
-      <span style="top:85%; left:60%; opacity:0.18; font-size:1.8rem; color:var(--accent); transform:rotate(8deg);">{'<'}/{'>'}</span>
-      <span style="top:50%; left:15%; opacity:0.15; font-size:1.5rem; color:var(--text-dim); transform:rotate(-15deg);">=&gt;</span>
-      <span style="top:75%; left:80%; opacity:0.15; font-size:1.5rem; color:var(--accent); transform:rotate(12deg);">===</span>
-      <span style="top:10%; left:75%; opacity:0.12; font-size:1.6rem; color:var(--text-dim); transform:rotate(-8deg);">&&</span>
-      <span style="top:60%; left:85%; opacity:0.14; font-size:1.4rem; color:var(--accent); transform:rotate(6deg);">||</span>
-      <span style="top:32%; left:82%; opacity:0.1; font-size:1.5rem; color:var(--text-dim); transform:rotate(-10deg);">...</span>
-      <span style="top:88%; left:15%; opacity:0.16; font-size:1.3rem; color:var(--accent); transform:rotate(3deg);">::</span>
-      <span style="top:42%; left:92%; opacity:0.12; font-size:1.4rem; color:var(--text-dim); transform:rotate(-6deg);">?.</span>
-      <span style="top:90%; left:45%; opacity:0.15; font-size:1.6rem; color:var(--accent); transform:rotate(10deg);">#</span>
-      <span style="top:2%; left:55%; opacity:0.13; font-size:1.5rem; color:var(--text-dim); transform:rotate(-12deg);">@</span>
+      <!-- ═══ ROW 3 LEFT: CSS ═══ -->
+      <span style="top:56%; left:2%; opacity:0.6; font-size:0.76rem; color:var(--accent);">.portfolio {'{'}</span>
+      <span style="top:59.5%; left:4%; opacity:0.4; font-size:0.7rem;">  display: grid;</span>
+      <span style="top:63%; left:4%; opacity:0.4; font-size:0.7rem;">  backdrop-filter: blur(20px);</span>
+      <span style="top:66.5%; left:4%; opacity:0.4; font-size:0.7rem;">  border: 1px solid rgba(255,255,255,0.06);</span>
+      <span style="top:70%; left:4%; opacity:0.45; font-size:0.7rem;">  animation: fadeUp 0.8s ease-out;</span>
+      <span style="top:73.5%; left:4%; opacity:0.4; font-size:0.7rem;">  background: var(--glass-bg);</span>
+      <span style="top:77%; left:2%; opacity:0.6; font-size:0.76rem; color:var(--accent);">{'}'}</span>
 
-      <!-- ═══════ DOT GRID — subtle pattern layer ═══════ -->
-      <span style="top:8%; left:48%; opacity:0.08; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · · ·</span>
-      <span style="top:11%; left:48%; opacity:0.06; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · · ·</span>
-      <span style="top:14%; left:48%; opacity:0.08; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · · ·</span>
-      <span style="top:17%; left:48%; opacity:0.06; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · · ·</span>
+      <!-- ═══ ROW 3 CENTER: API ═══ -->
+      <span style="top:70%; left:30%; opacity:0.6; font-size:0.76rem; color:var(--accent);">const api = {'{'}</span>
+      <span style="top:73.5%; left:32%; opacity:0.4; font-size:0.7rem;">  getProjects: () =&gt; fetch('/api/projects'),</span>
+      <span style="top:77%; left:32%; opacity:0.4; font-size:0.7rem;">  sendMessage: (data) =&gt; fetch('/api/contact', {'{'}</span>
+      <span style="top:80.5%; left:34%; opacity:0.35; font-size:0.68rem;">    method: 'POST', body: JSON.stringify(data),</span>
+      <span style="top:84%; left:32%; opacity:0.4; font-size:0.7rem;">  {'}'}),</span>
+      <span style="top:87.5%; left:30%; opacity:0.6; font-size:0.76rem; color:var(--accent);">{'}'}</span>
 
-      <span style="top:55%; left:5%; opacity:0.07; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · ·</span>
-      <span style="top:58%; left:5%; opacity:0.05; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · ·</span>
-      <span style="top:61%; left:5%; opacity:0.07; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · ·</span>
+      <!-- ═══ ROW 3 RIGHT: error handling ═══ -->
+      <span style="top:77%; right:2%; opacity:0.6; font-size:0.76rem; color:var(--accent);">try {'{'}</span>
+      <span style="top:80.5%; right:0%; opacity:0.4; font-size:0.7rem;">  const result = await pipeline.run();</span>
+      <span style="top:84%; right:0%; opacity:0.4; font-size:0.7rem;">  await notify(result.status);</span>
+      <span style="top:87.5%; right:0%; opacity:0.5; font-size:0.7rem; color:var(--accent);">  console.log('✓ shipped');</span>
+      <span style="top:91%; right:2%; opacity:0.6; font-size:0.76rem; color:var(--accent);">{'}'} catch (err) {'{'}</span>
+      <span style="top:94.5%; right:0%; opacity:0.4; font-size:0.7rem;">  retry(pipeline, {'{'} max: Infinity {'}'});</span>
+      <span style="top:98%; right:2%; opacity:0.6; font-size:0.76rem; color:var(--accent);">{'}'}</span>
 
-      <span style="top:70%; right:5%; opacity:0.06; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · ·</span>
-      <span style="top:73%; right:5%; opacity:0.08; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · ·</span>
-      <span style="top:76%; right:5%; opacity:0.06; font-size:0.5rem; letter-spacing:1.2em; color:var(--text-dim);">· · · · · · · ·</span>
+      <!-- ═══ BOTTOM LEFT: GSAP ═══ -->
+      <span style="bottom:18%; left:2%; opacity:0.6; font-size:0.76rem; color:var(--accent);">gsap.registerPlugin(ScrollTrigger);</span>
+      <span style="bottom:14.5%; left:2%; opacity:0.4; font-size:0.7rem;">const tl = gsap.timeline({'{'}</span>
+      <span style="bottom:11%; left:4%; opacity:0.35; font-size:0.68rem;">  scrollTrigger: {'{'} trigger: '#hero' {'}'},</span>
+      <span style="bottom:7.5%; left:2%; opacity:0.4; font-size:0.7rem;">{'}'});</span>
+      <span style="bottom:4%; left:2%; opacity:0.35; font-size:0.68rem;">tl.to('.hero', {'{'} y: -100, opacity: 0 {'}'});</span>
 
-      <!-- ═══════ LINE NUMBERS — left gutter feel ═══════ -->
-      <span style="top:35%; left:36%; opacity:0.08; font-size:0.55rem; color:var(--text-dim); line-height:1.8;">01<br/>02<br/>03<br/>04<br/>05<br/>06<br/>07<br/>08<br/>09<br/>10<br/>11<br/>12</span>
-      <span style="top:5%; left:70%; opacity:0.06; font-size:0.55rem; color:var(--text-dim); line-height:1.8;">14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22</span>
-      <span style="bottom:5%; left:50%; opacity:0.07; font-size:0.55rem; color:var(--text-dim); line-height:1.8;">31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37</span>
+      <!-- ═══ BOTTOM CENTER: export ═══ -->
+      <span style="bottom:18%; left:30%; opacity:0.65; font-size:0.78rem; color:var(--accent);">export default {'{'}</span>
+      <span style="bottom:14.5%; left:32%; opacity:0.45; font-size:0.72rem;">  name: 'Hamza Ali',</span>
+      <span style="bottom:11%; left:32%; opacity:0.45; font-size:0.72rem;">  available: true,</span>
+      <span style="bottom:7.5%; left:32%; opacity:0.45; font-size:0.72rem;">  stack: 'cutting-edge',</span>
+      <span style="bottom:4%; left:32%; opacity:0.55; font-size:0.72rem; color:var(--accent);">  method: 'AI-powered',</span>
+      <span style="bottom:0.5%; left:30%; opacity:0.65; font-size:0.78rem; color:var(--accent);">{'}'} satisfies Developer;</span>
 
-      <!-- ═══════ TERMINAL PROMPTS — scattered ═══════ -->
-      <span style="top:83%; left:5%; opacity:0.25; font-size:0.62rem; color:var(--accent);">~/hamza $</span>
-      <span style="top:83%; left:16%; opacity:0.2; font-size:0.62rem;">npm run build</span>
-      <span style="top:86%; left:5%; opacity:0.15; font-size:0.6rem; color:var(--text-muted);">✓ Built in 1.2s</span>
-      <span style="top:89%; left:5%; opacity:0.25; font-size:0.62rem; color:var(--accent);">~/hamza $</span>
-      <span style="top:89%; left:16%; opacity:0.2; font-size:0.62rem;">git push origin main</span>
-      <span style="top:92%; left:5%; opacity:0.15; font-size:0.6rem; color:var(--text-muted);">✓ Deployed to production</span>
+      <!-- ═══ BOTTOM RIGHT: terminal ═══ -->
+      <span style="bottom:18%; right:2%; opacity:0.5; font-size:0.72rem; color:var(--accent);">~/portfolio $</span>
+      <span style="bottom:18%; right:16%; opacity:0.4; font-size:0.7rem;">git log --oneline -5</span>
+      <span style="bottom:14.5%; right:2%; opacity:0.3; font-size:0.66rem; color:var(--text-muted);">a3f2d1c deploy: production ready</span>
+      <span style="bottom:11%; right:2%; opacity:0.25; font-size:0.66rem; color:var(--text-muted);">7b1e4a2 feat: webgl particles</span>
+      <span style="bottom:7.5%; right:2%; opacity:0.25; font-size:0.66rem; color:var(--text-muted);">f8c3b5d feat: gsap scroll reveals</span>
+      <span style="bottom:4%; right:2%; opacity:0.25; font-size:0.66rem; color:var(--text-muted);">2d9a7f1 feat: contact form</span>
+      <span style="bottom:0.5%; right:2%; opacity:0.25; font-size:0.66rem; color:var(--text-muted);">e5b8c3a init: astro + react + three</span>
 
-      <span style="top:55%; right:2%; opacity:0.2; font-size:0.6rem; color:var(--accent);">▶</span>
-      <span style="top:55%; right:5%; opacity:0.18; font-size:0.6rem;">node server.js</span>
-      <span style="top:58%; right:2%; opacity:0.12; font-size:0.58rem; color:var(--text-muted);">listening on :4321</span>
+      <!-- ═══ KEYWORDS — center ═══ -->
+      <span style="top:27%; left:46%; opacity:0.18; font-size:1.3rem; color:var(--accent); transform:rotate(-8deg);">async</span>
+      <span style="top:40%; left:54%; opacity:0.14; font-size:1.2rem; color:var(--text-dim); transform:rotate(6deg);">await</span>
+      <span style="top:24%; left:54%; opacity:0.12; font-size:1.35rem; color:var(--text-dim); transform:rotate(12deg);">import</span>
+      <span style="top:50%; left:58%; opacity:0.16; font-size:1.25rem; color:var(--accent); transform:rotate(-5deg);">export</span>
+      <span style="top:36%; left:64%; opacity:0.12; font-size:1.2rem; color:var(--text-dim); transform:rotate(4deg);">return</span>
+      <span style="top:60%; left:50%; opacity:0.14; font-size:1.2rem; color:var(--accent); transform:rotate(-10deg);">const</span>
+      <span style="top:46%; left:70%; opacity:0.12; font-size:1.3rem; color:var(--text-dim); transform:rotate(7deg);">function</span>
+      <span style="top:54%; left:24%; opacity:0.1; font-size:1.35rem; color:var(--text-dim); transform:rotate(-3deg);">class</span>
+      <span style="top:42%; left:44%; opacity:0.15; font-size:1.15rem; color:var(--accent); transform:rotate(9deg);">interface</span>
+      <span style="top:66%; left:52%; opacity:0.14; font-size:1.2rem; color:var(--text-dim); transform:rotate(-6deg);">deploy</span>
+      <span style="top:32%; left:74%; opacity:0.12; font-size:1.25rem; color:var(--accent); transform:rotate(3deg);">render</span>
+      <span style="top:58%; left:68%; opacity:0.1; font-size:1.3rem; color:var(--text-dim); transform:rotate(-11deg);">void</span>
+      <span style="top:48%; left:38%; opacity:0.14; font-size:1.15rem; color:var(--accent); transform:rotate(5deg);">string</span>
+      <span style="top:64%; left:40%; opacity:0.1; font-size:1.2rem; color:var(--text-dim); transform:rotate(-7deg);">boolean</span>
+      <span style="top:38%; left:50%; opacity:0.12; font-size:1.25rem; color:var(--text-dim); transform:rotate(2deg);">number</span>
+      <span style="top:52%; left:44%; opacity:0.14; font-size:1.15rem; color:var(--accent); transform:rotate(-4deg);">Promise</span>
+      <span style="top:44%; left:60%; opacity:0.1; font-size:1.3rem; color:var(--text-dim); transform:rotate(8deg);">typeof</span>
+      <span style="top:70%; left:44%; opacity:0.12; font-size:1.2rem; color:var(--accent); transform:rotate(-9deg);">static</span>
 
-      <!-- ═══════ COMMENT ANNOTATIONS — scattered wisdom ═══════ -->
-      <span style="top:30%; left:22%; opacity:0.15; font-size:0.58rem; color:var(--text-dim); transform:rotate(-2deg);">// TODO: change the world</span>
-      <span style="top:65%; left:40%; opacity:0.12; font-size:0.56rem; color:var(--text-dim); transform:rotate(3deg);">/* built with AI, architected by me */</span>
-      <span style="top:78%; left:58%; opacity:0.14; font-size:0.58rem; color:var(--text-dim); transform:rotate(-4deg);">// no shortcuts, just solutions</span>
-      <span style="top:48%; left:48%; opacity:0.1; font-size:0.55rem; color:var(--text-dim); transform:rotate(2deg);">/** @author hamza — age 17 */</span>
-      <span style="top:25%; left:65%; opacity:0.13; font-size:0.57rem; color:var(--text-dim); transform:rotate(-6deg);">// from paper to digital</span>
-      <span style="top:93%; left:40%; opacity:0.12; font-size:0.56rem; color:var(--text-dim); transform:rotate(1deg);">// 300K garments. Zero bugs.</span>
+      <!-- ═══ OPERATORS ═══ -->
+      <span style="top:26%; left:48%; opacity:0.2; font-size:1.8rem; color:var(--accent); transform:rotate(5deg);">{'{'} {'}'}</span>
+      <span style="top:62%; left:62%; opacity:0.16; font-size:1.7rem; color:var(--accent); transform:rotate(8deg);">{'<'}/{'>'}</span>
+      <span style="top:47%; left:27%; opacity:0.14; font-size:1.5rem; color:var(--text-dim); transform:rotate(-12deg);">=&gt;</span>
+      <span style="top:57%; left:74%; opacity:0.12; font-size:1.4rem; color:var(--accent); transform:rotate(10deg);">===</span>
+      <span style="top:37%; left:80%; opacity:0.11; font-size:1.5rem; color:var(--text-dim); transform:rotate(-7deg);">&&</span>
+      <span style="top:67%; left:82%; opacity:0.11; font-size:1.4rem; color:var(--accent); transform:rotate(6deg);">||</span>
+      <span style="top:44%; left:87%; opacity:0.09; font-size:1.4rem; color:var(--text-dim); transform:rotate(-8deg);">...</span>
+      <span style="top:52%; left:20%; opacity:0.11; font-size:1.3rem; color:var(--text-dim); transform:rotate(4deg);">?.</span>
+      <span style="top:74%; left:37%; opacity:0.14; font-size:1.5rem; color:var(--accent); transform:rotate(-5deg);">::</span>
+      <span style="top:50%; left:77%; opacity:0.12; font-size:1.4rem; color:var(--accent); transform:rotate(-3deg);">++</span>
+      <span style="top:60%; left:30%; opacity:0.1; font-size:1.5rem; color:var(--accent); transform:rotate(-6deg);">**</span>
+      <span style="top:45%; left:52%; opacity:0.13; font-size:1.4rem; color:var(--text-dim); transform:rotate(4deg);">[]</span>
+
+      <!-- ═══ DOT GRIDS ═══ -->
+      <span style="top:25%; left:50%; opacity:0.07; font-size:0.5rem; letter-spacing:1em; color:var(--text-dim);">· · · · · · · · · ·</span>
+      <span style="top:27%; left:50%; opacity:0.05; font-size:0.5rem; letter-spacing:1em; color:var(--text-dim);">· · · · · · · · · ·</span>
+      <span style="top:53%; left:6%; opacity:0.06; font-size:0.5rem; letter-spacing:1em; color:var(--text-dim);">· · · · · · ·</span>
+      <span style="top:55%; left:6%; opacity:0.04; font-size:0.5rem; letter-spacing:1em; color:var(--text-dim);">· · · · · · ·</span>
+      <span style="top:74%; right:6%; opacity:0.05; font-size:0.5rem; letter-spacing:1em; color:var(--text-dim);">· · · · · · · ·</span>
+      <span style="top:76%; right:6%; opacity:0.04; font-size:0.5rem; letter-spacing:1em; color:var(--text-dim);">· · · · · · · ·</span>
+
+      <!-- ═══ LINE NUMBERS ═══ -->
+      <span style="top:30%; left:43%; opacity:0.07; font-size:0.52rem; color:var(--text-dim); line-height:1.8;">01<br/>02<br/>03<br/>04<br/>05<br/>06<br/>07<br/>08<br/>09<br/>10</span>
+      <span style="top:3%; left:76%; opacity:0.06; font-size:0.52rem; color:var(--text-dim); line-height:1.8;">11<br/>12<br/>13<br/>14<br/>15<br/>16</span>
+
+      <!-- ═══ COMMENTS ═══ -->
+      <span style="top:26%; left:26%; opacity:0.18; font-size:0.66rem; color:var(--text-dim); transform:rotate(-2deg);">// TODO: change the world</span>
+      <span style="top:55%; left:46%; opacity:0.15; font-size:0.64rem; color:var(--text-dim); transform:rotate(2deg);">/* AI-architected, human-directed */</span>
+      <span style="top:78%; left:57%; opacity:0.16; font-size:0.66rem; color:var(--text-dim); transform:rotate(-3deg);">// zero to production</span>
+      <span style="top:88%; left:20%; opacity:0.14; font-size:0.64rem; color:var(--text-dim); transform:rotate(1deg);">// 300K garments. zero bugs.</span>
+      <span style="top:21%; right:24%; opacity:0.16; font-size:0.65rem; color:var(--text-dim); transform:rotate(-4deg);">/** @author hamza — age 17 */</span>
+      <span style="top:65%; left:17%; opacity:0.14; font-size:0.63rem; color:var(--text-dim); transform:rotate(3deg);">// no shortcuts, just solutions</span>
+      <span style="top:48%; left:18%; opacity:0.13; font-size:0.63rem; color:var(--text-dim); transform:rotate(-1deg);">// from paper to digital</span>
+      <span style="top:80%; left:34%; opacity:0.15; font-size:0.64rem; color:var(--text-dim); transform:rotate(2deg);">// software house quoted ₨2M</span>
+
     </div>
 
-    <div class="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center">
-      <!-- Availability tag -->
-      <div data-animate="fade-up" class="mb-6 sm:mb-8">
-        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-[0.7rem] font-mono tracking-wider text-text-secondary">
-          <span class="w-1.5 h-1.5 rounded-full bg-accent-success animate-glow-pulse"></span>
-          Available for projects
-        </span>
-      </div>
+    <div class="relative z-10 section-inner">
+      <div class="flex flex-col lg:flex-row items-center lg:items-center gap-10 lg:gap-14">
+        <!-- Left column — main content -->
+        <div class="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start max-w-2xl">
+          <!-- Availability tag -->
+          <div data-animate="fade-up" class="mb-6 sm:mb-8">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-[0.7rem] font-mono tracking-wider text-text-secondary">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent-success animate-glow-pulse"></span>
+              Available for projects
+            </span>
+          </div>
 
-      <!-- Name — letter hover pop -->
-      <h1
-        data-hover-letters
-        class="text-display font-heading font-bold text-text-primary mb-4 sm:mb-6"
-      >
-        Hamza Ali
-      </h1>
+          <!-- Name -->
+          <h1
+            data-hover-letters
+            data-scramble="load"
+            class="text-display font-heading font-bold text-text-primary mb-4 sm:mb-6"
+          >
+            Hamza Ali
+          </h1>
 
-      <!-- Typewriter -->
-      <div data-animate="fade-up" class="mb-6 sm:mb-8">
-        <TypeWriter roles={roles} textClass="text-heading-3 sm:text-heading-2" />
-      </div>
+          <!-- Typewriter -->
+          <div data-animate="fade-up" class="mb-6 sm:mb-8">
+            <TypeWriter roles={roles} textClass="text-heading-3 sm:text-heading-2" />
+          </div>
 
-      <!-- Tagline -->
-      <p data-animate="fade-up" class="text-body-lg text-text-secondary max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed">
-        I architect digital solutions and leverage AI to build systems that businesses depend on.
-      </p>
+          <!-- Tagline -->
+          <p data-animate="fade-up" class="text-body-lg text-text-secondary max-w-xl mb-10 sm:mb-12 leading-relaxed">
+            I architect digital solutions and leverage AI to build systems that businesses depend on.
+          </p>
 
-      <!-- CTAs -->
-      <div data-animate="fade-up" class="flex flex-col sm:flex-row items-center gap-4">
-        <a href="#work" data-nav-link class="btn-primary">
-          <span>explore my work</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </a>
-        <a href="#contact" data-nav-link class="btn-secondary">
-          <span>get in touch</span>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-        </a>
+          <!-- CTAs -->
+          <div data-animate="fade-up" class="flex flex-col sm:flex-row items-center gap-4">
+            <a href="#work" data-nav-link data-magnetic class="btn-primary laser-glow">
+              <span>explore my work</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </a>
+            <a href="#contact" data-nav-link data-magnetic class="btn-secondary laser-glow">
+              <span>get in touch</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right column — Snapshot card -->
+        <div data-animate="fade-up" class="w-full max-w-sm lg:w-80 xl:w-96 flex-shrink-0">
+          <div class="glass laser-glow p-5 sm:p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent-primary"></span>
+              <span class="font-mono text-[0.7rem] font-medium text-accent-primary tracking-wider uppercase">Snapshot</span>
+            </div>
+            <p class="text-body-sm text-text-secondary leading-relaxed mb-5">
+              Building production systems that businesses depend on — websites, ERP tooling, and brand identity — solo, powered by AI.
+            </p>
+            <div class="grid grid-cols-3 gap-4 border-t border-white/5 pt-4">
+              <div class="text-center">
+                <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">1<span class="text-base">+</span></div>
+                <div class="font-mono text-[0.6rem] text-text-dim tracking-wider uppercase mt-1.5">years building</div>
+              </div>
+              <div class="text-center border-x border-white/5">
+                <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">3<span class="text-base">+</span></div>
+                <div class="font-mono text-[0.6rem] text-text-dim tracking-wider uppercase mt-1.5">projects shipped</div>
+              </div>
+              <div class="text-center">
+                <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">300<span class="text-base">K+</span></div>
+                <div class="font-mono text-[0.6rem] text-text-dim tracking-wider uppercase mt-1.5">garments tracked</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -308,10 +395,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     data-section
     class="section-snap relative"
   >
-    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <div class="ambient-orb ambient-orb-gold" style="width: clamp(220px, 30vw, 420px); height: clamp(220px, 30vw, 420px); top: 15%; right: 12%;"></div>
-      <div class="ambient-orb ambient-orb-dim" style="width: clamp(180px, 25vw, 360px); height: clamp(180px, 25vw, 360px); bottom: 20%; left: 8%;"></div>
-    </div>
 
     <div class="relative z-10 section-inner">
       <div class="flex items-stretch gap-8 lg:gap-14">
@@ -324,7 +407,7 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
         <div class="flex-1 max-w-2xl">
           <!-- Mobile heading -->
           <div class="lg:hidden mb-6">
-            <span class="section-label mb-2 block">About</span>
+            <span data-scramble class="section-label mb-2 block">About</span>
             <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary">The Story</h2>
           </div>
 
@@ -388,15 +471,11 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     data-section
     class="section-snap relative"
   >
-    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <div class="ambient-orb ambient-orb-gold" style="width: clamp(200px, 30vw, 400px); height: clamp(200px, 30vw, 400px); top: 8%; left: 18%;"></div>
-      <div class="ambient-orb ambient-orb-dim" style="width: clamp(240px, 35vw, 440px); height: clamp(240px, 35vw, 440px); bottom: 8%; right: 12%;"></div>
-    </div>
 
     <div class="relative z-10 section-inner">
       <!-- Header -->
       <div class="text-center mb-6 lg:mb-4">
-        <span data-animate="fade-up" class="section-label mb-2 block">Technologies</span>
+        <span data-scramble class="section-label mb-2 block">Technologies</span>
         <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary mb-3">The Arsenal</h2>
         <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-sm mx-auto">
           Technologies I use to build solutions that businesses depend on.
@@ -462,15 +541,11 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     data-section
     class="section-snap relative"
   >
-    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <div class="ambient-orb ambient-orb-dim" style="width: clamp(200px, 28vw, 380px); height: clamp(200px, 28vw, 380px); top: 12%; left: 5%;"></div>
-      <div class="ambient-orb ambient-orb-gold" style="width: clamp(180px, 25vw, 350px); height: clamp(180px, 25vw, 350px); bottom: 15%; right: 8%;"></div>
-    </div>
 
     <div class="relative z-10 section-inner">
       <!-- Header -->
       <div class="mb-6 lg:mb-8">
-        <span data-animate="fade-up" class="section-label mb-2 block">Portfolio</span>
+        <span data-scramble class="section-label mb-2 block">Portfolio</span>
         <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary mb-3">Selected Works</h2>
         <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-md">
           Real projects. Real businesses. Real impact. Each delivered solo, powered by AI.
@@ -493,7 +568,7 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
         ))}
 
         <!-- CTA card -->
-        <div class="project-card-interactive glass flex flex-col items-center justify-center p-6 text-center" data-animate="fade-up" style="min-height: 260px;">
+        <div class="project-card-interactive glass laser-glow flex flex-col items-center justify-center p-6 text-center" data-animate="fade-up" style="min-height: 260px;">
           <div class="w-12 h-12 rounded-xl glass-strong flex items-center justify-center mb-4">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-primary">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -503,7 +578,7 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           <p class="text-xs text-text-secondary mb-4 leading-relaxed max-w-[200px]">
             Have an idea that needs to become real? Let's build it.
           </p>
-          <a href="#contact" data-nav-link class="btn-primary btn-sm" onclick="event.stopPropagation()">
+          <a href="#contact" data-nav-link data-magnetic class="btn-primary btn-sm" onclick="event.stopPropagation()">
             <span>start a conversation</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
           </a>
@@ -520,17 +595,13 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     data-section
     class="section-snap relative"
   >
-    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <div class="ambient-orb ambient-orb-gold" style="width: clamp(260px, 38vw, 500px); height: clamp(260px, 38vw, 500px); top: 15%; right: 8%;"></div>
-      <div class="ambient-orb ambient-orb-dim" style="width: clamp(200px, 28vw, 380px); height: clamp(200px, 28vw, 380px); bottom: 12%; left: 12%;"></div>
-    </div>
-
     <div class="relative z-10 section-inner">
       <!-- Header -->
       <div class="text-center mb-8 lg:mb-10">
-        <span data-animate="fade-up" class="section-label mb-2 block">Contact</span>
+        <span data-scramble class="section-label mb-2 block">Contact</span>
         <h2
           data-hover-letters
+          data-scramble
           class="text-heading-1 font-heading font-bold text-text-primary mb-3"
         >
           Let's Build Something Extraordinary
@@ -556,7 +627,8 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
             href="https://wa.me/923329555786"
             target="_blank"
             rel="noopener noreferrer"
-            class="contact-link glass p-4 flex items-center gap-3.5 group"
+            class="contact-link glass laser-glow p-4 flex items-center gap-3.5 group"
+            data-laser="green"
           >
             <div class="w-10 h-10 rounded-lg glass-strong flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-accent-success">
@@ -573,7 +645,8 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           <!-- Email -->
           <a
             href="mailto:hamzaali.dev@proton.me"
-            class="contact-link glass p-4 flex items-center gap-3.5 group"
+            class="contact-link glass laser-glow p-4 flex items-center gap-3.5 group"
+            data-laser="accent"
           >
             <div class="w-10 h-10 rounded-lg glass-strong flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-primary">
@@ -592,7 +665,8 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
             href="https://github.com/hamzaa1i"
             target="_blank"
             rel="noopener noreferrer"
-            class="contact-link glass p-4 flex items-center gap-3.5 group"
+            class="contact-link glass laser-glow p-4 flex items-center gap-3.5 group"
+            data-laser="white"
           >
             <div class="w-10 h-10 rounded-lg glass-strong flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" class="text-text-primary">
@@ -644,15 +718,18 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
   }
 
   /* ─── Contact link hover states ─── */
-  .contact-link:nth-child(1):hover {
+  .contact-link:nth-child(1):hover,
+  .contact-link:nth-child(1):active {
     border-color: rgba(16, 185, 129, 0.15) !important;
     background: rgba(16, 185, 129, 0.03) !important;
   }
-  .contact-link:nth-child(2):hover {
+  .contact-link:nth-child(2):hover,
+  .contact-link:nth-child(2):active {
     border-color: rgba(200, 162, 78, 0.15) !important;
     background: rgba(200, 162, 78, 0.03) !important;
   }
-  .contact-link:nth-child(3):hover {
+  .contact-link:nth-child(3):hover,
+  .contact-link:nth-child(3):active {
     border-color: rgba(250, 250, 250, 0.08) !important;
     background: rgba(250, 250, 250, 0.02) !important;
   }

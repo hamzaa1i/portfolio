@@ -1,0 +1,276 @@
+---
+import { themes, activeTheme } from '../config/theme';
+
+const themeEntries = Object.entries(themes).map(([key, config]) => ({
+  key,
+  name: config.name,
+  accent: config.accent,
+}));
+
+const themesJSON = JSON.stringify(themes);
+const initialTheme = Object.keys(themes).find(
+  (k) => themes[k].name === activeTheme.name
+) || 'midnight-gold';
+---
+
+<div class="theme-switcher-wrap" data-theme-switcher>
+  <button
+    class="theme-toggle-dot"
+    aria-label="Switch color theme"
+    aria-expanded="false"
+  >
+    <span class="theme-dot-inner"></span>
+  </button>
+
+  <div class="theme-dropdown" aria-hidden="true">
+    <div class="theme-dropdown-panel">
+      <span class="theme-dropdown-label">theme</span>
+      {themeEntries.map((t) => (
+        <button
+          class={`theme-opt ${t.key === initialTheme ? 'active' : ''}`}
+          data-theme-key={t.key}
+        >
+          <span class="theme-opt-swatch" style={`background:${t.accent}`}></span>
+          <span class="theme-opt-name">{t.key}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .theme-switcher-wrap {
+    position: relative;
+  }
+
+  .theme-toggle-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid transparent;
+    transition: border-color 0.3s ease, transform 0.25s ease;
+    padding: 0;
+  }
+  .theme-toggle-dot:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: scale(1.15);
+  }
+
+  .theme-dot-inner {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: background 0.3s ease;
+    box-shadow: 0 0 6px var(--accent-glow);
+  }
+
+  .theme-dropdown {
+    position: absolute;
+    top: calc(100% + 14px);
+    right: -8px;
+    width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px) scale(0.95);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 60;
+    pointer-events: none;
+  }
+  .theme-dropdown.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .theme-dropdown-panel {
+    background: rgba(9, 9, 11, 0.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .theme-dropdown-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    color: #52525B;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 0.25rem 0.5rem 0.375rem;
+  }
+
+  .theme-opt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.375rem;
+    background: none;
+    border: none;
+    transition: background 0.2s ease;
+    text-align: left;
+  }
+  .theme-opt:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .theme-opt.active {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .theme-opt-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .theme-opt-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: #A1A1AA;
+    transition: color 0.2s;
+  }
+  .theme-opt:hover .theme-opt-name {
+    color: #FAFAFA;
+  }
+  .theme-opt.active .theme-opt-name {
+    color: #FAFAFA;
+  }
+  .theme-opt.active::after {
+    content: '✓';
+    margin-left: auto;
+    font-size: 0.62rem;
+    color: var(--accent);
+  }
+
+  @media (max-width: 1023px) {
+    .theme-switcher-wrap { display: none; }
+  }
+</style>
+
+<script is:inline define:vars={{ themesJSON, initialTheme }}>
+(function() {
+  var wrapper = document.querySelector('[data-theme-switcher]');
+  if (!wrapper) return;
+
+  var toggle = wrapper.querySelector('.theme-toggle-dot');
+  var dropdown = wrapper.querySelector('.theme-dropdown');
+  var dot = wrapper.querySelector('.theme-dot-inner');
+  var options = wrapper.querySelectorAll('.theme-opt');
+  if (!toggle || !dropdown || !dot) return;
+
+  var allThemes = {};
+  try { allThemes = JSON.parse(themesJSON); } catch(e) { return; }
+
+  var currentKey = (function() {
+    try {
+      var saved = localStorage.getItem('portfolio-theme');
+      if (saved && allThemes[saved]) return saved;
+    } catch(e) {}
+    return initialTheme;
+  })();
+
+  if (allThemes[currentKey]) {
+    dot.style.background = allThemes[currentKey].accent;
+  }
+  markActive();
+
+  var isOpen = false;
+
+  function openDD() {
+    isOpen = true;
+    dropdown.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    dropdown.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeDD() {
+    isOpen = false;
+    dropdown.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    dropdown.setAttribute('aria-hidden', 'true');
+  }
+
+  function markActive() {
+    options.forEach(function(o) {
+      o.classList.toggle('active', o.getAttribute('data-theme-key') === currentKey);
+    });
+  }
+
+  function applyTheme(key) {
+    var th = allThemes[key];
+    if (!th) return;
+    currentKey = key;
+
+    var h = document.documentElement;
+    h.style.setProperty('--void', th.void);
+    h.style.setProperty('--midnight', th.midnight);
+    h.style.setProperty('--surface', th.surface);
+    h.style.setProperty('--elevated', th.elevated);
+    h.style.setProperty('--glass-bg', th.glassBg);
+    h.style.setProperty('--glass-border', th.glassBorder);
+    h.style.setProperty('--glass-hover', th.glassHover);
+    h.style.setProperty('--glass-hover-border', th.glassHoverBorder);
+    h.style.setProperty('--text-primary', th.textPrimary);
+    h.style.setProperty('--text-secondary', th.textSecondary);
+    h.style.setProperty('--text-muted', th.textMuted);
+    h.style.setProperty('--text-dim', th.textDim);
+    h.style.setProperty('--accent', th.accent);
+    h.style.setProperty('--accent-hover', th.accentHover);
+    h.style.setProperty('--accent-dim', th.accentDim);
+    h.style.setProperty('--accent-glow', th.accentGlow);
+    h.style.setProperty('--accent-subtle', th.accentSubtle);
+    h.style.setProperty('--accent-contrast', th.accentContrast);
+    h.style.setProperty('--accent-success', th.success);
+    h.style.setProperty('--gradient-accent-text', th.gradientText);
+    h.style.backgroundColor = th.void;
+    h.style.color = th.textPrimary;
+
+    if (th.isDark) { h.classList.add('dark'); h.classList.remove('light'); }
+    else { h.classList.remove('dark'); h.classList.add('light'); }
+
+    dot.style.background = th.accent;
+    try { localStorage.setItem('portfolio-theme', key); } catch(e) {}
+    document.dispatchEvent(new CustomEvent('theme:change', { detail: { key: key } }));
+    markActive();
+    closeDD();
+  }
+
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (isOpen) closeDD(); else openDD();
+  });
+
+  options.forEach(function(o) {
+    o.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var k = o.getAttribute('data-theme-key');
+      if (k) applyTheme(k);
+    });
+  });
+
+  document.addEventListener('click', function() { if (isOpen) closeDD(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && isOpen) closeDD(); });
+  window.addEventListener('scroll', function() { if (isOpen) closeDD(); }, { passive: true });
+
+  // Sync from terminal theme changes
+  document.addEventListener('theme:change', function(e) {
+    if (e.detail && e.detail.key && e.detail.key !== currentKey && allThemes[e.detail.key]) {
+      currentKey = e.detail.key;
+      dot.style.background = allThemes[currentKey].accent;
+      markActive();
+    }
+  });
+})();
+</script>

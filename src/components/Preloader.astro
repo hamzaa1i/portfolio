@@ -1,0 +1,221 @@
+---
+// Preloader.astro — Terminal-style entry sequence
+// First visit: ~/hamza types in → progress bar fills → smooth fade reveal
+// Return visits: skipped instantly via localStorage
+// Skip anytime: click or keypress
+---
+
+<div id="preloader" aria-hidden="true">
+  <div class="pl-inner">
+    <div class="pl-logo">
+      <span id="pl-text"></span><span class="pl-caret">█</span>
+    </div>
+    <div class="pl-track" id="pl-track">
+      <div class="pl-fill" id="pl-fill"></div>
+    </div>
+    <div class="pl-meta" id="pl-meta">
+      <span id="pl-pct">0</span><span class="pl-dim">%</span>
+    </div>
+  </div>
+</div>
+
+<noscript><style>#preloader{display:none!important}</style></noscript>
+
+<style>
+  /* ── Fullscreen overlay ── */
+  #preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--void, #09090B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Exit animation ── */
+  #preloader.pl-exit {
+    animation: plOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes plOut {
+    to {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+  }
+
+  /* ── Layout ── */
+  .pl-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  /* ── ~/hamza text ── */
+  .pl-logo {
+    display: flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    font-weight: 700;
+    color: var(--text-primary, #FAFAFA);
+    letter-spacing: -0.03em;
+    min-height: 1.3em;
+  }
+
+  /* ── Blinking block cursor ── */
+  .pl-caret {
+    color: var(--accent, #C8A24E);
+    animation: plBlink 1s step-end infinite;
+    font-weight: 400;
+    margin-left: 2px;
+    font-size: 0.85em;
+  }
+  @keyframes plBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* ── Progress bar track ── */
+  .pl-track {
+    width: min(260px, 55vw);
+    height: 2px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  /* ── Progress bar fill ── */
+  .pl-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent, #C8A24E);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(200, 162, 78, 0.25);
+  }
+
+  /* ── Percentage counter ── */
+  .pl-meta {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim, #3F3F46);
+    letter-spacing: 0.12em;
+    font-variant-numeric: tabular-nums;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .pl-dim {
+    opacity: 0.5;
+  }
+</style>
+
+<script is:inline>
+(function () {
+  var el = document.getElementById('preloader');
+  if (!el) return;
+
+  /* ── Config ── */
+  var KEY = 'portfolio-visited';
+  var isReturn = false;
+  try { isReturn = localStorage.getItem(KEY) === '1'; } catch (e) {}
+  var noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── Global flag for Layout.astro script coordination ── */
+  window.__preloaderDone = false;
+
+  /* ── Finish: fade out, unlock scroll, signal animations ── */
+  function finish() {
+    if (window.__preloaderDone) return;
+    window.__preloaderDone = true;
+
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    document.documentElement.style.overflow = '';
+    document.removeEventListener('click', skip);
+    document.removeEventListener('keydown', skip);
+
+    /* Return visitors / reduced motion: instant hide */
+    if (isReturn || noMotion) {
+      el.style.display = 'none';
+      document.dispatchEvent(new CustomEvent('preloader:complete'));
+      return;
+    }
+
+    /* New visitors: animated exit */
+    el.classList.add('pl-exit');
+    document.dispatchEvent(new CustomEvent('preloader:complete'));
+    el.addEventListener('animationend', function () { el.remove(); }, { once: true });
+    /* Safety: remove even if animationend doesn't fire */
+    setTimeout(function () { try { el.remove(); } catch (e) {} }, 1200);
+  }
+
+  /* ── Return visitors: skip everything ── */
+  if (isReturn || noMotion) {
+    finish();
+    return;
+  }
+
+  /* ── Lock scroll while preloader is active ── */
+  document.documentElement.style.overflow = 'hidden';
+
+  /* ── Skip on any click or keypress ── */
+  function skip() { finish(); }
+  document.addEventListener('click', skip);
+  document.addEventListener('keydown', skip);
+
+  /* ── DOM references ── */
+  var textEl  = document.getElementById('pl-text');
+  var trackEl = document.getElementById('pl-track');
+  var fillEl  = document.getElementById('pl-fill');
+  var metaEl  = document.getElementById('pl-meta');
+  var pctEl   = document.getElementById('pl-pct');
+
+  if (!textEl || !fillEl || !pctEl) { finish(); return; }
+
+  var str  = '~/hamza';
+  var ci   = 0;
+  var prog = 0;
+
+  /* ── Phase 1: Type ~/hamza one character at a time ── */
+  function typeNext() {
+    if (window.__preloaderDone) return;
+    if (ci < str.length) {
+      ci++;
+      textEl.textContent = str.substring(0, ci);
+      setTimeout(typeNext, 70 + Math.random() * 50);
+    } else {
+      /* Typing done — fade in bar + counter */
+      if (trackEl) trackEl.style.opacity = '1';
+      if (metaEl) metaEl.style.opacity = '1';
+      setTimeout(tick, 200);
+    }
+  }
+
+  /* ── Phase 2: Fill progress bar 0→100% ── */
+  function tick() {
+    if (window.__preloaderDone) return;
+
+    /* Variable speed: fast start, slower near end */
+    var inc = prog < 30 ? 3 + Math.random() * 5
+            : prog < 70 ? 2 + Math.random() * 3
+            : prog < 90 ? 1 + Math.random() * 2
+            : 0.5 + Math.random();
+
+    prog = Math.min(100, prog + inc);
+    fillEl.style.width = prog + '%';
+    pctEl.textContent = Math.round(prog);
+
+    if (prog < 100) {
+      setTimeout(tick, 18 + Math.random() * 18);
+    } else {
+      /* Phase 3: Brief hold, then exit */
+      setTimeout(finish, 300);
+    }
+  }
+
+  /* ── Start after 200ms (let fonts load) ── */
+  setTimeout(typeNext, 200);
+})();
+</script>

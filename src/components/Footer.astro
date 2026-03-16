@@ -47,7 +47,23 @@ const year = new Date().getFullYear();
     transition: color 0.3s ease, background 0.3s ease;
   }
 
-  .footer-icon:hover {
+  /* GitHub → white */
+  .footer-icon[aria-label="GitHub"]:hover,
+  .footer-icon[aria-label="GitHub"]:active {
+    color: var(--text-primary);
+    background: rgba(250, 250, 250, 0.04);
+  }
+
+  /* WhatsApp → green */
+  .footer-icon[aria-label="WhatsApp"]:hover,
+  .footer-icon[aria-label="WhatsApp"]:active {
+    color: #10B981;
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  /* Email → accent gold */
+  .footer-icon[aria-label="Email"]:hover,
+  .footer-icon[aria-label="Email"]:active {
     color: var(--accent);
     background: var(--accent-subtle);
   }

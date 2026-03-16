@@ -25,6 +25,35 @@ const REDUCED_MOTION = typeof window !== 'undefined' &&
 let lenisInstance = null;
 
 /* ============================================================
+   SHARED MOUSE + UNIFIED ANIMATION LOOP
+   Merges 3 rAF loops → 1. Eliminates 2 extra mousemove listeners.
+   ============================================================ */
+let sharedMouseX = 0, sharedMouseY = 0;
+const _loopCallbacks = [];
+
+if (typeof window !== 'undefined' && !IS_TOUCH && !IS_MOBILE) {
+  document.addEventListener('mousemove', (e) => {
+    sharedMouseX = e.clientX;
+    sharedMouseY = e.clientY;
+  }, { passive: true });
+}
+
+function registerLoop(fn) { _loopCallbacks.push(fn); }
+
+function startUnifiedLoop() {
+  if (IS_TOUCH || IS_MOBILE || REDUCED_MOTION) return;
+  if (!_loopCallbacks.length) return;
+
+  function tick() {
+    for (let i = 0; i < _loopCallbacks.length; i++) {
+      _loopCallbacks[i]();
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ============================================================
    MODULE 1: LENIS SMOOTH SCROLL
    ============================================================ */
 function initLenis() {
@@ -48,8 +77,6 @@ function initLenis() {
   gsap.ticker.add((time) => {
     lenisInstance.raf(time * 1000);
   });
-
-  gsap.ticker.lagSmoothing(0);
 
   return lenisInstance;
 }
@@ -278,32 +305,45 @@ function initCounters() {
 
 /* ============================================================
    MODULE 7: LETTER HOVER POP
-   Wraps each character of [data-hover-letters] in a <span>
-   CSS handles the hover translateY effect
+   Fixed — waits a frame after scramble to ensure DOM is settled
    ============================================================ */
+function wrapInHoverLetters(el) {
+  const text = el.textContent.trim();
+  if (!text) return;
+
+  el.innerHTML = '';
+  el.classList.add('hover-letters');
+
+  for (let i = 0; i < text.length; i++) {
+    const span = document.createElement('span');
+    span.classList.add('char');
+
+    if (text[i] === ' ') {
+      span.innerHTML = '&nbsp;';
+    } else {
+      span.textContent = text[i];
+    }
+
+    el.appendChild(span);
+  }
+}
+
 function initLetterHover() {
   if (IS_TOUCH) return;
 
   const elements = document.querySelectorAll('[data-hover-letters]');
 
   elements.forEach((el) => {
-    const text = el.textContent.trim();
-    if (!text) return;
-
-    el.innerHTML = '';
-    el.classList.add('hover-letters');
-
-    for (let i = 0; i < text.length; i++) {
-      const span = document.createElement('span');
-      span.classList.add('char');
-
-      if (text[i] === ' ') {
-        span.innerHTML = '&nbsp;';
-      } else {
-        span.textContent = text[i];
-      }
-
-      el.appendChild(span);
+    if (el.hasAttribute('data-scramble')) {
+      el.addEventListener('scramble:complete', () => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            wrapInHoverLetters(el);
+          });
+        });
+      }, { once: true });
+    } else {
+      wrapInHoverLetters(el);
     }
   });
 }
@@ -430,7 +470,7 @@ function initCardPopup() {
 
 /* ============================================================
    MODULE 9: SKILL ORB PROXIMITY TILT (Desktop Only)
-   From V1 — orbs tilt toward cursor within 150px
+   Optimized — uses shared mouse, visibility-gated, one loop
    ============================================================ */
 function initSkillOrbs() {
   if (IS_TOUCH || IS_MOBILE || REDUCED_MOTION) return;
@@ -438,36 +478,41 @@ function initSkillOrbs() {
   const orbs = gsap.utils.toArray('.skill-orb');
   if (!orbs.length) return;
 
-  let mouseX = 0;
-  let mouseY = 0;
+  const section = document.querySelector('#skills');
+  let visible = false;
 
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
+  if (section) {
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top bottom',
+      end: 'bottom top',
+      onEnter: () => { visible = true; },
+      onLeave: () => { visible = false; },
+      onEnterBack: () => { visible = true; },
+      onLeaveBack: () => { visible = false; },
+    });
+  }
 
-  function updateOrbs() {
-    orbs.forEach((orb) => {
+  registerLoop(() => {
+    if (!visible) return;
+
+    for (let i = 0; i < orbs.length; i++) {
+      const orb = orbs[i];
       const rect = orb.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
-      const dx = mouseX - cx;
-      const dy = mouseY - cy;
+      const dx = sharedMouseX - cx;
+      const dy = sharedMouseY - cy;
       const dist = Math.sqrt(dx * dx + dy * dy);
       const maxDist = 150;
 
       if (dist < maxDist) {
         const factor = 1 - dist / maxDist;
-        const tiltX = (dy / maxDist) * 12 * factor;
-        const tiltY = -(dx / maxDist) * 12 * factor;
-        const moveX = (dx / maxDist) * 6 * factor;
-        const moveY = (dy / maxDist) * 6 * factor;
-
         gsap.to(orb, {
-          rotateX: tiltX,
-          rotateY: tiltY,
-          x: moveX,
-          y: moveY,
+          rotateX: (dy / maxDist) * 12 * factor,
+          rotateY: -(dx / maxDist) * 12 * factor,
+          x: (dx / maxDist) * 6 * factor,
+          y: (dy / maxDist) * 6 * factor,
           scale: 1 + 0.04 * factor,
           duration: 0.35,
           ease: 'power2.out',
@@ -475,22 +520,14 @@ function initSkillOrbs() {
         });
       } else {
         gsap.to(orb, {
-          rotateX: 0,
-          rotateY: 0,
-          x: 0,
-          y: 0,
-          scale: 1,
+          rotateX: 0, rotateY: 0, x: 0, y: 0, scale: 1,
           duration: 0.5,
           ease: 'elastic.out(1, 0.7)',
           overwrite: 'auto',
         });
       }
-    });
-
-    requestAnimationFrame(updateOrbs);
-  }
-
-  requestAnimationFrame(updateOrbs);
+    }
+  });
 }
 
 /* ============================================================
@@ -633,11 +670,14 @@ function initTypingEffect() {
 
   let roles;
   try {
-    roles = JSON.parse(container.getAttribute('data-typewriter') || '[]');
+    const raw = container.getAttribute('data-roles') || container.getAttribute('data-typewriter') || '[]';
+    // Decode HTML entities that Astro may inject into attribute values
+    const decoded = raw.replace(/&quot;/g, '"').replace(/&#34;/g, '"').replace(/&amp;/g, '&');
+    roles = JSON.parse(decoded);
   } catch {
     roles = [];
   }
-  if (!roles.length) return;
+  if (!Array.isArray(roles) || !roles.length) return;
 
   if (REDUCED_MOTION) {
     textEl.textContent = roles[0];
@@ -780,11 +820,28 @@ function initLightbox() {
 }
 
 /* ============================================================
-   MODULE 18: SCROLL INDICATOR FADE
+   MODULE 18: SCROLL INDICATOR — fade + click to scroll
    ============================================================ */
 function initScrollIndicator() {
   const el = document.querySelector('[data-scroll-indicator]');
-  if (!el || REDUCED_MOTION) return;
+  if (!el) return;
+
+  /* Click to scroll to story section */
+  el.style.cursor = 'pointer';
+  el.addEventListener('click', () => {
+    const story = document.querySelector('#story');
+    if (story && lenisInstance) {
+      lenisInstance.scrollTo(story, {
+        offset: 0,
+        duration: 1.4,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+    } else if (story) {
+      story.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  if (REDUCED_MOTION) return;
 
   ScrollTrigger.create({
     start: 'top -150',
@@ -796,29 +853,191 @@ function initScrollIndicator() {
 }
 
 /* ============================================================
-   MODULE 19: HERO REVEAL — cursor flashlight
+   MODULE 19: HERO REVEAL — unified loop, no standalone rAF
    ============================================================ */
 function initHeroReveal() {
   if (IS_TOUCH || IS_MOBILE || REDUCED_MOTION) return;
 
   const hero = document.querySelector('#hero');
-  const reveal = hero?.querySelector('.hero-reveal-layer');
-  if (!hero || !reveal) return;
+  if (!hero) return;
+  const reveal = hero.querySelector('.hero-reveal-layer');
+  if (!reveal) return;
 
-  hero.addEventListener('mouseenter', () => {
-    reveal.classList.add('active');
-  });
+  let mouseInHero = false;
+  const rect = hero.getBoundingClientRect();
+  let tx = rect.width / 2, ty = rect.height * 0.4;
+  let cx = tx, cy = ty;
 
+  hero.style.setProperty('--reveal-x', cx + 'px');
+  hero.style.setProperty('--reveal-y', cy + 'px');
+  requestAnimationFrame(() => { reveal.classList.add('active'); });
+
+  hero.addEventListener('mouseenter', () => { mouseInHero = true; });
   hero.addEventListener('mousemove', (e) => {
-    const rect = hero.getBoundingClientRect();
-    reveal.style.setProperty('--reveal-x', (e.clientX - rect.left) + 'px');
-    reveal.style.setProperty('--reveal-y', (e.clientY - rect.top) + 'px');
+    const r = hero.getBoundingClientRect();
+    tx = e.clientX - r.left;
+    ty = e.clientY - r.top;
+  });
+  hero.addEventListener('mouseleave', () => {
+    mouseInHero = false;
+    const r = hero.getBoundingClientRect();
+    tx = r.width / 2;
+    ty = r.height * 0.4;
   });
 
-  hero.addEventListener('mouseleave', () => {
-    reveal.classList.remove('active');
-    reveal.style.setProperty('--reveal-x', '-300px');
-    reveal.style.setProperty('--reveal-y', '-300px');
+  registerLoop(() => {
+    const speed = mouseInHero ? 0.08 : 0.015;
+    const dx = tx - cx, dy = ty - cy;
+    if (Math.abs(dx) > 0.3 || Math.abs(dy) > 0.3) {
+      cx += dx * speed;
+      cy += dy * speed;
+      hero.style.setProperty('--reveal-x', cx + 'px');
+      hero.style.setProperty('--reveal-y', cy + 'px');
+    }
+  });
+}
+
+/* ============================================================
+   MODULE 20: TEXT SCRAMBLE EFFECT
+   Progressive character reveal — left to right
+   ============================================================ */
+function initTextScramble() {
+  if (REDUCED_MOTION) {
+    gsap.utils.toArray('[data-scramble]').forEach((el) => {
+      el.style.opacity = '1';
+    });
+    return;
+  }
+
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*<>[]{}=+-';
+
+  gsap.utils.toArray('[data-scramble]').forEach((el) => {
+    const original = el.textContent.trim();
+    if (!original) return;
+
+    const isLoad = el.getAttribute('data-scramble') === 'load';
+
+    // Hide scroll-triggered elements until they play
+    if (!isLoad) {
+      el.style.opacity = '0';
+    }
+
+    let hasPlayed = false;
+
+    function play() {
+      if (hasPlayed) return;
+      hasPlayed = true;
+
+      el.style.opacity = '1';
+
+      const len = original.length;
+      const totalFrames = Math.min(Math.ceil(len * 2.5), 50);
+      let frame = 0;
+
+      function step() {
+        frame++;
+        const resolved = Math.floor((frame / totalFrames) * len);
+
+        let text = '';
+        for (let i = 0; i < len; i++) {
+          if (original[i] === ' ') {
+            text += ' ';
+          } else if (i < resolved) {
+            text += original[i];
+          } else {
+            text += CHARS[Math.floor(Math.random() * CHARS.length)];
+          }
+        }
+
+        el.textContent = text;
+
+        if (frame < totalFrames) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = original;
+          el.dispatchEvent(new CustomEvent('scramble:complete'));
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    if (isLoad) {
+      setTimeout(play, 400);
+    } else {
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 88%',
+        once: true,
+        onEnter: play,
+      });
+    }
+  });
+}
+
+/* ============================================================
+   MODULE 21: MAGNETIC BUTTONS
+   Optimized — shared mouse, skips offscreen buttons
+   ============================================================ */
+function initMagneticButtons() {
+  if (IS_TOUCH || IS_MOBILE || REDUCED_MOTION) return;
+
+  const buttons = document.querySelectorAll('[data-magnetic]');
+  if (!buttons.length) return;
+
+  const winH = window.innerHeight;
+
+  registerLoop(() => {
+    for (let i = 0; i < buttons.length; i++) {
+      const btn = buttons[i];
+      const rect = btn.getBoundingClientRect();
+
+      if (rect.bottom < -50 || rect.top > winH + 50) {
+        if (btn._magneticActive) {
+          gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)', overwrite: 'auto' });
+          btn._magneticActive = false;
+        }
+        continue;
+      }
+
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = sharedMouseX - cx;
+      const dy = sharedMouseY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const radius = parseFloat(btn.getAttribute('data-magnetic-radius') || '80');
+      const strength = parseFloat(btn.getAttribute('data-magnetic-strength') || '0.3');
+
+      if (dist < radius) {
+        const factor = strength * (1 - dist / radius);
+        gsap.to(btn, {
+          x: dx * factor, y: dy * factor,
+          duration: 0.25, ease: 'power2.out', overwrite: 'auto',
+        });
+        btn._magneticActive = true;
+      } else if (btn._magneticActive) {
+        gsap.to(btn, {
+          x: 0, y: 0,
+          duration: 0.7, ease: 'elastic.out(1, 0.3)', overwrite: 'auto',
+        });
+        btn._magneticActive = false;
+      }
+    }
+  });
+}
+
+/* ============================================================
+   MODULE 22: LASER GLOW — cursor-following highlight
+   ============================================================ */
+function initLaserGlow() {
+  if (IS_TOUCH || IS_MOBILE) return;
+
+  document.querySelectorAll('.laser-glow').forEach((el) => {
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      el.style.setProperty('--laser-x', (e.clientX - rect.left) + 'px');
+      el.style.setProperty('--laser-y', (e.clientY - rect.top) + 'px');
+    }, { passive: true });
   });
 }
 
@@ -844,11 +1063,19 @@ export function initAnimations() {
   initCounters();
   initStoryReveal();
 
-  /* Interactive effects */
+  /* Interactive effects — scramble MUST run before letterHover */
+  initTextScramble();
   initLetterHover();
+  initMagneticButtons();
   initCardPopup();
   initSkillOrbs();
-  initHeroReveal();        // ← ADD THIS LINE
+  initHeroReveal();
+
+  /* Start unified animation loop (replaces 3 separate rAF loops) */
+  startUnifiedLoop();
+
+    /* Laser glow on cards */
+  initLaserGlow();
 
   /* UI */
   initScrollspy();
@@ -880,15 +1107,4 @@ export function initAnimations() {
    ============================================================ */
 export function getLenis() {
   return lenisInstance;
-}
-
-/* ============================================================
-   AUTO-INIT
-   ============================================================ */
-if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAnimations);
-  } else {
-    initAnimations();
-  }
 }

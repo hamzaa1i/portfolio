@@ -1,0 +1,711 @@
+---
+import { themes, activeTheme } from '../config/theme';
+
+const initialTheme = Object.keys(themes).find(
+  (k) => themes[k].name === activeTheme.name
+) || 'midnight-gold';
+
+const themesJSON = JSON.stringify(themes);
+---
+
+<div id="terminal-overlay" class="terminal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Interactive terminal">
+  <div class="terminal-backdrop" data-terminal-close></div>
+  <div class="terminal-window">
+    <div class="terminal-header">
+      <div class="terminal-dots">
+        <span class="t-dot t-dot-red"></span>
+        <span class="t-dot t-dot-yellow"></span>
+        <span class="t-dot t-dot-green"></span>
+      </div>
+      <span class="terminal-title">hamza@portfolio:~</span>
+      <button class="terminal-close-btn" data-terminal-close aria-label="Close terminal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="terminal-body" id="terminal-body">
+      <div id="terminal-output"></div>
+      <div class="terminal-input-row">
+        <span class="terminal-prompt">$</span>
+        <input
+          type="text"
+          id="terminal-input"
+          class="terminal-input"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          aria-label="Terminal command input"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* ============================================================
+     TERMINAL OVERLAY
+     ============================================================ */
+  .terminal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9996;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .terminal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .terminal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .terminal-window {
+    position: relative;
+    width: min(92vw, 640px);
+    max-height: min(80vh, 520px);
+    background: rgba(9, 9, 11, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.875rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+    transform: scale(0.96) translateY(10px);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  }
+  .terminal-overlay.active .terminal-window {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  /* ── Header bar ── */
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+    user-select: none;
+  }
+  .terminal-dots {
+    display: flex;
+    gap: 6px;
+    margin-right: 1rem;
+  }
+  .t-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .t-dot-red { background: #FF5F57; }
+  .t-dot-yellow { background: #FEBC2E; }
+  .t-dot-green { background: #28C840; }
+
+  .terminal-overlay.active .t-dot-red   { animation: dotPop 0.4s ease 0.15s both; }
+  .terminal-overlay.active .t-dot-yellow { animation: dotPop 0.4s ease 0.25s both; }
+  .terminal-overlay.active .t-dot-green  { animation: dotPop 0.4s ease 0.35s both; }
+
+  @keyframes dotPop {
+    0%   { transform: scale(0); }
+    60%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+  }
+
+  .terminal-title {
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #A1A1AA; /* hardcoded muted */
+    letter-spacing: 0.03em;
+  }
+  .terminal-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    color: #52525B; /* hardcoded dim */
+    background: none;
+    border: none;
+    transition: color 0.2s, background 0.2s;
+  }
+  .terminal-close-btn:hover {
+    color: #FAFAFA; /* hardcoded light */
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  /* ── Body ── */
+  .terminal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-dim) transparent;
+  }
+  .terminal-body::-webkit-scrollbar { width: 3px; }
+  .terminal-body::-webkit-scrollbar-track { background: transparent; }
+  .terminal-body::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 3px; }
+
+  #terminal-output {
+    flex: 1;
+  }
+
+  /* ── Input row ── */
+  .terminal-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+  }
+  .terminal-prompt {
+    color: var(--accent);
+    font-weight: 600;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .terminal-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #FAFAFA; /* hardcoded light */
+    caret-color: var(--accent);
+    padding: 0;
+    line-height: 1.7;
+  }
+  .terminal-input::placeholder {
+    color: #52525B; /* hardcoded dim */
+    opacity: 0.5;
+  }
+
+  /* ── Output line types ── */
+  .t-line {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .t-line-cmd {
+    color: #FAFAFA; /* hardcoded light */
+  }
+  .t-line-cmd .t-prompt-echo {
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  /* Terminal-specific colors — always readable on dark bg */
+  .t-accent { color: var(--accent); }
+  .t-muted { color: #A1A1AA; }
+  .t-dim { color: #52525B; }
+  .t-primary { color: #FAFAFA; }
+  .t-secondary { color: #D4D4D8; }
+  .t-success { color: #10B981; }
+  .t-error { color: #EF4444; }
+  .t-bold { font-weight: 600; }
+
+  .t-line a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+  .t-line a:hover { color: var(--accent-hover); }
+
+  /* ── Mobile adjustments ── */
+  @media (max-width: 639px) {
+    .terminal-window {
+      width: 96vw;
+      max-height: 75vh;
+      border-radius: 0.75rem;
+    }
+    .terminal-body {
+      font-size: 0.72rem;
+      padding: 0.75rem 1rem;
+    }
+    .terminal-input { font-size: 0.72rem; }
+  }
+</style>
+
+<script is:inline define:vars={{ themesJSON, initialTheme }}>
+(function() {
+  const overlay = document.getElementById('terminal-overlay');
+  const output = document.getElementById('terminal-output');
+  const input = document.getElementById('terminal-input');
+  const body = document.getElementById('terminal-body');
+  if (!overlay || !output || !input || !body) return;
+
+  let allThemes = {};
+  try { allThemes = JSON.parse(themesJSON); } catch(e) {}
+
+  let currentTheme = (function() {
+    try {
+      var saved = localStorage.getItem('portfolio-theme');
+      if (saved && allThemes[saved]) return saved;
+    } catch(e) {}
+    return initialTheme;
+  })();
+  let history = [];
+  let historyIndex = -1;
+  let isOpen = false;
+  let easterEggRunning = false;
+
+  /* ── Helpers ── */
+  function addLine(html, cls) {
+    const div = document.createElement('div');
+    div.className = 't-line' + (cls ? ' ' + cls : '');
+    div.innerHTML = html;
+    output.appendChild(div);
+    scrollBottom();
+  }
+
+  function addEmpty() { addLine('&nbsp;'); }
+
+  function scrollBottom() {
+    requestAnimationFrame(function() {
+      body.scrollTop = body.scrollHeight;
+    });
+  }
+
+  function echoCommand(cmd) {
+    addLine('<span class="t-prompt-echo">$</span> ' + escapeHtml(cmd), 't-line-cmd');
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function delay(ms) {
+    return new Promise(function(r) { setTimeout(r, ms); });
+  }
+
+  /* ── Welcome message ── */
+  function showWelcome() {
+    output.innerHTML = '';
+    addLine('<span class="t-accent t-bold">Welcome to hamza@portfolio</span>');
+    addLine('<span class="t-muted">Type </span><span class="t-accent">help</span><span class="t-muted"> for available commands.</span>');
+    addEmpty();
+  }
+
+  /* ── Open / Close ── */
+  function openTerminal() {
+    if (isOpen) return;
+    isOpen = true;
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.documentElement.style.overflow = 'hidden';
+    if (output.children.length === 0) showWelcome();
+    setTimeout(function() { input.focus(); }, 350);
+  }
+
+  function closeTerminal() {
+    if (!isOpen) return;
+    isOpen = false;
+    easterEggRunning = false;
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.documentElement.style.overflow = '';
+    input.blur();
+  }
+
+  /* ── Commands ── */
+  function cmdHelp() {
+    addEmpty();
+    addLine('<span class="t-accent t-bold">Available commands:</span>');
+    addEmpty();
+    var cmds = [
+      ['help',      'show this menu'],
+      ['about',     'my story in 30 seconds'],
+      ['skills',    'tech stack breakdown'],
+      ['work',      'project showcase'],
+      ['contact',   'get in touch'],
+      ['whoami',    'who am I?'],
+      ['theme',     'list / switch color themes'],
+      ['neofetch',  'system info'],
+      ['clear',     'clear terminal'],
+      ['history',   'command history'],
+      ['exit',      'close terminal'],
+    ];
+    cmds.forEach(function(c) {
+      addLine('  <span class="t-accent">' + c[0] + '</span>' + ' '.repeat(12 - c[0].length) + '<span class="t-muted">— ' + c[1] + '</span>');
+    });
+    addEmpty();
+    addLine('<span class="t-dim">Pro tip: try </span><span class="t-accent">sudo rm -rf /</span>');
+    addEmpty();
+  }
+
+  function cmdAbout() {
+    addEmpty();
+    addLine('<span class="t-accent t-bold">cat about.txt</span>');
+    addLine('<span class="t-muted">─────────────────────────────────────</span>');
+    addEmpty();
+    addLine('<span class="t-primary">At 17, I walked into a garment factory</span>');
+    addLine('<span class="t-primary">exporting 300K+ garments/month to brands</span>');
+    addLine('<span class="t-primary">like Boohoo and Pull&amp;Bear.</span>');
+    addEmpty();
+    addLine('<span class="t-secondary">Zero coding experience. No budget.</span>');
+    addLine('<span class="t-secondary">A software house quoted ₨2,000,000.</span>');
+    addEmpty();
+    addLine('<span class="t-accent">I delivered it solo, using AI.</span>');
+    addLine('<span class="t-primary">→ Production website with scroll animations</span>');
+    addLine('<span class="t-primary">→ ERP system (50 daily gatepasses digitized)</span>');
+    addLine('<span class="t-primary">→ Complete brand identity</span>');
+    addEmpty();
+    addLine('<span class="t-dim">"The thinking behind giving correct prompts</span>');
+    addLine('<span class="t-dim"> to AI was me."</span>');
+    addEmpty();
+  }
+
+  function cmdSkills() {
+    addEmpty();
+    addLine('<span class="t-accent t-bold">Skills & Technologies</span>');
+    addLine('<span class="t-muted">─────────────────────────────────────</span>');
+    addEmpty();
+    var groups = [
+      { name: 'Frontend',   items: 'Astro · React · Tailwind · JavaScript · HTML/CSS' },
+      { name: 'Animation',  items: 'GSAP · Three.js · ScrollTrigger · Lenis' },
+      { name: 'Backend',    items: 'ERPNext · Python · Supabase · PostgreSQL' },
+      { name: 'Design',     items: 'Brand Identity · UI/UX · Figma' },
+      { name: 'Tools',      items: 'Git · Vercel · VS Code · AI (Claude/GPT)' },
+    ];
+    groups.forEach(function(g) {
+      addLine('  <span class="t-accent">' + g.name + '</span>');
+      addLine('  <span class="t-secondary">' + g.items + '</span>');
+      addEmpty();
+    });
+  }
+
+  function cmdWork() {
+    addEmpty();
+    addLine('<span class="t-accent t-bold">Selected Works</span>');
+    addLine('<span class="t-muted">─────────────────────────────────────</span>');
+    addEmpty();
+    var projects = [
+      {
+        name: 'Reve Stitching — Corporate Website',
+        desc: 'B2B manufacturing site with scroll animations, AI chat, quote system',
+        stack: 'Astro 5 · Tailwind · GSAP · Supabase',
+        url: 'https://revestitching.com'
+      },
+      {
+        name: 'Factory ERP System',
+        desc: 'Digitized 50+ daily paper gatepasses to real-time tracking',
+        stack: 'ERPNext · Python · PostgreSQL',
+        url: null
+      },
+      {
+        name: 'Brand Identity Design',
+        desc: 'Logo system, colors, typography, business cards, guidelines',
+        stack: 'AI-Assisted Design · Brand Strategy',
+        url: 'https://revestitching.com'
+      },
+    ];
+    projects.forEach(function(p, i) {
+      addLine('  <span class="t-primary t-bold">' + (i+1) + '. ' + p.name + '</span>');
+      addLine('  <span class="t-secondary">' + p.desc + '</span>');
+      addLine('  <span class="t-dim">' + p.stack + '</span>');
+      if (p.url) addLine('  <a href="' + p.url + '" target="_blank" rel="noopener">' + p.url + '</a>');
+      addEmpty();
+    });
+  }
+
+  function cmdContact() {
+    addEmpty();
+    addLine('<span class="t-accent t-bold">Contact</span>');
+    addLine('<span class="t-muted">─────────────────────────────────────</span>');
+    addEmpty();
+    addLine('  <span class="t-primary">Email     </span><a href="mailto:hamzaali.dev@proton.me">hamzaali.dev@proton.me</a>');
+    addLine('  <span class="t-primary">WhatsApp  </span><a href="https://wa.me/923329555786" target="_blank" rel="noopener">+92 332 955 5786</a>');
+    addLine('  <span class="t-primary">GitHub    </span><a href="https://github.com/hamzaa1i" target="_blank" rel="noopener">@hamzaa1i</a>');
+    addEmpty();
+    addLine('  <span class="t-success">● Currently available for new projects</span>');
+    addEmpty();
+  }
+
+  function cmdWhoami() {
+    addLine('<span class="t-accent">hamza</span> <span class="t-muted">— digital solutions architect, 17</span>');
+  }
+
+  function cmdNeofetch() {
+    addEmpty();
+    addLine('<span class="t-accent t-bold">    ╱╲</span>       <span class="t-primary t-bold">hamza</span><span class="t-muted">@</span><span class="t-primary t-bold">portfolio</span>');
+    addLine('<span class="t-accent t-bold">   ╱  ╲</span>      <span class="t-muted">─────────────────</span>');
+    addLine('<span class="t-accent t-bold">  ╱    ╲</span>     <span class="t-primary">OS:</span>     <span class="t-secondary">Astro 5.18 + React 18</span>');
+    addLine('<span class="t-accent t-bold"> ╱  ╱╲  ╲</span>    <span class="t-primary">Shell:</span>  <span class="t-secondary">JetBrains Mono</span>');
+    addLine('<span class="t-accent t-bold">╱  ╱  ╲  ╲</span>   <span class="t-primary">WM:</span>     <span class="t-secondary">GSAP + Lenis</span>');
+    addLine('<span class="t-accent t-bold">‾‾‾    ‾‾‾</span>   <span class="t-primary">Theme:</span>  <span class="t-secondary">' + (allThemes[currentTheme] ? allThemes[currentTheme].name : currentTheme) + '</span>');
+    addLine('               <span class="t-primary">Uptime:</span> <span class="t-secondary">17 years</span>');
+    addLine('               <span class="t-primary">WPM:</span>    <span class="t-secondary">95</span>');
+    addEmpty();
+  }
+
+  function cmdHistory() {
+    addEmpty();
+    if (history.length === 0) {
+      addLine('<span class="t-muted">No command history yet.</span>');
+    } else {
+      history.forEach(function(cmd, i) {
+        addLine('<span class="t-dim">' + (i + 1) + '</span>  <span class="t-secondary">' + escapeHtml(cmd) + '</span>');
+      });
+    }
+    addEmpty();
+  }
+
+  function cmdTheme(args) {
+    var themeName = args.trim();
+    if (!themeName || themeName === 'list') {
+      addEmpty();
+      addLine('<span class="t-accent t-bold">Available themes:</span>');
+      addEmpty();
+      var keys = Object.keys(allThemes);
+      keys.forEach(function(k) {
+        var th = allThemes[k];
+        var marker = (k === currentTheme) ? ' <span class="t-success">← active</span>' : '';
+        addLine('  <span style="color:' + th.accent + '">█</span> <span class="t-primary">' + k + '</span> <span class="t-dim">(' + th.name + ')</span>' + marker);
+      });
+      addEmpty();
+      addLine('<span class="t-muted">Usage: </span><span class="t-accent">theme &lt;name&gt;</span>');
+      addEmpty();
+      return;
+    }
+
+    if (!allThemes[themeName]) {
+      addLine('<span class="t-error">Theme "' + escapeHtml(themeName) + '" not found.</span> <span class="t-muted">Type </span><span class="t-accent">theme list</span>');
+      return;
+    }
+
+    var th = allThemes[themeName];
+    currentTheme = themeName;
+    var html = document.documentElement;
+
+    html.style.setProperty('--void', th.void);
+    html.style.setProperty('--midnight', th.midnight);
+    html.style.setProperty('--surface', th.surface);
+    html.style.setProperty('--elevated', th.elevated);
+    html.style.setProperty('--glass-bg', th.glassBg);
+    html.style.setProperty('--glass-border', th.glassBorder);
+    html.style.setProperty('--glass-hover', th.glassHover);
+    html.style.setProperty('--glass-hover-border', th.glassHoverBorder);
+    html.style.setProperty('--text-primary', th.textPrimary);
+    html.style.setProperty('--text-secondary', th.textSecondary);
+    html.style.setProperty('--text-muted', th.textMuted);
+    html.style.setProperty('--text-dim', th.textDim);
+    html.style.setProperty('--accent', th.accent);
+    html.style.setProperty('--accent-hover', th.accentHover);
+    html.style.setProperty('--accent-dim', th.accentDim);
+    html.style.setProperty('--accent-glow', th.accentGlow);
+    html.style.setProperty('--accent-subtle', th.accentSubtle);
+    html.style.setProperty('--accent-contrast', th.accentContrast);
+    html.style.setProperty('--accent-success', th.success);
+    html.style.setProperty('--gradient-accent-text', th.gradientText);
+    html.style.backgroundColor = th.void;
+    html.style.color = th.textPrimary;
+
+    if (th.isDark) { html.classList.add('dark'); html.classList.remove('light'); }
+    else { html.classList.remove('dark'); html.classList.add('light'); }
+
+    try { localStorage.setItem('portfolio-theme', themeName); } catch(e) {}
+    document.dispatchEvent(new CustomEvent('theme:change', { detail: { key: themeName } }));
+    addLine('<span class="t-success">✓</span> <span class="t-primary">Switched to </span><span style="color:' + th.accent + '">' + th.name + '</span>');
+  }  // ← closes cmdTheme
+  
+  async function cmdSudoRm() {
+    if (easterEggRunning) return;
+    easterEggRunning = true;
+    input.disabled = true;
+
+    addEmpty();
+    addLine('<span class="t-error">[sudo] password for hamza: ********</span>');
+    await delay(600);
+    addLine('<span class="t-muted">Authenticating...</span>');
+    await delay(800);
+    addEmpty();
+
+    var items = [
+      ['node_modules',  800],
+      ['package-lock',  400],
+      ['.git/history',  500],
+      ['portfolio',     600],
+      ['system32',      500],
+      ['the internet',  700],
+    ];
+
+    for (var i = 0; i < items.length; i++) {
+      if (!isOpen) break;
+      var item = items[i];
+      addLine('<span class="t-error">Deleting ' + item[0] + '...</span> <span class="t-success">✓</span>');
+      await delay(item[1]);
+    }
+
+    await delay(500);
+    addEmpty();
+    addLine('<span class="t-error t-bold">ERROR:</span> <span class="t-primary">Cannot delete talent.</span>');
+    addLine('<span class="t-accent">       Permission denied — it\'s built different.</span>');
+    await delay(800);
+    addEmpty();
+    addLine('<span class="t-dim">// just kidding. everything is fine. 😏</span>');
+    addLine('<span class="t-muted">// but seriously, don\'t try this at home.</span>');
+    addEmpty();
+
+    easterEggRunning = false;
+    input.disabled = false;
+    if (isOpen) input.focus();
+  }
+
+  /* ── Command router ── */
+  function processCommand(raw) {
+    var cmd = raw.trim();
+    if (!cmd) return;
+
+    history.push(cmd);
+    if (history.length > 50) history.shift();
+    historyIndex = history.length;
+
+    echoCommand(cmd);
+
+    var lower = cmd.toLowerCase();
+    var parts = lower.split(/\s+/);
+    var base = parts[0];
+    var args = cmd.substring(base.length).trim();
+
+    switch(base) {
+      case 'help': cmdHelp(); break;
+      case 'about': cmdAbout(); break;
+      case 'cat':
+        if (args.toLowerCase() === 'about.txt') cmdAbout();
+        else addLine('<span class="t-error">cat: ' + escapeHtml(args || '?') + ': No such file</span>');
+        break;
+      case 'skills': cmdSkills(); break;
+      case 'work': case 'projects': cmdWork(); break;
+      case 'contact': cmdContact(); break;
+      case 'whoami': cmdWhoami(); break;
+      case 'neofetch': cmdNeofetch(); break;
+      case 'theme': cmdTheme(args); break;
+      case 'clear': output.innerHTML = ''; break;
+      case 'history': cmdHistory(); break;
+      case 'exit': case 'quit': case 'q': closeTerminal(); break;
+      case 'ls':
+        addLine('<span class="t-accent">about.txt</span>  <span class="t-accent">projects/</span>  <span class="t-accent">skills/</span>  <span class="t-accent">contact.md</span>');
+        break;
+      case 'pwd':
+        addLine('<span class="t-secondary">/home/hamza/portfolio</span>');
+        break;
+      case 'date':
+        addLine('<span class="t-secondary">' + new Date().toString() + '</span>');
+        break;
+      case 'echo':
+        addLine('<span class="t-secondary">' + escapeHtml(args) + '</span>');
+        break;
+      case 'sudo':
+        if (args.toLowerCase().indexOf('rm') !== -1) { cmdSudoRm(); }
+        else { addLine('<span class="t-error">sudo: command not found (nice try though)</span>'); }
+        break;
+      case 'npm':
+        addLine('<span class="t-muted">added 847 packages in 42s</span>');
+        addLine('<span class="t-error">69 vulnerabilities (nice)</span>');
+        break;
+      case 'ping':
+        addLine('<span class="t-success">PONG!</span> <span class="t-muted">— 0ms (I\'m right here)</span>');
+        break;
+      case 'cd':
+        addLine('<span class="t-muted">Nice try, but this is a single-page app 😄</span>');
+        break;
+      default:
+        addLine('<span class="t-error">command not found:</span> <span class="t-secondary">' + escapeHtml(base) + '</span>');
+        addLine('<span class="t-muted">Type </span><span class="t-accent">help</span><span class="t-muted"> for available commands.</span>');
+    }
+  }
+
+  /* ── Event listeners ── */
+
+  // Toggle from header ~ button
+  document.addEventListener('terminal:toggle', function() {
+    if (isOpen) closeTerminal(); else openTerminal();
+  });
+
+  // Close buttons (backdrop + X)
+  document.querySelectorAll('[data-terminal-close]').forEach(function(el) {
+    el.addEventListener('click', closeTerminal);
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    // Escape to close
+    if (e.key === 'Escape' && isOpen) {
+      e.preventDefault();
+      closeTerminal();
+      return;
+    }
+    // Backtick toggle (only when not typing in a form)
+    if (e.key === '`' && !isOpen) {
+      var tag = document.activeElement ? document.activeElement.tagName : '';
+      if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
+        e.preventDefault();
+        openTerminal();
+      }
+    }
+  });
+
+  // Input handling
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (easterEggRunning) return;
+      var val = input.value;
+      input.value = '';
+      processCommand(val);
+    }
+    // History navigation
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (history.length > 0 && historyIndex > 0) {
+        historyIndex--;
+        input.value = history[historyIndex];
+      }
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex < history.length - 1) {
+        historyIndex++;
+        input.value = history[historyIndex];
+      } else {
+        historyIndex = history.length;
+        input.value = '';
+      }
+    }
+  });
+
+  // Click body to focus input
+  body.addEventListener('click', function(e) {
+    if (e.target === body || e.target === output || e.target.classList.contains('t-line')) {
+      input.focus();
+    }
+  });
+  // Sync from ThemeSwitcher UI changes
+  document.addEventListener('theme:change', function(e) {
+    if (e.detail && e.detail.key && e.detail.key !== currentTheme && allThemes[e.detail.key]) {
+      currentTheme = e.detail.key;
+    }
+  });
+
+})();
+</script>

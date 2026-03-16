@@ -161,31 +161,48 @@ a, button, [role="button"], select, label, input[type="submit"] {
    ============================================================ */
 @layer components {
 
-  /* ----- GLASS ----- */
+    /* ----- LIQUID GLASS (no backdrop-filter — perf optimized for low-end) ----- */
   .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
+    background: linear-gradient(
+      135deg,
+      rgba(24, 24, 27, 0.85) 0%,
+      rgba(17, 17, 19, 0.9) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 1rem;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+      0 2px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.4s var(--ease-out-quart);
   }
 
   .glass:hover {
-    background: var(--glass-hover);
-    border-color: var(--glass-hover-border);
+    background: linear-gradient(
+      135deg,
+      rgba(31, 31, 35, 0.9) 0%,
+      rgba(24, 24, 27, 0.95) 100%
+    );
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+      0 4px 20px rgba(0, 0, 0, 0.2);
   }
 
   .glass-strong {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(
+      135deg,
+      rgba(31, 31, 35, 0.9) 0%,
+      rgba(24, 24, 27, 0.95) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+      0 2px 8px rgba(0, 0, 0, 0.12);
   }
 
   /* ----- FLOATING HEADER (centered pill) ----- */
-  .floating-header {
+    .floating-header {
     position: fixed;
     top: 0.625rem;
     left: 50%;
@@ -193,18 +210,31 @@ a, button, [role="button"], select, label, input[type="submit"] {
     width: min(calc(100% - 1.5rem), 720px);
     z-index: 50;
     height: 2.75rem;
-    background: rgba(9, 9, 11, 0.55);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: linear-gradient(
+      135deg,
+      rgba(9, 9, 11, 0.6) 0%,
+      rgba(9, 9, 11, 0.45) 100%
+    );
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 999px;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+      0 4px 20px rgba(0, 0, 0, 0.15);
     transition: all 0.5s var(--ease-out-expo);
   }
 
   .floating-header.scrolled {
-    background: rgba(9, 9, 11, 0.82);
-    border-color: rgba(255, 255, 255, 0.07);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    background: linear-gradient(
+      135deg,
+      rgba(9, 9, 11, 0.85) 0%,
+      rgba(9, 9, 11, 0.75) 100%
+    );
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+      0 8px 32px rgba(0, 0, 0, 0.3);
   }
 
   /* ----- FLOATING FOOTER (centered pill) ----- */
@@ -212,12 +242,19 @@ a, button, [role="button"], select, label, input[type="submit"] {
     position: relative;
     width: min(calc(100% - 1.5rem), 720px);
     margin: 0 auto 0.625rem;
-    background: rgba(9, 9, 11, 0.55);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: linear-gradient(
+      135deg,
+      rgba(9, 9, 11, 0.6) 0%,
+      rgba(9, 9, 11, 0.45) 100%
+    );
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 999px;
     padding: 0.625rem 1.25rem;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+      0 4px 20px rgba(0, 0, 0, 0.15);
   }
 
   /* ----- CODE NAV LINK ----- */
@@ -465,6 +502,63 @@ a, button, [role="button"], select, label, input[type="submit"] {
 }
 
 /* ============================================================
+   LASER GLOW — cursor-following highlight, theme-aware
+   ============================================================ */
+.laser-glow {
+  --laser-x: 50%;
+  --laser-y: 50%;
+  --laser-color: var(--accent-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.laser-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    250px circle at var(--laser-x) var(--laser-y),
+    var(--laser-color) 0%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.laser-glow:hover::before {
+  opacity: 1;
+}
+
+/* Buttons — white glow on primary, accent on secondary */
+.btn-primary.laser-glow {
+  --laser-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-secondary.laser-glow {
+  --laser-color: var(--accent-glow);
+}
+
+/* Contact links — per-link colors */
+.contact-link.laser-glow[data-laser="green"] {
+  --laser-color: rgba(16, 185, 129, 0.12);
+}
+
+.contact-link.laser-glow[data-laser="accent"] {
+  --laser-color: var(--accent-glow);
+}
+
+.contact-link.laser-glow[data-laser="white"] {
+  --laser-color: rgba(255, 255, 255, 0.06);
+}
+
+@media (pointer: coarse), (max-width: 1023px) {
+  .laser-glow::before { display: none; }
+}
+
+/* ============================================================
    PROJECT CARD POPUP EFFECT
    ============================================================ */
 .project-card-interactive {
@@ -709,68 +803,7 @@ a, button, [role="button"], select, label, input[type="submit"] {
 }
 
 /* ============================================================
-   AMBIENT ORBS — base + hero-specific animated orbs
-   ============================================================ */
-.ambient-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  pointer-events: none;
-}
-
-.ambient-orb-gold {
-  background: rgba(200, 162, 78, 0.03);
-}
-
-.ambient-orb-dim {
-  background: rgba(255, 255, 255, 0.015);
-}
-
-/* ── Hero orbs — animated, interactive-feeling ── */
-.hero-orb-1 {
-  background: radial-gradient(circle, rgba(200, 162, 78, 0.06) 0%, rgba(200, 162, 78, 0.02) 50%, transparent 70%);
-  animation: heroOrb1Drift 18s ease-in-out infinite, heroOrbPulse 6s ease-in-out infinite;
-}
-
-.hero-orb-2 {
-  background: radial-gradient(circle, rgba(200, 162, 78, 0.04) 0%, rgba(255, 255, 255, 0.015) 50%, transparent 70%);
-  animation: heroOrb2Drift 22s ease-in-out 2s infinite, heroOrbPulse 8s ease-in-out 3s infinite;
-}
-
-.hero-orb-3 {
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.025) 0%, rgba(200, 162, 78, 0.01) 50%, transparent 70%);
-  animation: heroOrb3Drift 25s ease-in-out 5s infinite, heroOrbPulse 10s ease-in-out 1s infinite;
-}
-
-@keyframes heroOrb1Drift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25%      { transform: translate(40px, -30px) scale(1.05); }
-  50%      { transform: translate(80px, 20px) scale(0.95); }
-  75%      { transform: translate(-20px, 40px) scale(1.08); }
-}
-
-@keyframes heroOrb2Drift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25%      { transform: translate(-50px, 30px) scale(1.06); }
-  50%      { transform: translate(-20px, -50px) scale(0.94); }
-  75%      { transform: translate(40px, -20px) scale(1.04); }
-}
-
-@keyframes heroOrb3Drift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33%      { transform: translate(60px, -40px) scale(1.1); }
-  66%      { transform: translate(-30px, 50px) scale(0.92); }
-}
-
-@keyframes heroOrbPulse {
-  0%, 100% { opacity: 0.6; }
-  50%      { opacity: 1; }
-}
-
-/* ============================================================
-   HERO REVEAL — dense code matrix behind cursor
-   Sits ABOVE orbs (z-index:5 > orbs z-index:2)
-   Dark backdrop makes text readable even over bright orbs
+   HERO REVEAL — code matrix, instant on load, large spotlight
    ============================================================ */
 .hero-reveal-layer {
   position: absolute;
@@ -779,31 +812,24 @@ a, button, [role="button"], select, label, input[type="submit"] {
   pointer-events: none;
   overflow: hidden;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 
   -webkit-mask-image: radial-gradient(
-    circle 220px at var(--reveal-x, -300px) var(--reveal-y, -300px),
-    rgba(0,0,0,0.85) 0%,
-    rgba(0,0,0,0.5) 35%,
-    rgba(0,0,0,0.15) 65%,
+    circle 400px at var(--reveal-x, 50%) var(--reveal-y, 40%),
+    rgba(0,0,0,0.8) 0%,
+    rgba(0,0,0,0.4) 20%,
+    rgba(0,0,0,0.15) 45%,
+    rgba(0,0,0,0.04) 70%,
     transparent 100%
   );
   mask-image: radial-gradient(
-    circle 220px at var(--reveal-x, -300px) var(--reveal-y, -300px),
-    rgba(0,0,0,0.85) 0%,
-    rgba(0,0,0,0.5) 35%,
-    rgba(0,0,0,0.15) 65%,
+    circle 400px at var(--reveal-x, 50%) var(--reveal-y, 40%),
+    rgba(0,0,0,0.8) 0%,
+    rgba(0,0,0,0.4) 20%,
+    rgba(0,0,0,0.15) 45%,
+    rgba(0,0,0,0.04) 70%,
     transparent 100%
   );
-}
-
-/* Dark backdrop — dims orb glow under the cursor spotlight */
-.hero-reveal-layer::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(9, 9, 11, 0.55);
-  z-index: -1;
 }
 
 .hero-reveal-layer.active {
@@ -819,7 +845,6 @@ a, button, [role="button"], select, label, input[type="submit"] {
   line-height: 1;
 }
 
-/* Hide reveal on touch / mobile */
 @media (pointer: coarse), (max-width: 1023px) {
   .hero-reveal-layer { display: none !important; }
 }
@@ -1126,6 +1151,47 @@ a, button, [role="button"], select, label, input[type="submit"] {
   .typewriter-caret { animation: none !important; }
   .hover-letters .char:hover { transform: none; }
 }
+
+/* ============================================================
+   SKELETON LOADERS
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.07) 37%,
+    rgba(255, 255, 255, 0.03) 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+.skeleton-text {
+  height: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-heading {
+  height: 1.5rem;
+  width: 60%;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-block {
+  height: 2.5rem;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Hide skeleton when content loads (React hydration) */
+.skeleton-wrap:has(form) .skeleton-placeholder { display: none; }
+.skeleton-wrap form { display: block; }
 
 /* ============================================================
    LIGHT THEME OVERRIDES

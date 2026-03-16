@@ -1,4 +1,6 @@
 ---
+import ThemeSwitcher from './ThemeSwitcher.astro';
+
 const navItems = [
   { label: 'about', href: '#story' },
   { label: 'skills', href: '#skills' },
@@ -12,12 +14,15 @@ const navItems = [
   class="floating-header"
 >
   <div class="flex items-center justify-between h-full px-5">
-    <!-- Logo -->
-    <a href="#hero" data-nav-link class="relative z-10 select-none group" aria-label="Scroll to top">
-      <span class="font-mono text-[0.8rem] font-semibold tracking-tight text-text-muted group-hover:text-text-primary transition-colors duration-300">
-        <span class="text-accent-primary">~</span>/<span class="text-text-primary">hamza</span>
-      </span>
-    </a>
+    <!-- Logo — ~ opens terminal -->
+    <div class="relative z-10 select-none flex items-center">
+      <button
+        data-terminal-trigger
+        class="terminal-trigger font-mono text-[0.8rem] font-semibold text-accent-primary hover:text-accent-hover transition-colors duration-300"
+        aria-label="Open terminal"
+        title="Open terminal"
+      >~</button><a href="#hero" data-nav-link class="font-mono text-[0.8rem] font-semibold tracking-tight text-text-muted hover:text-text-primary transition-colors duration-300">/<span class="text-text-primary">hamza</span></a>
+    </div>
 
     <!-- Desktop Nav -->
     <nav class="hidden lg:flex items-center gap-5" aria-label="Main navigation">
@@ -27,10 +32,15 @@ const navItems = [
 
       <div class="w-px h-3.5 bg-white/8 mx-0.5"></div>
 
+      <ThemeSwitcher />
+
       <a
         href="https://wa.me/923329555786"
         target="_blank"
         rel="noopener noreferrer"
+        data-magnetic
+        data-magnetic-strength="0.25"
+        data-magnetic-radius="60"
         class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-[0.7rem] font-medium text-void bg-accent-primary hover:bg-accent-hover transition-colors duration-200"
       >
         <span>contact me</span>
@@ -71,6 +81,31 @@ const navItems = [
 </header>
 
 <style>
+  .terminal-trigger {
+    background: none;
+    border: none;
+    padding: 0.25rem 0;
+    margin: 0;
+    line-height: 1;
+    position: relative;
+  }
+  .terminal-trigger::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    opacity: 0.5;
+  }
+  .terminal-trigger:hover::after {
+    transform: scaleX(1);
+  }
+
   .hamburger-lines {
     width: 18px;
     height: 12px;
@@ -79,7 +114,6 @@ const navItems = [
     flex-direction: column;
     justify-content: space-between;
   }
-
   .hamburger-line {
     display: block;
     width: 100%;
@@ -89,7 +123,6 @@ const navItems = [
     transition: transform 0.4s var(--ease-out-expo), opacity 0.3s ease, width 0.3s var(--ease-out-expo);
     transform-origin: center;
   }
-
   .line-2 { width: 60%; margin-left: auto; }
 
   [data-menu-toggle].open .line-1 { transform: translateY(5px) rotate(45deg); }
@@ -107,7 +140,6 @@ const navItems = [
     visibility: hidden;
     transition: opacity 0.5s var(--ease-out-expo), visibility 0.5s;
   }
-
   .mobile-menu-overlay.open { opacity: 1; visibility: visible; }
 
   .mobile-nav-link {
@@ -118,13 +150,23 @@ const navItems = [
     transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
     transition-delay: var(--delay, 0s);
   }
-
   .mobile-menu-overlay.open .mobile-nav-link {
     opacity: 1;
     transform: translateY(0);
   }
-
   .mobile-nav-link:hover span.font-mono:last-child {
     color: var(--accent) !important;
   }
 </style>
+
+<script is:inline>
+  (function() {
+    var trigger = document.querySelector('[data-terminal-trigger]');
+    if (!trigger) return;
+    trigger.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.dispatchEvent(new CustomEvent('terminal:toggle'));
+    });
+  })();
+</script>

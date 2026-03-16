@@ -145,4 +145,4 @@ export const themes: Record<string, ThemeConfig> = {
 /* ║                                               ║ */
 /* ╚═══════════════════════════════════════════════╝ */
 
-export const activeTheme: ThemeConfig = themes['noir'];
+export const activeTheme: ThemeConfig = themes['midnight-gold'];

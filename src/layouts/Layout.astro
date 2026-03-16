@@ -1,6 +1,9 @@
 ---
 import { activeTheme as t } from '../config/theme';
+import { themes } from '../config/theme';
 import '../styles/global.css';
+import Terminal from '../components/Terminal.astro';
+import Preloader from '../components/Preloader.astro';
 
 interface Props {
   title?: string;
@@ -50,6 +53,44 @@ const themeStyle = [
       (function(){ document.documentElement.classList.add(document.documentElement.classList.contains('dark') ? 'dark' : 'light'); })();
     </script>
 
+    <!-- ADD THIS NEW SCRIPT RIGHT HERE ↓ -->
+    <script is:inline define:vars={{ themesJSON: JSON.stringify(themes) }}>
+      (function() {
+        try {
+          var saved = localStorage.getItem('portfolio-theme');
+          if (!saved) return;
+          var themes = JSON.parse(themesJSON);
+          var th = themes[saved];
+          if (!th) return;
+          var h = document.documentElement;
+          h.style.setProperty('--void', th.void);
+          h.style.setProperty('--midnight', th.midnight);
+          h.style.setProperty('--surface', th.surface);
+          h.style.setProperty('--elevated', th.elevated);
+          h.style.setProperty('--glass-bg', th.glassBg);
+          h.style.setProperty('--glass-border', th.glassBorder);
+          h.style.setProperty('--glass-hover', th.glassHover);
+          h.style.setProperty('--glass-hover-border', th.glassHoverBorder);
+          h.style.setProperty('--text-primary', th.textPrimary);
+          h.style.setProperty('--text-secondary', th.textSecondary);
+          h.style.setProperty('--text-muted', th.textMuted);
+          h.style.setProperty('--text-dim', th.textDim);
+          h.style.setProperty('--accent', th.accent);
+          h.style.setProperty('--accent-hover', th.accentHover);
+          h.style.setProperty('--accent-dim', th.accentDim);
+          h.style.setProperty('--accent-glow', th.accentGlow);
+          h.style.setProperty('--accent-subtle', th.accentSubtle);
+          h.style.setProperty('--accent-contrast', th.accentContrast);
+          h.style.setProperty('--accent-success', th.success);
+          h.style.setProperty('--gradient-accent-text', th.gradientText);
+          h.style.backgroundColor = th.void;
+          h.style.color = th.textPrimary;
+          if (th.isDark) { h.classList.add('dark'); h.classList.remove('light'); }
+          else { h.classList.remove('dark'); h.classList.add('light'); }
+        } catch(e) {}
+      })();
+    </script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
@@ -86,6 +127,7 @@ const themeStyle = [
   </head>
 
   <body class="bg-void text-text-primary font-body antialiased overflow-x-hidden">
+    <Preloader />
     <div class="css-bg-fallback" aria-hidden="true"></div>
 
     <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar"></div></div>
@@ -102,16 +144,27 @@ const themeStyle = [
       <img class="lightbox-image" src="" alt="Screenshot" loading="lazy" />
     </div>
 
+    <Terminal />
+
     <button data-scroll-top class="scroll-to-top glass" aria-label="Scroll to top">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </button>
 
     <script>
       import { initAnimations } from '../scripts/animations.js';
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(() => requestAnimationFrame(() => initAnimations())));
+
+      function boot() {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            initAnimations();
+          });
+        });
+      }
+
+      if (window.__preloaderDone) {
+        boot();
       } else {
-        requestAnimationFrame(() => requestAnimationFrame(() => initAnimations()));
+        document.addEventListener('preloader:complete', boot, { once: true });
       }
     </script>
 
