@@ -1,19 +1,80 @@
-<div data-scroll-indicator class="flex flex-col items-center gap-2 select-none" aria-hidden="true">
-  <span class="font-mono text-[0.6rem] tracking-[0.25em] uppercase text-text-dim">scroll</span>
-  <div class="flex flex-col items-center gap-0.5">
-    <div class="w-px h-8 relative overflow-hidden">
-      <div class="w-full h-full bg-gradient-to-b from-transparent via-accent-primary/40 to-accent-primary/80" style="animation: scrollLine 2s ease-in-out infinite;"></div>
-    </div>
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent-primary/50">
-      <polyline points="6 9 12 15 18 9" />
-    </svg>
+---
+// ScrollIndicator.astro — animated scroll prompt with click-to-scroll
+---
+
+<button data-scroll-indicator class="scroll-indicator" aria-label="Scroll to content">
+  <span class="scroll-label">scroll</span>
+  <div class="scroll-track">
+    <div class="scroll-dot"></div>
   </div>
-</div>
+</button>
 
 <style>
-  @keyframes scrollLine {
-    0% { transform: translateY(-100%); opacity: 0; }
-    30% { opacity: 1; }
-    100% { transform: translateY(100%); opacity: 0; }
+  .scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    transition: opacity 0.4s ease;
+  }
+
+  .scroll-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .scroll-track {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-dot {
+    width: 3px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 2px;
+    position: absolute;
+    left: -1px;
+    animation: scrollDot 2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  @keyframes scrollDot {
+    0% {
+      top: -8px;
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      top: 40px;
+      opacity: 0;
+    }
+  }
+
+  .scroll-indicator:hover .scroll-label {
+    color: var(--accent);
+  }
+
+  .scroll-indicator:hover .scroll-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-dot { animation: none; opacity: 0.5; top: 16px; }
   }
 </style>

@@ -350,57 +350,78 @@ function initLetterHover() {
 
 /* ============================================================
    MODULE 8: PROJECT CARD POPUP
-   Hover: scale up slightly
-   Click: expand to center, blur rest of page
+   — CSS :hover uses !important (works immediately, no GSAP conflict)
+   — Moves card to body (escapes stacking context)
+   — power2.inOut = smooth start AND end
+   — Arrow cursor when expanded
    ============================================================ */
 function initCardPopup() {
+  if (IS_MOBILE) return;
+
   const cards = document.querySelectorAll('.project-card-interactive');
   const overlay = document.querySelector('.page-blur-overlay');
 
   if (!cards.length || !overlay) return;
 
   let expandedCard = null;
-  let originalStyles = null;
+  let placeholder = null;
+  let originalRect = null;
 
   function expandCard(card) {
     if (expandedCard) return;
-
     expandedCard = card;
 
-    /* Store original position for restore */
+    /* Capture current position */
     const rect = card.getBoundingClientRect();
-    originalStyles = {
-      position: card.style.position,
-      top: card.style.top,
-      left: card.style.left,
-      width: card.style.width,
-      zIndex: card.style.zIndex,
-      transform: card.style.transform,
+    originalRect = {
+      top: rect.top,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
     };
 
-    /* First: set card to its current position (fixed) */
-    card.style.position = 'fixed';
-    card.style.top = rect.top + 'px';
-    card.style.left = rect.left + 'px';
-    card.style.width = rect.width + 'px';
-    card.style.zIndex = '75';
+    /* Create invisible placeholder to hold grid spot */
+    placeholder = document.createElement('div');
+    placeholder.style.cssText =
+      'width:' + rect.width + 'px;height:' + rect.height + 'px;visibility:hidden;';
+    card.parentElement.insertBefore(placeholder, card);
+
+    /* Move card to body — escapes .content-layer stacking context */
+    document.body.appendChild(card);
+
+    /* Kill CSS transitions so GSAP has full control */
+    card.style.transition = 'none';
+
+    /* Set at current screen position (fixed) */
+    gsap.set(card, {
+      position: 'fixed',
+      top: rect.top,
+      left: rect.left,
+      width: rect.width,
+      height: 'auto',
+      margin: 0,
+      zIndex: 75,
+      scale: 1,
+      clearProps: 'transform',
+    });
+
+    card.classList.add('expanded');
 
     /* Show blur overlay */
     overlay.classList.add('active');
 
     /* Animate to center */
-    requestAnimationFrame(() => {
-      const targetWidth = Math.min(window.innerWidth * 0.85, 680);
+    const targetW = Math.min(window.innerWidth * 0.85, 680);
 
-      gsap.to(card, {
-        top: '50%',
-        left: '50%',
-        width: targetWidth,
-        xPercent: -50,
-        yPercent: -50,
-        duration: 0.5,
-        ease: 'power3.out',
-      });
+    gsap.to(card, {
+      top: '50%',
+      left: '50%',
+      width: targetW,
+      xPercent: -50,
+      yPercent: -50,
+      duration: 0.55,
+      ease: 'power2.inOut',
+      delay: 0.08,
     });
 
     /* Stop scroll */
@@ -409,46 +430,49 @@ function initCardPopup() {
   }
 
   function collapseCard() {
-    if (!expandedCard || !originalStyles) return;
+    if (!expandedCard || !placeholder) return;
 
     const card = expandedCard;
 
-    /* Animate back */
+    /* Animate back to original grid position */
     gsap.to(card, {
-      top: originalStyles.top || 'auto',
-      left: originalStyles.left || 'auto',
-      width: originalStyles.width || 'auto',
+      top: originalRect.top,
+      left: originalRect.left,
+      width: originalRect.width,
       xPercent: 0,
       yPercent: 0,
-      duration: 0.4,
-      ease: 'power3.inOut',
-      onComplete: () => {
-        /* Reset all inline styles */
+      duration: 0.45,
+      ease: 'power2.inOut',
+      onComplete: function () {
+        card.classList.remove('expanded');
+        card.style.transition = '';
         card.style.position = '';
         card.style.top = '';
         card.style.left = '';
         card.style.width = '';
+        card.style.height = '';
         card.style.zIndex = '';
-        card.style.transform = '';
-
+        card.style.margin = '';
         gsap.set(card, { clearProps: 'all' });
+
+        if (placeholder && placeholder.parentElement) {
+          placeholder.parentElement.insertBefore(card, placeholder);
+          placeholder.remove();
+        }
+        placeholder = null;
       },
     });
 
     overlay.classList.remove('active');
 
-    /* Resume scroll */
     if (lenisInstance) lenisInstance.start();
     document.body.style.overflow = '';
 
     expandedCard = null;
-    originalStyles = null;
   }
 
-  /* Click card to expand */
-  cards.forEach((card) => {
-    card.addEventListener('click', (e) => {
-      /* Don't expand if clicking a link/button inside */
+  cards.forEach(function (card) {
+    card.addEventListener('click', function (e) {
       if (e.target.closest('a') || e.target.closest('button')) return;
 
       if (expandedCard === card) {
@@ -459,11 +483,9 @@ function initCardPopup() {
     });
   });
 
-  /* Click overlay to collapse */
   overlay.addEventListener('click', collapseCard);
 
-  /* Escape to collapse */
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && expandedCard) collapseCard();
   });
 }
@@ -602,10 +624,10 @@ function initHeaderTransition() {
   if (!header) return;
 
   ScrollTrigger.create({
-    start: 'top -50',
+    start: 'top -100',
     end: 'max',
     onUpdate: (self) => {
-      if (self.scroll() > 50) {
+      if (self.scroll() > 100) {
         header.classList.add('scrolled');
       } else {
         header.classList.remove('scrolled');
@@ -853,47 +875,20 @@ function initScrollIndicator() {
 }
 
 /* ============================================================
-   MODULE 19: HERO REVEAL — unified loop, no standalone rAF
+   MODULE 19: HERO GRID + BLUEPRINT — entrance only, no per-frame work
    ============================================================ */
 function initHeroReveal() {
   if (IS_TOUCH || IS_MOBILE || REDUCED_MOTION) return;
 
   const hero = document.querySelector('#hero');
   if (!hero) return;
-  const reveal = hero.querySelector('.hero-reveal-layer');
-  if (!reveal) return;
 
-  let mouseInHero = false;
-  const rect = hero.getBoundingClientRect();
-  let tx = rect.width / 2, ty = rect.height * 0.4;
-  let cx = tx, cy = ty;
+  const grid = hero.querySelector('.hero-grid');
+  const blueprint = hero.querySelector('.hero-blueprint');
 
-  hero.style.setProperty('--reveal-x', cx + 'px');
-  hero.style.setProperty('--reveal-y', cy + 'px');
-  requestAnimationFrame(() => { reveal.classList.add('active'); });
-
-  hero.addEventListener('mouseenter', () => { mouseInHero = true; });
-  hero.addEventListener('mousemove', (e) => {
-    const r = hero.getBoundingClientRect();
-    tx = e.clientX - r.left;
-    ty = e.clientY - r.top;
-  });
-  hero.addEventListener('mouseleave', () => {
-    mouseInHero = false;
-    const r = hero.getBoundingClientRect();
-    tx = r.width / 2;
-    ty = r.height * 0.4;
-  });
-
-  registerLoop(() => {
-    const speed = mouseInHero ? 0.08 : 0.015;
-    const dx = tx - cx, dy = ty - cy;
-    if (Math.abs(dx) > 0.3 || Math.abs(dy) > 0.3) {
-      cx += dx * speed;
-      cy += dy * speed;
-      hero.style.setProperty('--reveal-x', cx + 'px');
-      hero.style.setProperty('--reveal-y', cy + 'px');
-    }
+  requestAnimationFrame(() => {
+    if (grid) grid.classList.add('active');
+    if (blueprint) blueprint.classList.add('active');
   });
 }
 
@@ -1042,6 +1037,118 @@ function initLaserGlow() {
 }
 
 /* ============================================================
+   MODULE 23: DRAGGABLE SNAPSHOT CARD
+   — Smooth drag with 3D tilt based on velocity
+   — Rubber-band resistance past bounds
+   — Elastic snap-back on release
+   — "drag me" hint fades after first drag
+   — Desktop only
+   ============================================================ */
+function initDraggableCard() {
+  if (IS_TOUCH || IS_MOBILE || REDUCED_MOTION) return;
+
+  const card = document.querySelector('[data-draggable]');
+  if (!card) return;
+
+  let isDragging = false;
+  let startX = 0, startY = 0;
+  let currentX = 0, currentY = 0;
+  let lastMX = 0, lastMY = 0;
+  let velX = 0, velY = 0;
+  let hasDragged = false;
+
+  const BOUNDS_X = 100;
+  const BOUNDS_Y = 60;
+
+  /* Rubber-band: past bounds, movement resists */
+  function rubber(value, limit) {
+    if (Math.abs(value) <= limit) return value;
+    var sign = value > 0 ? 1 : -1;
+    var over = Math.abs(value) - limit;
+    return sign * (limit + over * 0.12);
+  }
+
+  card.addEventListener('mousedown', function (e) {
+    /* Don't drag if clicking a link/button inside */
+    if (e.target.closest('a') || e.target.closest('button')) return;
+
+    isDragging = true;
+    startX = e.clientX - currentX;
+    startY = e.clientY - currentY;
+    lastMX = e.clientX;
+    lastMY = e.clientY;
+    velX = 0;
+    velY = 0;
+
+    card.classList.add('dragging');
+
+    if (!hasDragged) {
+      hasDragged = true;
+      card.classList.add('dragged');
+    }
+
+    /* Kill any snap-back in progress */
+    gsap.killTweensOf(card);
+
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!isDragging) return;
+
+    var rawX = e.clientX - startX;
+    var rawY = e.clientY - startY;
+
+    /* Apply rubber-band */
+    currentX = rubber(rawX, BOUNDS_X);
+    currentY = rubber(rawY, BOUNDS_Y);
+
+    /* Track velocity for tilt */
+    velX = e.clientX - lastMX;
+    velY = e.clientY - lastMY;
+    lastMX = e.clientX;
+    lastMY = e.clientY;
+
+    /* Tilt based on movement direction */
+    var tiltY = Math.max(-15, Math.min(15, velX * 1.2));
+    var tiltX = Math.max(-15, Math.min(15, -velY * 1.2));
+
+    gsap.set(card, {
+      x: currentX,
+      y: currentY,
+      rotateX: tiltX,
+      rotateY: tiltY,
+      scale: 1.04,
+      boxShadow: '0 25px 60px rgba(0, 0, 0, 0.25), 0 0 40px rgba(200, 162, 78, 0.06)',
+      force3D: true,
+    });
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (!isDragging) return;
+    isDragging = false;
+
+    card.classList.remove('dragging');
+
+    /* Snap back with elastic overshoot */
+    gsap.to(card, {
+      x: 0,
+      y: 0,
+      rotateX: 0,
+      rotateY: 0,
+      scale: 1,
+      boxShadow: 'inset 0 1px 0 0 rgba(255, 255, 255, 0.04), 0 2px 12px rgba(0, 0, 0, 0.15)',
+      duration: 1,
+      ease: 'elastic.out(1, 0.4)',
+      force3D: true,
+    });
+
+    currentX = 0;
+    currentY = 0;
+  });
+}
+
+/* ============================================================
    MASTER INIT
    ============================================================ */
 export function initAnimations() {
@@ -1074,8 +1181,11 @@ export function initAnimations() {
   /* Start unified animation loop (replaces 3 separate rAF loops) */
   startUnifiedLoop();
 
-    /* Laser glow on cards */
+  /* Laser glow on cards */
   initLaserGlow();
+
+  /* Draggable snapshot card */
+  initDraggableCard();
 
   /* UI */
   initScrollspy();

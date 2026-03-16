@@ -120,7 +120,7 @@
   /* ── Config ── */
   var KEY = 'portfolio-visited';
   var isReturn = false;
-  try { isReturn = localStorage.getItem(KEY) === '1'; } catch (e) {}
+  try { isReturn = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
   var noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ── Global flag for Layout.astro script coordination ── */
@@ -131,7 +131,7 @@
     if (window.__preloaderDone) return;
     window.__preloaderDone = true;
 
-    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
     document.documentElement.style.overflow = '';
     document.removeEventListener('click', skip);
     document.removeEventListener('keydown', skip);
