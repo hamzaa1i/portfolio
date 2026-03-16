@@ -3,13 +3,13 @@
    Tailwind + Custom Properties + Glass + Cursor + Animations
    ============================================================ */
 
+/* --- Google Fonts Import (after Tailwind) --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@500;600;700&display=swap');
+
 /* --- Tailwind Directives (MUST be first) --- */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* --- Google Fonts Import (after Tailwind) --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 /* ============================================================
    CSS CUSTOM PROPERTIES
