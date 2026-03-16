@@ -1,0 +1,266 @@
+---
+// Header.astro — Fixed scrollspy nav with glass transition + mobile menu
+// Attributes used by animations.js:
+//   data-header       → glass transition on scroll
+//   data-nav-link     → scrollspy active state
+//   data-menu-toggle  → mobile hamburger
+//   data-mobile-menu  → fullscreen overlay
+
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+const navItems: NavItem[] = [
+  { label: 'Story', href: '#story' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Work', href: '#work' },
+  { label: 'Contact', href: '#contact' },
+];
+---
+
+<header
+  data-header
+  class="fixed top-0 left-0 w-full z-header transition-all duration-500 ease-out-expo"
+  style="background: transparent; border-bottom: 1px solid transparent;"
+>
+  <div
+    class="mx-auto flex items-center justify-between"
+    style="max-width: 1440px; padding: 0 var(--section-padding-x); height: var(--header-height);"
+  >
+    <!-- Logo -->
+    <a
+      href="#hero"
+      data-nav-link
+      data-magnetic
+      data-magnetic-strength="0.15"
+      data-magnetic-distance="50"
+      class="relative z-10 flex items-center gap-1 select-none"
+      aria-label="Hamza Ali — scroll to top"
+    >
+      <span
+        class="font-heading text-2xl font-bold tracking-tight text-gradient"
+        style="line-height: 1;"
+      >
+        H<span class="text-accent-cyan">.</span>
+      </span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden lg:flex items-center gap-8" aria-label="Main navigation">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          data-nav-link
+          class="nav-link"
+        >
+          {item.label}
+        </a>
+      ))}
+
+      <!-- CTA Button -->
+      <a
+        href="https://wa.me/923329555786"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-magnetic
+        data-magnetic-strength="0.2"
+        data-magnetic-distance="60"
+        class="glow-btn glow-btn-sm glow-btn-accent"
+      >
+        <span>Let's Talk</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17L17 7" />
+          <path d="M7 7h10v10" />
+        </svg>
+      </a>
+    </nav>
+
+    <!-- Mobile Hamburger -->
+    <button
+      data-menu-toggle
+      class="lg:hidden relative z-[100] w-10 h-10 flex items-center justify-center"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <div class="hamburger-lines">
+        <span class="hamburger-line line-1"></span>
+        <span class="hamburger-line line-2"></span>
+        <span class="hamburger-line line-3"></span>
+      </div>
+    </button>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div
+    id="mobile-menu"
+    data-mobile-menu
+    class="mobile-menu-overlay"
+    aria-hidden="true"
+  >
+    <!-- Background orbs (decorative) -->
+    <div class="ambient-orbs" aria-hidden="true">
+      <div
+        class="ambient-orb ambient-orb-cyan"
+        style="width: 300px; height: 300px; top: 10%; left: -10%;"
+      ></div>
+      <div
+        class="ambient-orb ambient-orb-purple"
+        style="width: 250px; height: 250px; bottom: 15%; right: -5%;"
+      ></div>
+    </div>
+
+    <nav
+      class="relative z-10 flex flex-col items-center justify-center h-full gap-8"
+      aria-label="Mobile navigation"
+    >
+      {navItems.map((item, index) => (
+        <a
+          href={item.href}
+          data-nav-link
+          class="mobile-nav-link"
+          style={`--delay: ${index * 0.08}s`}
+        >
+          <span class="mobile-nav-number font-mono text-xs text-text-muted mr-3">
+            0{index + 1}
+          </span>
+          <span class="font-heading text-3xl sm:text-4xl font-semibold text-text-primary">
+            {item.label}
+          </span>
+        </a>
+      ))}
+
+      <!-- Mobile CTA -->
+      <div class="mt-8 mobile-nav-link" style="--delay: 0.32s">
+        <a
+          href="https://wa.me/923329555786"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="glow-btn glow-btn-accent"
+        >
+          <span>Let's Talk on WhatsApp</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 17L17 7" />
+            <path d="M7 7h10v10" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Mobile Social Links -->
+      <div class="flex gap-4 mt-4 mobile-nav-link" style="--delay: 0.4s">
+        <a
+          href="https://github.com/qxcz1"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full glass flex items-center justify-center text-text-secondary hover:text-accent-cyan transition-colors duration-300"
+          aria-label="GitHub"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+        </a>
+        <a
+          href="mailto:hamzaali@proton.me"
+          class="w-10 h-10 rounded-full glass flex items-center justify-center text-text-secondary hover:text-accent-cyan transition-colors duration-300"
+          aria-label="Email"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M22 7l-10 7L2 7" />
+          </svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* Hamburger lines */
+  .hamburger-lines {
+    width: 22px;
+    height: 14px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hamburger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 1px;
+    transition: transform 0.4s var(--ease-out-expo),
+                opacity 0.3s ease,
+                width 0.3s var(--ease-out-expo);
+    transform-origin: center;
+  }
+
+  .line-2 {
+    width: 65%;
+    margin-left: auto;
+  }
+
+  /* Open state */
+  [data-menu-toggle].open .line-1 {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  [data-menu-toggle].open .line-2 {
+    opacity: 0;
+    width: 0;
+  }
+
+  [data-menu-toggle].open .line-3 {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* Mobile menu overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: rgba(3, 3, 5, 0.96);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s var(--ease-out-expo),
+                visibility 0.5s var(--ease-out-expo);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .mobile-menu-overlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Mobile nav links animation */
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s var(--ease-out-expo),
+                transform 0.5s var(--ease-out-expo);
+    transition-delay: var(--delay, 0s);
+  }
+
+  .mobile-menu-overlay.open .mobile-nav-link {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-nav-link:hover .font-heading {
+    color: var(--accent-cyan);
+    transition: color 0.3s;
+  }
+
+  .mobile-nav-link:hover .mobile-nav-number {
+    color: var(--accent-cyan);
+    transition: color 0.3s;
+  }
+</style>

@@ -1,0 +1,929 @@
+---
+// index.astro — Complete Single-Page Portfolio
+// Sections: Hero → Story → Arsenal → Selected Works → Contact
+
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import InteractiveBackground from '@components/InteractiveBackground.tsx';
+import TypeWriter from '@components/TypeWriter.astro';
+import ScrollIndicator from '@components/ScrollIndicator.astro';
+import SkillOrb from '@components/SkillOrb.astro';
+import ProjectCard from '@components/ProjectCard.astro';
+import MagneticButton from '@components/MagneticButton.astro';
+
+// Typing effect roles
+const roles = [
+  'Digital Solutions Architect',
+  'UI/UX Enthusiast',
+  'AI-Powered Developer',
+  'ERP Systems Engineer',
+  'Brand Designer',
+];
+
+// Stats data
+const stats = [
+  { value: 3, suffix: '+', label: 'Projects Delivered' },
+  { value: 300000, suffix: '+', label: 'Garments Tracked Monthly' },
+  { value: 95, suffix: '', label: 'WPM Typing Speed' },
+  { value: 17, suffix: '', label: 'Years Old' },
+];
+
+// Skills data grouped by category
+const skills = {
+  Build: [
+    { name: 'Astro', icon: '🚀' },
+    { name: 'React', icon: '⚛️' },
+    { name: 'Tailwind CSS', icon: '🎨' },
+    { name: 'JavaScript', icon: '⚡' },
+    { name: 'HTML/CSS', icon: '🌐' },
+  ],
+  Animate: [
+    { name: 'GSAP', icon: '✨' },
+    { name: 'Three.js', icon: '🎲' },
+    { name: 'Lenis', icon: '🧈' },
+    { name: 'ScrollTrigger', icon: '📜' },
+  ],
+  Backend: [
+    { name: 'ERPNext', icon: '🏭' },
+    { name: 'Python', icon: '🐍' },
+    { name: 'Supabase', icon: '💚' },
+    { name: 'PostgreSQL', icon: '🐘' },
+  ],
+  Design: [
+    { name: 'Brand Identity', icon: '💎' },
+    { name: 'UI/UX', icon: '🎯', learning: true },
+    { name: 'Figma', icon: '🖌️', learning: true },
+  ],
+  Tools: [
+    { name: 'Git & GitHub', icon: '🔀' },
+    { name: 'Vercel', icon: '▲' },
+    { name: 'VS Code', icon: '💻' },
+    { name: 'AI (Claude/GPT)', icon: '🤖' },
+  ],
+};
+
+// Flatten skills for scattered layout
+const allSkills = Object.entries(skills).flatMap(([category, items]) =>
+  items.map((item) => ({ ...item, category: category as any }))
+);
+
+// Float animation classes for scattered visual
+const floatClasses = [
+  'animate-float',
+  'animate-float-delayed',
+  'animate-float-slow',
+  'animate-float-reverse',
+  'animate-float',
+  'animate-float-delayed',
+  'animate-float-slow',
+  'animate-float-reverse',
+  'animate-float',
+  'animate-float-delayed',
+  'animate-float-slow',
+  'animate-float-reverse',
+  'animate-float',
+  'animate-float-delayed',
+  'animate-float-slow',
+  'animate-float-reverse',
+  'animate-float',
+  'animate-float-delayed',
+  'animate-float-slow',
+  'animate-float-reverse',
+];
+
+// Projects data
+const projects = [
+  {
+    title: 'Reve Stitching — Corporate Website',
+    description: 'Premium B2B manufacturing website with scroll-driven animations, pinned process sections, horizontal product scroll, interactive price calculator, AI-powered chat widget, quote/sample request system with email notifications, full admin dashboard, and dark mode support.',
+    type: 'Full Production Website',
+    role: 'Sole Developer & Designer',
+    stack: ['Astro 5', 'Tailwind CSS', 'GSAP', 'ScrollTrigger', 'Lenis', 'Supabase', 'Vercel', 'Resend API'],
+    liveUrl: 'https://revestitching.com',
+    githubUrl: 'https://github.com/qxcz1/reve-stitching',
+    placeholderClass: 'project-placeholder-1',
+  },
+  {
+    title: 'Factory ERP System',
+    description: 'Digitized an entire factory\'s store operations. Migrated dyeing gatepasses from paper to digital (50+ daily). Built fabric stock management, issuance tracking, and automated reporting. The system is actively used daily by factory staff. Saved ₨500K–2M vs hiring a software house.',
+    type: 'Enterprise Resource Planning',
+    role: 'Sole ERP Implementation Lead',
+    stack: ['ERPNext', 'Python', 'PostgreSQL', 'Custom Scripts'],
+    liveUrl: undefined,
+    githubUrl: undefined,
+    placeholderClass: 'project-placeholder-2',
+  },
+  {
+    title: 'Brand Identity Design',
+    description: 'Created complete brand identity for an international garment exporter: logo system (primary, secondary, icon variants), color palette, typography system, business cards, letterhead, social media templates, and brand guidelines document.',
+    type: 'Complete Brand Identity',
+    role: 'Brand Designer',
+    stack: ['AI-Assisted Design', 'Brand Strategy', 'Visual Identity'],
+    liveUrl: 'https://revestitching.com',
+    githubUrl: undefined,
+    placeholderClass: 'project-placeholder-3',
+  },
+];
+---
+
+<Layout>
+  <!-- ============================================================
+       WEBGL INTERACTIVE BACKGROUND
+       React island — loads on client, fixed behind all content
+       Hidden on mobile (<1024px) via CSS
+       ============================================================ -->
+  <InteractiveBackground client:load />
+
+  <!-- ============================================================
+       HEADER — Fixed scrollspy nav
+       ============================================================ -->
+  <Header />
+
+  <!-- ============================================================
+       SECTION 1: HERO
+       Full viewport · WebGL visible · Typing effect · CTA
+       ============================================================ -->
+  <section
+    id="hero"
+    data-section
+    class="section-full relative flex items-center justify-center min-h-screen"
+  >
+    <!-- Ambient background orbs (behind content, visible through glass elements) -->
+    <div class="ambient-orbs" aria-hidden="true">
+      <div
+        class="ambient-orb ambient-orb-cyan"
+        style="width: clamp(250px, 40vw, 500px); height: clamp(250px, 40vw, 500px); top: 15%; left: 5%;"
+      ></div>
+      <div
+        class="ambient-orb ambient-orb-purple"
+        style="width: clamp(200px, 35vw, 400px); height: clamp(200px, 35vw, 400px); bottom: 20%; right: 8%;"
+      ></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto text-center">
+      <!-- Eyebrow tag -->
+      <div data-animate="fade-up" class="mb-6 sm:mb-8">
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs sm:text-sm font-mono tracking-wider text-text-secondary">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-glow"></span>
+          Available for projects
+        </span>
+      </div>
+
+      <!-- Main heading -->
+      <h1
+        data-split
+        class="text-display font-heading font-bold text-text-primary mb-4 sm:mb-6"
+      >
+        Hamza Ali
+      </h1>
+
+      <!-- Typing effect -->
+      <div data-animate="fade-up" class="mb-6 sm:mb-8">
+        <TypeWriter
+          roles={roles}
+          textClass="text-heading-3 sm:text-heading-2 text-gradient"
+        />
+      </div>
+
+      <!-- One-liner paragraph -->
+      <p
+        data-animate="fade-up"
+        class="text-body-lg sm:text-lg text-text-secondary max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed"
+      >
+        I architect digital solutions and leverage AI to build systems
+        that businesses depend on.
+      </p>
+
+      <!-- CTA buttons -->
+      <div
+        data-animate="fade-up"
+        class="flex flex-col sm:flex-row items-center justify-center gap-4"
+      >
+        <MagneticButton
+          href="#work"
+          text="Explore My Work"
+          variant="accent"
+          icon="chevron-down"
+          magneticStrength={0.3}
+          magneticDistance={80}
+          ariaLabel="Scroll to my work section"
+        />
+        <MagneticButton
+          href="#contact"
+          text="Get in Touch"
+          variant="default"
+          icon="arrow"
+          magneticStrength={0.25}
+          magneticDistance={70}
+          ariaLabel="Scroll to contact section"
+        />
+      </div>
+    </div>
+
+    <!-- Scroll indicator at bottom -->
+    <div class="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2">
+      <ScrollIndicator />
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2: THE STORY
+       Split layout · Line-by-line reveal · Counter stats
+       ============================================================ -->
+  <section
+    id="story"
+    data-section
+    class="section-full relative flex items-center min-h-screen"
+  >
+    <!-- Ambient orbs -->
+    <div class="ambient-orbs" aria-hidden="true">
+      <div
+        class="ambient-orb ambient-orb-purple"
+        style="width: clamp(200px, 30vw, 400px); height: clamp(200px, 30vw, 400px); top: 20%; right: 15%;"
+      ></div>
+      <div
+        class="ambient-orb ambient-orb-blue"
+        style="width: clamp(150px, 25vw, 350px); height: clamp(150px, 25vw, 350px); bottom: 25%; left: 10%;"
+      ></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-7xl mx-auto">
+      <div class="flex items-stretch gap-8 lg:gap-16">
+        <!-- Left: Vertical decorative text (desktop only) -->
+        <div class="hidden lg:flex items-center justify-center flex-shrink-0" style="width: 80px;">
+          <span class="vertical-text">The Story</span>
+        </div>
+
+        <!-- Right: Content -->
+        <div class="flex-1 max-w-3xl">
+          <!-- Section heading (mobile: visible since vertical-text is hidden) -->
+          <div class="lg:hidden mb-8">
+            <span class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-3 block">
+              About
+            </span>
+            <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary">
+              The Story
+            </h2>
+          </div>
+
+          <!-- Story paragraphs — each reveals individually -->
+          <div class="space-y-6 sm:space-y-8">
+            <p
+              data-story-line
+              class="text-body-lg text-text-secondary leading-relaxed"
+            >
+              At 17, I walked into a garment factory in Faisalabad and saw a
+              business exporting
+              <span class="text-text-primary font-medium">300,000 garments monthly</span>
+              to Boohoo, Pull&Bear, and Yours Clothing — running entirely on
+              paper and Excel.
+            </p>
+
+            <p
+              data-story-line
+              class="text-body-lg text-text-secondary leading-relaxed"
+            >
+              I had zero coding experience. But I had a hypothesis:
+              <span class="text-gradient font-medium">AI could be the bridge</span>
+              between my ideas and their execution. So I volunteered to digitize
+              everything.
+            </p>
+
+            <p
+              data-story-line
+              class="text-body-lg text-text-secondary leading-relaxed"
+            >
+              I built their website from scratch — premium scroll animations,
+              real-time quote systems, AI-powered chat. I implemented an
+              enterprise ERP system that replaced
+              <span class="text-text-primary font-medium">50 daily paper gatepasses</span>
+              with real-time digital tracking. I designed their entire brand
+              identity.
+            </p>
+
+            <p
+              data-story-line
+              class="text-body-lg text-text-secondary leading-relaxed"
+            >
+              A software house quoted
+              <span class="text-accent-cyan font-medium">₨2 million</span>.
+              I delivered it alone, at 17, using AI as my execution engine.
+            </p>
+
+            <!-- The Edge — highlighted quote -->
+            <blockquote
+              data-story-line
+              class="glass p-5 sm:p-6 mt-4 border-l-2 border-accent-cyan/40"
+              style="border-radius: 0 1rem 1rem 0;"
+            >
+              <p class="text-body text-text-primary italic leading-relaxed">
+                "The thinking behind giving correct prompts to AI was me. I
+                don't just use tools — I architect solutions."
+              </p>
+            </blockquote>
+          </div>
+
+          <!-- Stats Row -->
+          <div
+            class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-12 sm:mt-16"
+            data-animate="stagger"
+          >
+            {stats.map((stat) => (
+              <div class="stat-card glass">
+                <div class="stat-number text-gradient">
+                  <span
+                    data-counter={stat.value.toString()}
+                    data-counter-suffix={stat.suffix}
+                    class="counter-number"
+                  >
+                    0{stat.suffix}
+                  </span>
+                </div>
+                <div class="stat-label">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3: THE ARSENAL (Skills)
+       Floating glass orbs · Scattered layout · Proximity tilt
+       ============================================================ -->
+  <section
+    id="skills"
+    data-section
+    class="section-full relative flex items-center min-h-screen"
+  >
+    <!-- Ambient orbs -->
+    <div class="ambient-orbs" aria-hidden="true">
+      <div
+        class="ambient-orb ambient-orb-cyan"
+        style="width: clamp(180px, 30vw, 380px); height: clamp(180px, 30vw, 380px); top: 10%; left: 20%;"
+      ></div>
+      <div
+        class="ambient-orb ambient-orb-purple"
+        style="width: clamp(220px, 35vw, 420px); height: clamp(220px, 35vw, 420px); bottom: 10%; right: 15%;"
+      ></div>
+      <div
+        class="ambient-orb ambient-orb-blue"
+        style="width: clamp(130px, 20vw, 280px); height: clamp(130px, 20vw, 280px); top: 50%; left: 60%;"
+      ></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-7xl mx-auto">
+      <!-- Section Header -->
+      <div class="text-center mb-12 sm:mb-16 lg:mb-20">
+        <span
+          data-animate="fade-up"
+          class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-3 block"
+        >
+          Technologies
+        </span>
+        <h2
+          data-split
+          class="text-heading-1 font-heading font-bold text-text-primary mb-4"
+        >
+          The Arsenal
+        </h2>
+        <p
+          data-animate="fade-up"
+          class="text-body text-text-secondary max-w-md mx-auto"
+        >
+          Technologies I use to build solutions that businesses depend on.
+        </p>
+      </div>
+
+      <!-- Skills Grid — Scattered on desktop, grid on mobile -->
+      <!-- Desktop: Scattered absolute positioning -->
+      <div class="hidden lg:block relative" style="height: 520px;">
+        <!-- Row 1 — Top area -->
+        <div class="absolute" style="top: 0; left: 2%;" data-animate="scale">
+          <SkillOrb name="Astro" icon="🚀" category="Build" animationClass="animate-float" />
+        </div>
+        <div class="absolute" style="top: 10px; left: 22%;" data-animate="scale">
+          <SkillOrb name="React" icon="⚛️" category="Build" animationClass="animate-float-delayed" />
+        </div>
+        <div class="absolute" style="top: 25px; left: 44%;" data-animate="scale">
+          <SkillOrb name="GSAP" icon="✨" category="Animate" animationClass="animate-float-slow" />
+        </div>
+        <div class="absolute" style="top: 5px; left: 64%;" data-animate="scale">
+          <SkillOrb name="Three.js" icon="🎲" category="Animate" animationClass="animate-float-reverse" />
+        </div>
+        <div class="absolute" style="top: 15px; right: 2%;" data-animate="scale">
+          <SkillOrb name="ERPNext" icon="🏭" category="Backend" animationClass="animate-float" />
+        </div>
+
+        <!-- Row 2 — Upper-middle area -->
+        <div class="absolute" style="top: 120px; left: 8%;" data-animate="scale">
+          <SkillOrb name="Tailwind CSS" icon="🎨" category="Build" animationClass="animate-float-reverse" />
+        </div>
+        <div class="absolute" style="top: 130px; left: 35%;" data-animate="scale">
+          <SkillOrb name="ScrollTrigger" icon="📜" category="Animate" animationClass="animate-float-delayed" />
+        </div>
+        <div class="absolute" style="top: 115px; left: 58%;" data-animate="scale">
+          <SkillOrb name="Python" icon="🐍" category="Backend" animationClass="animate-float" />
+        </div>
+        <div class="absolute" style="top: 125px; right: 5%;" data-animate="scale">
+          <SkillOrb name="Supabase" icon="💚" category="Backend" animationClass="animate-float-slow" />
+        </div>
+
+        <!-- Row 3 — Middle area -->
+        <div class="absolute" style="top: 240px; left: 3%;" data-animate="scale">
+          <SkillOrb name="JavaScript" icon="⚡" category="Build" animationClass="animate-float-slow" />
+        </div>
+        <div class="absolute" style="top: 250px; left: 24%;" data-animate="scale">
+          <SkillOrb name="Lenis" icon="🧈" category="Animate" animationClass="animate-float" />
+        </div>
+        <div class="absolute" style="top: 235px; left: 48%;" data-animate="scale">
+          <SkillOrb name="PostgreSQL" icon="🐘" category="Backend" animationClass="animate-float-reverse" />
+        </div>
+        <div class="absolute" style="top: 245px; right: 8%;" data-animate="scale">
+          <SkillOrb name="Brand Identity" icon="💎" category="Design" animationClass="animate-float-delayed" />
+        </div>
+
+        <!-- Row 4 — Lower-middle area -->
+        <div class="absolute" style="top: 350px; left: 10%;" data-animate="scale">
+          <SkillOrb name="HTML/CSS" icon="🌐" category="Build" animationClass="animate-float-delayed" />
+        </div>
+        <div class="absolute" style="top: 360px; left: 33%;" data-animate="scale">
+          <SkillOrb name="Git & GitHub" icon="🔀" category="Tools" animationClass="animate-float-reverse" />
+        </div>
+        <div class="absolute" style="top: 345px; left: 55%;" data-animate="scale">
+          <SkillOrb name="Vercel" icon="▲" category="Tools" animationClass="animate-float-slow" />
+        </div>
+        <div class="absolute" style="top: 355px; right: 3%;" data-animate="scale">
+          <SkillOrb name="UI/UX" icon="🎯" category="Design" learning={true} animationClass="animate-float" />
+        </div>
+
+        <!-- Row 5 — Bottom area -->
+        <div class="absolute" style="top: 450px; left: 18%;" data-animate="scale">
+          <SkillOrb name="VS Code" icon="💻" category="Tools" animationClass="animate-float" />
+        </div>
+        <div class="absolute" style="top: 460px; left: 45%;" data-animate="scale">
+          <SkillOrb name="AI (Claude/GPT)" icon="🤖" category="Tools" animationClass="animate-float-delayed" />
+        </div>
+        <div class="absolute" style="top: 445px; right: 15%;" data-animate="scale">
+          <SkillOrb name="Figma" icon="🖌️" category="Design" learning={true} animationClass="animate-float-reverse" />
+        </div>
+      </div>
+
+      <!-- Mobile: Simple responsive grid -->
+      <div class="lg:hidden">
+        <!-- Category groups -->
+        {Object.entries(skills).map(([category, items]) => (
+          <div class="mb-8">
+            <h3 class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted mb-3 pl-1">
+              {category}
+            </h3>
+            <div class="flex flex-wrap gap-2 sm:gap-2.5" data-animate="stagger">
+              {items.map((item, i) => (
+                <SkillOrb
+                  name={item.name}
+                  icon={item.icon}
+                  category={category as any}
+                  learning={(item as any).learning || false}
+                  animationClass={floatClasses[i % floatClasses.length]}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Category legend (desktop only) -->
+      <div
+        class="hidden lg:flex items-center justify-center gap-6 mt-6"
+        data-animate="fade-up"
+      >
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-accent-cyan/60"></span>
+          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Build</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-accent-purple/60"></span>
+          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Animate</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-accent-blue/60"></span>
+          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Backend</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-pink-400/60"></span>
+          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Design</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-400/60"></span>
+          <span class="font-mono text-[0.625rem] tracking-wider uppercase text-text-muted">Tools</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 4: SELECTED WORKS
+       Horizontal scroll on desktop · Vertical stack on mobile
+       Pinned heading + scrolling cards
+       ============================================================ -->
+  <section
+    id="work"
+    data-section
+    data-horizontal-scroll
+    class="relative min-h-screen"
+  >
+    <!-- Ambient orbs -->
+    <div class="ambient-orbs" aria-hidden="true">
+      <div
+        class="ambient-orb ambient-orb-cyan"
+        style="width: clamp(200px, 30vw, 400px); height: clamp(200px, 30vw, 400px); top: 15%; left: 5%;"
+      ></div>
+      <div
+        class="ambient-orb ambient-orb-purple"
+        style="width: clamp(180px, 25vw, 350px); height: clamp(180px, 25vw, 350px); bottom: 20%; right: 30%;"
+      ></div>
+    </div>
+
+    <div class="relative z-10 flex items-center min-h-screen" style="padding-top: var(--header-height);">
+      <!-- Desktop: Horizontal scroll layout -->
+      <div class="hidden lg:flex items-center w-full">
+        <!-- Pinned left heading area -->
+        <div
+          class="flex-shrink-0 flex flex-col justify-center pr-12 xl:pr-16"
+          style="padding-left: var(--section-padding-x); width: clamp(320px, 25vw, 420px);"
+        >
+          <span
+            data-animate="fade-up"
+            class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-3 block"
+          >
+            Portfolio
+          </span>
+          <h2
+            data-split
+            class="text-heading-1 font-heading font-bold text-text-primary mb-4"
+          >
+            Selected Works
+          </h2>
+          <p
+            data-animate="fade-up"
+            class="text-body text-text-secondary mb-8 leading-relaxed"
+          >
+            Real projects. Real businesses. Real impact. Each one delivered solo, powered by AI.
+          </p>
+
+          <!-- Project counter -->
+          <div data-animate="fade-up" class="flex items-center gap-3">
+            <div class="flex items-baseline gap-1">
+              <span class="font-heading text-3xl font-bold text-gradient">03</span>
+              <span class="font-mono text-xs text-text-muted tracking-wider">projects</span>
+            </div>
+            <div class="w-12 h-px bg-gradient-to-r from-accent-cyan/30 to-transparent"></div>
+          </div>
+        </div>
+
+        <!-- Horizontal scroll track -->
+        <div data-horizontal-track class="horizontal-track flex items-center py-8">
+          {projects.map((project, index) => (
+            <ProjectCard
+              title={project.title}
+              description={project.description}
+              type={project.type}
+              role={project.role}
+              stack={project.stack}
+              liveUrl={project.liveUrl}
+              githubUrl={project.githubUrl}
+              placeholderClass={project.placeholderClass}
+              index={index}
+            />
+          ))}
+
+          <!-- End card — CTA to connect -->
+          <div
+            class="flex-shrink-0 w-[320px] lg:w-[360px] flex flex-col items-center justify-center glass p-8 text-center min-h-[400px]"
+            data-animate="fade-up"
+          >
+            <div class="w-16 h-16 rounded-full glass flex items-center justify-center mb-6">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </div>
+            <h3 class="font-heading text-lg font-semibold text-text-primary mb-2">
+              Your Project?
+            </h3>
+            <p class="text-sm text-text-secondary mb-6 leading-relaxed">
+              Have an idea that needs to become real? Let's build it together.
+            </p>
+            <MagneticButton
+              href="#contact"
+              text="Start a Conversation"
+              variant="accent"
+              size="sm"
+              icon="arrow"
+              magneticStrength={0.2}
+              magneticDistance={60}
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile: Vertical stack -->
+      <div class="lg:hidden w-full" style="padding-left: var(--section-padding-x); padding-right: var(--section-padding-x);">
+        <!-- Heading -->
+        <div class="mb-10">
+          <span
+            data-animate="fade-up"
+            class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-3 block"
+          >
+            Portfolio
+          </span>
+          <h2
+            data-split
+            class="text-heading-1 font-heading font-bold text-text-primary mb-4"
+          >
+            Selected Works
+          </h2>
+          <p
+            data-animate="fade-up"
+            class="text-body text-text-secondary leading-relaxed"
+          >
+            Real projects. Real businesses. Real impact.
+          </p>
+        </div>
+
+        <!-- Vertical project cards -->
+        <div class="flex flex-col gap-6">
+          {projects.map((project, index) => (
+            <ProjectCard
+              title={project.title}
+              description={project.description}
+              type={project.type}
+              role={project.role}
+              stack={project.stack}
+              liveUrl={project.liveUrl}
+              githubUrl={project.githubUrl}
+              placeholderClass={project.placeholderClass}
+              index={index}
+            />
+          ))}
+
+          <!-- End CTA card -->
+          <div
+            class="flex flex-col items-center justify-center glass p-6 sm:p-8 text-center"
+            data-animate="fade-up"
+          >
+            <div class="w-14 h-14 rounded-full glass flex items-center justify-center mb-5">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </div>
+            <h3 class="font-heading text-lg font-semibold text-text-primary mb-2">
+              Your Project?
+            </h3>
+            <p class="text-sm text-text-secondary mb-5 leading-relaxed">
+              Have an idea? Let's build it together.
+            </p>
+            <MagneticButton
+              href="#contact"
+              text="Let's Talk"
+              variant="accent"
+              size="sm"
+              icon="arrow"
+              magneticStrength={0.2}
+              magneticDistance={60}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 5: LET'S CONNECT (Contact)
+       Full viewport · Glowing contact links · CTA
+       ============================================================ -->
+  <section
+    id="contact"
+    data-section
+    class="section-full relative flex items-center justify-center min-h-screen"
+  >
+    <!-- Ambient orbs -->
+    <div class="ambient-orbs" aria-hidden="true">
+      <div
+        class="ambient-orb ambient-orb-cyan"
+        style="width: clamp(250px, 40vw, 500px); height: clamp(250px, 40vw, 500px); top: 20%; right: 10%;"
+      ></div>
+      <div
+        class="ambient-orb ambient-orb-purple"
+        style="width: clamp(200px, 30vw, 400px); height: clamp(200px, 30vw, 400px); bottom: 15%; left: 15%;"
+      ></div>
+      <div
+        class="ambient-orb ambient-orb-blue"
+        style="width: clamp(150px, 20vw, 300px); height: clamp(150px, 20vw, 300px); top: 50%; left: 50%;"
+      ></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-3xl mx-auto text-center">
+      <!-- Eyebrow -->
+      <span
+        data-animate="fade-up"
+        class="font-mono text-xs tracking-[0.2em] uppercase text-accent-cyan/70 mb-4 block"
+      >
+        Contact
+      </span>
+
+      <!-- Heading -->
+      <h2
+        data-split
+        class="text-heading-1 sm:text-display font-heading font-bold text-text-primary mb-4 sm:mb-6"
+      >
+        Let's Build Something Extraordinary
+      </h2>
+
+      <!-- Subtitle -->
+      <p
+        data-animate="fade-up"
+        class="text-body-lg text-text-secondary max-w-xl mx-auto mb-12 sm:mb-16 leading-relaxed"
+      >
+        Available for freelance projects — websites, UI/UX design, branding,
+        and digital solutions. Let's talk about your next big idea.
+      </p>
+
+      <!-- Contact links grid -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 mb-12 sm:mb-16"
+        data-animate="stagger"
+      >
+        <!-- WhatsApp -->
+        <a
+          href="https://wa.me/923329555786"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contact-link glass p-6 sm:p-7 flex flex-col items-center gap-4 group"
+          data-magnetic
+          data-magnetic-strength="0.15"
+          data-magnetic-distance="80"
+          data-cursor="click"
+        >
+          <div class="w-14 h-14 rounded-2xl glass-strong flex items-center justify-center group-hover:border-emerald-500/30 transition-all duration-400">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" class="text-emerald-400 group-hover:scale-110 transition-transform duration-300">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          </div>
+          <div>
+            <span class="font-heading text-sm font-semibold text-text-primary block mb-0.5">
+              Chat on WhatsApp
+            </span>
+            <span class="font-mono text-[0.625rem] tracking-wider text-text-muted">
+              Quick response
+            </span>
+          </div>
+        </a>
+
+        <!-- Email -->
+        <a
+          href="mailto:hamzaali@proton.me"
+          class="contact-link glass p-6 sm:p-7 flex flex-col items-center gap-4 group"
+          data-magnetic
+          data-magnetic-strength="0.15"
+          data-magnetic-distance="80"
+          data-cursor="click"
+        >
+          <div class="w-14 h-14 rounded-2xl glass-strong flex items-center justify-center group-hover:border-accent-cyan/30 transition-all duration-400">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-cyan group-hover:scale-110 transition-transform duration-300">
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="M22 7l-10 7L2 7" />
+            </svg>
+          </div>
+          <div>
+            <span class="font-heading text-sm font-semibold text-text-primary block mb-0.5">
+              Send an Email
+            </span>
+            <span class="font-mono text-[0.625rem] tracking-wider text-text-muted">
+              hamzaali@proton.me
+            </span>
+          </div>
+        </a>
+
+        <!-- GitHub -->
+        <a
+          href="https://github.com/qxcz1"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contact-link glass p-6 sm:p-7 flex flex-col items-center gap-4 group"
+          data-magnetic
+          data-magnetic-strength="0.15"
+          data-magnetic-distance="80"
+          data-cursor="click"
+        >
+          <div class="w-14 h-14 rounded-2xl glass-strong flex items-center justify-center group-hover:border-text-primary/20 transition-all duration-400">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-text-primary group-hover:scale-110 transition-transform duration-300">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+          </div>
+          <div>
+            <span class="font-heading text-sm font-semibold text-text-primary block mb-0.5">
+              View GitHub
+            </span>
+            <span class="font-mono text-[0.625rem] tracking-wider text-text-muted">
+              @qxcz1
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Availability status -->
+      <div
+        data-animate="fade-up"
+        class="inline-flex items-center gap-3 px-5 py-3 rounded-full glass"
+      >
+        <div class="relative flex items-center justify-center">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 absolute animate-ping opacity-75"></span>
+        </div>
+        <span class="font-body text-sm text-text-secondary">
+          Currently available for new projects
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <Footer />
+</Layout>
+
+<style>
+  /* ---- Hero section specifics ---- */
+  #hero {
+    padding-top: calc(var(--header-height) + 2rem);
+  }
+
+  /* ---- Work section: ensure full-height for horizontal scroll ---- */
+  #work {
+    overflow: hidden;
+  }
+
+  @media (min-width: 1024px) {
+    #work {
+      overflow: visible;
+    }
+  }
+
+  /* ---- Mobile project cards: full width ---- */
+  @media (max-width: 1023px) {
+    #work .project-card {
+      width: 100% !important;
+    }
+  }
+
+  /* ---- Contact links hover glow per type ---- */
+  .contact-link:nth-child(1):hover {
+    border-color: rgba(52, 211, 153, 0.25) !important;
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.06),
+                0 0 60px rgba(52, 211, 153, 0.03) !important;
+  }
+
+  .contact-link:nth-child(2):hover {
+    border-color: rgba(0, 240, 255, 0.25) !important;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.06),
+                0 0 60px rgba(0, 240, 255, 0.03) !important;
+  }
+
+  .contact-link:nth-child(3):hover {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.04),
+                0 0 60px rgba(255, 255, 255, 0.02) !important;
+  }
+
+  /* ---- Stat cards responsive ---- */
+  @media (max-width: 639px) {
+    .stat-card {
+      padding: 1rem;
+    }
+
+    .stat-card .stat-number {
+      font-size: clamp(1.5rem, 6vw, 2rem);
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.6875rem;
+    }
+  }
+
+  /* ---- Scattered skills overflow control ---- */
+  @media (min-width: 1024px) {
+    #skills .ambient-orbs {
+      z-index: -1;
+    }
+  }
+
+  /* ---- Contact section bottom padding for footer ---- */
+  #contact {
+    padding-bottom: 2rem;
+  }
+</style>

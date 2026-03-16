@@ -1,0 +1,19 @@
+---
+// DarkModeScript.astro
+// Inline script that runs BEFORE paint to prevent flash of unstyled content
+// Dark mode is always on — no toggle needed
+---
+
+<script is:inline>
+  // Execute immediately — before any rendering
+  (function() {
+    // Force dark mode class
+    document.documentElement.classList.add('dark');
+    
+    // Set color-scheme for native browser elements
+    document.documentElement.style.colorScheme = 'dark';
+    
+    // Prevent any light flash by setting background immediately
+    document.documentElement.style.backgroundColor = '#030305';
+  })();
+</script>

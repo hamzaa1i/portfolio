@@ -1,0 +1,21 @@
+---
+// CustomCursor.astro
+// The cursor DOM elements are already rendered in Layout.astro
+// (cursor-dot, cursor-follower, cursor-label)
+// The behavior is handled by animations.js Module 8 (initCustomCursor)
+// The styles are in global.css
+//
+// This component exists as a convenience wrapper if you prefer
+// importing the cursor separately rather than having it in Layout.
+// Currently Layout.astro handles this — this file is for reference.
+//
+// If you want to move cursor out of Layout into a component:
+// 1. Remove cursor divs from Layout.astro
+// 2. Import and use <CustomCursor /> in Layout.astro
+---
+
+<div id="custom-cursor-container" aria-hidden="true">
+  <div class="cursor-dot"></div>
+  <div class="cursor-follower"></div>
+  <div class="cursor-label"></div>
+</div>
