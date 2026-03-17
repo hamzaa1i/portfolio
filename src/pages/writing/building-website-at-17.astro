@@ -1,0 +1,69 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+---
+
+<PostLayout
+  title="How I Built a Production Website at 17"
+  date="March 12, 2026"
+  readingTime="5 min read"
+  tags={['Astro', 'Tailwind', 'GSAP', 'Supabase']}
+  description="The story of how I went from zero coding experience to shipping a full production website for a UK garment exporter."
+>
+
+<h2>The Starting Point</h2>
+
+<p>My uncle Vasim runs a garment factory in Faisalabad. They export over 300,000 garments every month to brands in the UK and Europe. When I started working there as a store assistant, I noticed something strange: a business of that scale had no website, no digital systems, and no brand identity. Everything ran on paper and Excel.</p>
+
+<p>I had no coding experience. But I had seen enough websites to know what a good one looked like, and I was curious enough to try building one myself.</p>
+
+<h2>Picking the Stack</h2>
+
+<p>After researching for about a week, I landed on a stack that made sense for a content-heavy B2B website:</p>
+
+<ul>
+  <li><strong>Astro 5</strong> for the framework. Static site generation meant fast loading with zero JavaScript by default.</li>
+  <li><strong>Tailwind CSS</strong> for styling. Utility classes let me move fast without fighting CSS specificity.</li>
+  <li><strong>GSAP + ScrollTrigger</strong> for animations. I wanted premium scroll interactions, not just fade-ins.</li>
+  <li><strong>Supabase</strong> for the backend. Quote requests, sample forms, and an admin dashboard all needed a database.</li>
+  <li><strong>Vercel</strong> for hosting. Free tier, automatic deploys from GitHub, fast CDN.</li>
+</ul>
+
+<h2>What I Actually Built</h2>
+
+<p>The website ended up being much bigger than a simple corporate page. Here's what shipped:</p>
+
+<ul>
+  <li>Custom scroll animations on every section using GSAP and ScrollTrigger</li>
+  <li>A real-time quote calculator where buyers can get instant pricing</li>
+  <li>A sample request system connected to Supabase</li>
+  <li>An admin dashboard for the factory team to manage incoming requests</li>
+  <li>Full dark mode with smooth transitions</li>
+  <li>An AI chat widget for quick visitor questions</li>
+  <li>Mobile responsive down to 320px</li>
+</ul>
+
+<p>The site is live at <a href="https://revestitching.com" target="_blank" rel="noopener">revestitching.com</a> if you want to see it.</p>
+
+<h2>The Hard Parts</h2>
+
+<p>The animations were the trickiest. Getting scroll-triggered reveals to feel smooth without janking on slower devices took a lot of trial and error. I learned that fewer, well-timed animations always beat more, flashier ones.</p>
+
+<p>The admin dashboard was another challenge. I had to learn Supabase Row Level Security to make sure only authorized users could view and manage form submissions. That was my first real taste of backend security.</p>
+
+<h2>What a Software House Quoted</h2>
+
+<p>Before I volunteered to build everything, the factory got quotes from local software houses. The range was <strong>₨500,000 to ₨2,000,000</strong> for the scope I ended up delivering. I did it solo, at 17.</p>
+
+<p>I'm not saying this to brag. I'm saying it because the gap between "what agencies charge" and "what a motivated builder can deliver" is massive right now. The tools are accessible. The knowledge is free. You just have to actually do the work.</p>
+
+<h2>What I'd Do Differently</h2>
+
+<p>If I started this project today, I'd plan the content structure before writing any code. I spent too many hours rearranging sections because I didn't have a clear sitemap upfront. I'd also set up analytics from day one instead of adding it later.</p>
+
+<p>But honestly? Shipping something imperfect taught me more than any tutorial ever could.</p>
+
+<blockquote>
+  <p>The best way to learn is to build something real for someone who actually needs it.</p>
+</blockquote>
+
+</PostLayout>

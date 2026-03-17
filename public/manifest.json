@@ -1,0 +1,19 @@
+{
+  "name": "Hamza Ali — Portfolio",
+  "short_name": "~/hamza",
+  "description": "Web Developer, ERP Specialist & Brand Designer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090B",
+  "theme_color": "#C8A24E",
+  "orientation": "portrait-primary",
+  "categories": ["portfolio", "developer"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

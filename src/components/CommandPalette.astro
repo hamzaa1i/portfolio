@@ -1,0 +1,438 @@
+---
+import { themes } from '../config/theme';
+const themesJSON = JSON.stringify(themes);
+---
+
+<div id="cmd-palette" class="cmd-overlay" aria-hidden="true">
+  <div class="cmd-backdrop" data-cmd-close></div>
+  <div class="cmd-window">
+    <div class="cmd-search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cmd-search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="cmd-input" class="cmd-search" placeholder="Type a command or search..." autocomplete="off" autocorrect="off" spellcheck="false" />
+      <kbd class="cmd-kbd">ESC</kbd>
+    </div>
+    <div class="cmd-list" id="cmd-list"></div>
+    <div class="cmd-footer">
+      <span class="cmd-footer-hint"><kbd class="cmd-kbd-sm">↑↓</kbd> navigate</span>
+      <span class="cmd-footer-hint"><kbd class="cmd-kbd-sm">↵</kbd> select</span>
+      <span class="cmd-footer-hint"><kbd class="cmd-kbd-sm">esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .cmd-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9995;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: min(20vh, 160px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+  }
+  .cmd-overlay.active { opacity: 1; visibility: visible; }
+
+  .cmd-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+.cmd-window {
+  position: relative;
+  width: min(92vw, 540px);
+  max-height: min(60vh, 440px);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(9, 9, 11, 0.95) 0%,
+      rgba(9, 9, 11, 0.88) 100%
+    );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 0.875rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+    0 25px 80px rgba(0, 0, 0, 0.5);
+  transform: scale(0.96) translateY(-10px);
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+  .cmd-overlay.active .cmd-window {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  .cmd-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .cmd-search-icon { color: #52525B; flex-shrink: 0; }
+  .cmd-search {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #FAFAFA;
+    caret-color: var(--accent);
+  }
+  .cmd-search::placeholder { color: #52525B; }
+
+  .cmd-kbd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: #52525B;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 2px 6px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .cmd-kbd-sm {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    color: #3F3F46;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    padding: 1px 4px;
+  }
+
+  .cmd-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-dim) transparent;
+  }
+  .cmd-list::-webkit-scrollbar { width: 3px; }
+  .cmd-list::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 3px; }
+
+  .cmd-category {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: #3F3F46;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 0.5rem 0.25rem;
+    user-select: none;
+  }
+
+  .cmd-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .cmd-item:hover, .cmd-item.active {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .cmd-item.active {
+    outline: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .cmd-item-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+  .cmd-item-label {
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: #FAFAFA;
+  }
+  .cmd-item-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: #3F3F46;
+  }
+
+  .cmd-empty {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #52525B;
+  }
+
+  .cmd-footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .cmd-footer-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    color: #3F3F46;
+  }
+
+  @media (max-width: 639px) {
+    .cmd-window { width: 96vw; max-height: 70vh; }
+    .cmd-footer { display: none; }
+  }
+</style>
+
+<script is:inline define:vars={{ themesJSON }}>
+(function() {
+  var overlay = document.getElementById('cmd-palette');
+  var input = document.getElementById('cmd-input');
+  var list = document.getElementById('cmd-list');
+  if (!overlay || !input || !list) return;
+
+  var allThemes = {};
+  try { allThemes = JSON.parse(themesJSON); } catch(e) {}
+
+  var isOpen = false;
+  var selectedIndex = 0;
+  var visibleItems = [];
+
+  /* ── Actions ── */
+var actions = [
+  { id: 'nav-about',   label: 'Go to About',    cat: 'Navigation', icon: '→', hint: '#story',   action: function() { navigate('#story'); } },
+  { id: 'nav-skills',  label: 'Go to Skills',   cat: 'Navigation', icon: '→', hint: '#skills',  action: function() { navigate('#skills'); } },
+  { id: 'nav-work',    label: 'Go to Work',     cat: 'Navigation', icon: '→', hint: '#work',    action: function() { navigate('#work'); } },
+  { id: 'nav-contact', label: 'Go to Contact',  cat: 'Navigation', icon: '→', hint: '#contact', action: function() { navigate('#contact'); } },
+
+  { id: 'page-writing', label: 'Open Writing', cat: 'Pages', icon: '✎', hint: '/writing', action: function() { goTo('/writing'); } },
+  { id: 'page-changelog', label: 'Open Changelog',  cat: 'Pages', icon: '◎', hint: '/changelog', action: function() { goTo('/changelog'); } },
+  { id: 'page-work', label: 'Case Studies', cat: 'Pages', icon: '◆', hint: '/work', action: function() { goTo('/work'); } },
+  { id: 'page-resume', label: 'Resume', cat: 'Pages', icon: '↓', hint: '/resume', action: function() { goTo('/resume'); } },
+
+  { id: 'act-terminal', label: 'Open Terminal',    cat: 'Actions', icon: '>', hint: '`',           action: function() { document.dispatchEvent(new CustomEvent('terminal:toggle')); } },
+  { id: 'act-music', label: 'Toggle Music', cat: 'Actions', icon: '♫', hint: '', action: function() { var btn = document.getElementById('music-toggle'); if (btn) btn.click(); } },
+  { id: 'act-resume',   label: 'Download Resume',  cat: 'Actions', icon: '↓', hint: '.pdf',        action: function() { window.open('/resume.pdf', '_blank'); } },
+  { id: 'act-top',      label: 'Scroll to Top',    cat: 'Actions', icon: '↑', hint: '',            action: function() { window.scrollTo({ top: 0, behavior: 'smooth' }); } },
+];
+
+  /* Add theme actions */
+  Object.keys(allThemes).forEach(function(key) {
+    var th = allThemes[key];
+    actions.push({
+      id: 'theme-' + key,
+      label: th.name,
+      cat: 'Themes',
+      icon: '█',
+      iconColor: th.accent,
+      hint: '',
+      action: function() { switchTheme(key); },
+    });
+  });
+
+  /* ── Helpers ── */
+  function navigate(hash) {
+    if (window.location.pathname !== '/') {
+      window.location.href = '/' + hash;
+      return;
+    }
+    var el = document.querySelector(hash);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+function goTo(url) {
+  var fade = document.getElementById('page-fade');
+  if (fade) {
+    fade.style.transition = 'opacity 0.2s ease';
+    fade.classList.add('active');
+    fade.style.opacity = '1';
+    setTimeout(function() { window.location.href = url; }, 200);
+  } else {
+    window.location.href = url;
+  }
+}
+
+  function switchTheme(key) {
+    var th = allThemes[key];
+    if (!th) return;
+    var h = document.documentElement;
+    var props = {
+      '--void': th.void, '--midnight': th.midnight, '--surface': th.surface,
+      '--elevated': th.elevated, '--glass-bg': th.glassBg, '--glass-border': th.glassBorder,
+      '--glass-hover': th.glassHover, '--glass-hover-border': th.glassHoverBorder,
+      '--text-primary': th.textPrimary, '--text-secondary': th.textSecondary,
+      '--text-muted': th.textMuted, '--text-dim': th.textDim,
+      '--accent': th.accent, '--accent-hover': th.accentHover, '--accent-dim': th.accentDim,
+      '--accent-glow': th.accentGlow, '--accent-subtle': th.accentSubtle,
+      '--accent-contrast': th.accentContrast, '--accent-success': th.success,
+      '--gradient-accent-text': th.gradientText,
+    };
+    Object.keys(props).forEach(function(p) { h.style.setProperty(p, props[p]); });
+    h.style.backgroundColor = th.void;
+    h.style.color = th.textPrimary;
+    if (th.isDark) { h.classList.add('dark'); h.classList.remove('light'); }
+    else { h.classList.remove('dark'); h.classList.add('light'); }
+    try { localStorage.setItem('portfolio-theme', key); } catch(e) {}
+    document.dispatchEvent(new CustomEvent('theme:change', { detail: { key: key } }));
+  }
+
+  /* ── Render ── */
+  function render(query) {
+    list.innerHTML = '';
+    visibleItems = [];
+    selectedIndex = 0;
+
+    var q = (query || '').toLowerCase();
+    var filtered = actions.filter(function(a) {
+      return a.label.toLowerCase().includes(q) || a.cat.toLowerCase().includes(q);
+    });
+
+    if (!filtered.length) {
+      list.innerHTML = '<div class="cmd-empty">no results found</div>';
+      return;
+    }
+
+    var lastCat = '';
+    filtered.forEach(function(a, i) {
+      if (a.cat !== lastCat) {
+        lastCat = a.cat;
+        var catEl = document.createElement('div');
+        catEl.className = 'cmd-category';
+        catEl.textContent = a.cat;
+        list.appendChild(catEl);
+      }
+
+      var item = document.createElement('div');
+      item.className = 'cmd-item' + (i === 0 ? ' active' : '');
+      item.setAttribute('data-cmd-index', visibleItems.length.toString());
+
+      var iconStyle = a.iconColor ? ' style="color:' + a.iconColor + '"' : '';
+      item.innerHTML =
+        '<div class="cmd-item-icon"' + iconStyle + '>' + a.icon + '</div>' +
+        '<span class="cmd-item-label">' + a.label + '</span>' +
+        (a.hint ? '<span class="cmd-item-hint">' + a.hint + '</span>' : '');
+
+      item.addEventListener('click', function() {
+        close();
+        a.action();
+      });
+
+      item.addEventListener('mouseenter', function() {
+        setActive(parseInt(this.getAttribute('data-cmd-index')));
+      });
+
+      list.appendChild(item);
+      visibleItems.push({ el: item, action: a });
+    });
+  }
+
+  function setActive(idx) {
+    if (idx < 0 || idx >= visibleItems.length) return;
+    visibleItems.forEach(function(v, i) {
+      v.el.classList.toggle('active', i === idx);
+    });
+    selectedIndex = idx;
+    visibleItems[idx].el.scrollIntoView({ block: 'nearest' });
+  }
+
+  /* ── Open / Close ── */
+function open() {
+  if (isOpen) return;
+
+  isOpen = true;
+  overlay.classList.add('active');
+  overlay.setAttribute('aria-hidden', 'false');
+
+  document.documentElement.style.overflow = 'hidden';
+
+  input.value = '';
+  render('');
+
+  setTimeout(function() {
+    input.focus();
+  }, 100);
+}
+
+function close() {
+  if (!isOpen) return;
+
+  isOpen = false;
+  overlay.classList.remove('active');
+  overlay.setAttribute('aria-hidden', 'true');
+
+  document.documentElement.style.overflow = '';
+
+  input.blur();
+}
+
+  /* ── Events ── */
+  document.addEventListener('keydown', function(e) {
+    var tag = document.activeElement ? document.activeElement.tagName : '';
+
+    /* Ctrl+K / Cmd+K to toggle */
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      if (isOpen) close(); else open();
+      return;
+    }
+
+    if (!isOpen) return;
+
+    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActive(Math.min(selectedIndex + 1, visibleItems.length - 1));
+      return;
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActive(Math.max(selectedIndex - 1, 0));
+      return;
+    }
+
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (visibleItems[selectedIndex]) {
+        close();
+        visibleItems[selectedIndex].action.action();
+      }
+      return;
+    }
+  });
+
+  input.addEventListener('input', function() {
+    render(input.value);
+  });
+
+  document.querySelectorAll('[data-cmd-close]').forEach(function(el) {
+    el.addEventListener('click', close);
+  });
+
+  /* Listen for external open event */
+  document.addEventListener('cmd:toggle', function() {
+    if (isOpen) close(); else open();
+  });
+
+})();
+</script>

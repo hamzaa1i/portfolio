@@ -1,0 +1,84 @@
+<div id="copy-toast" class="copy-toast">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="copy-toast-text">Copied!</span>
+</div>
+
+<style is:global>
+  .copy-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--elevated, #1F1F23);
+    border: 1px solid var(--glass-border, rgba(255,255,255,0.06));
+    border-radius: 999px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1), visibility 0.3s ease;
+    pointer-events: none;
+  }
+  .copy-toast.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+
+<script is:inline>
+(function() {
+  var toast = document.getElementById('copy-toast');
+  var toastText = document.getElementById('copy-toast-text');
+  if (!toast) return;
+
+  var timer = null;
+
+  function showToast(text) {
+    if (toastText) toastText.textContent = text || 'Copied!';
+    clearTimeout(timer);
+    toast.classList.add('visible');
+    timer = setTimeout(function() {
+      toast.classList.remove('visible');
+    }, 2000);
+  }
+
+  window.__showToast = showToast;
+
+  /* Email links — single click copies, double click opens mail client */
+  document.querySelectorAll('a[href^="mailto:"]').forEach(function(link) {
+    var clickCount = 0;
+    var clickTimer = null;
+
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      clickCount++;
+
+      if (clickCount === 1) {
+        clickTimer = setTimeout(function() {
+          /* Single click — copy email */
+          var email = link.getAttribute('href').replace('mailto:', '');
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(email).then(function() {
+              showToast('Email copied — double-click to open mail app');
+            });
+          }
+          clickCount = 0;
+        }, 300);
+      } else if (clickCount === 2) {
+        /* Double click — open mail client */
+        clearTimeout(clickTimer);
+        clickCount = 0;
+        window.location.href = link.getAttribute('href');
+      }
+    });
+  });
+})();
+</script>

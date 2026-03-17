@@ -1,0 +1,60 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+---
+
+<PostLayout
+  title="Implementing ERPNext for a Real Factory"
+  date="March 8, 2026"
+  readingTime="4 min read"
+  tags={['ERPNext', 'Python', 'PostgreSQL']}
+  description="How I replaced 50+ daily paper processes with a digital ERP system for a garment manufacturing business."
+>
+
+<h2>The Paper Problem</h2>
+
+<p>The factory had been running for years on paper. Every fabric roll that came in got logged in a register. Every dyeing batch got a handwritten gatepass. Every issuance to the cutting floor was tracked in a notebook. Over 50 daily processes, all manual.</p>
+
+<p>The problems were predictable: lost records, miscounted inventory, delayed reporting, and hours spent compiling data that should have taken minutes.</p>
+
+<h2>Why ERPNext</h2>
+
+<p>I evaluated a few options. SAP and Oracle were way out of budget. Custom-built systems would take months. ERPNext hit the sweet spot:</p>
+
+<ul>
+  <li><strong>Open source</strong> with no license fees</li>
+  <li><strong>Python-based</strong> so I could write custom scripts</li>
+  <li><strong>PostgreSQL</strong> backend that could handle the volume</li>
+  <li><strong>Built-in modules</strong> for inventory, stock, and manufacturing</li>
+  <li><strong>Web-based</strong> so anyone on the factory floor could access it from a browser</li>
+</ul>
+
+<h2>What I Customized</h2>
+
+<p>Out-of-the-box ERPNext covers general manufacturing. A garment factory has specific workflows that needed custom doctypes and scripts:</p>
+
+<ul>
+  <li><strong>Fabric inventory tracking</strong> with roll-level granularity (not just weight)</li>
+  <li><strong>Digital gatepasses</strong> replacing the handwritten ones for dyeing and processing</li>
+  <li><strong>Issuance management</strong> tracking fabric flow from store to cutting to stitching</li>
+  <li><strong>Automated reports</strong> that previously required hours of manual compilation</li>
+</ul>
+
+<p>Each custom module was built in Python with ERPNext's Frappe framework, tested on real data, and deployed incrementally.</p>
+
+<h2>The Adoption Challenge</h2>
+
+<p>Building the system was one thing. Getting a team of factory workers to actually use it was another. Most of them had never used anything beyond WhatsApp on their phones.</p>
+
+<p>I handled this by sitting with each person individually, walking them through their specific workflow, and making the interface as simple as possible. Within two weeks, everyone was using it daily.</p>
+
+<h2>Results</h2>
+
+<p>Processes that used to take hours now happen in seconds. Inventory discrepancies dropped significantly. Management can pull real-time reports instead of waiting for end-of-day summaries.</p>
+
+<p>The system is internal so I can't share a live link, but it's been running in production for months without issues.</p>
+
+<blockquote>
+  <p>The hardest part of an ERP implementation isn't the code. It's getting people to trust the new system.</p>
+</blockquote>
+
+</PostLayout>

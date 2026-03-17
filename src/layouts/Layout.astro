@@ -2,9 +2,14 @@
 import { activeTheme as t } from '../config/theme';
 import { themes } from '../config/theme';
 import '../styles/global.css';
+
 import Terminal from '../components/Terminal.astro';
 import Preloader from '../components/Preloader.astro';
 import DynamicFavicon from '../components/DynamicFavicon.astro';
+import CommandPalette from '../components/CommandPalette.astro';
+import MusicPlayer from '../components/MusicPlayer.astro';
+import KeyboardShortcuts from '../components/KeyboardShortcuts.astro';
+import CopyToast from '../components/CopyToast.astro';
 
 interface Props {
   title?: string;
@@ -12,13 +17,12 @@ interface Props {
 }
 
 const {
-  title = 'Hamza Ali — Digital Solutions Architect',
+  title = 'Hamza Ali — Portfolio',
   description = '17-year-old developer who builds production websites, ERP systems, and brand identities for international businesses.',
 } = Astro.props;
 
 const siteURL = 'https://hamzaali-dev.vercel.app';
 
-/* Build CSS custom-property string from active theme */
 const themeStyle = [
   `background-color:${t.void}`,
   `color:${t.textPrimary}`,
@@ -48,131 +52,275 @@ const themeStyle = [
 
 <!doctype html>
 <html lang="en" class={t.isDark ? 'dark' : ''} style={themeStyle}>
-  <head>
-    <!-- Prevent FOUC -->
-    <script is:inline>
-      (function(){ document.documentElement.classList.add(document.documentElement.classList.contains('dark') ? 'dark' : 'light'); })();
-    </script>
+<head>
 
-    <!-- ADD THIS NEW SCRIPT RIGHT HERE ↓ -->
-    <script is:inline define:vars={{ themesJSON: JSON.stringify(themes) }}>
-      (function() {
-        try {
-          var saved = localStorage.getItem('portfolio-theme');
-          if (!saved) return;
-          var themes = JSON.parse(themesJSON);
-          var th = themes[saved];
-          if (!th) return;
-          var h = document.documentElement;
-          h.style.setProperty('--void', th.void);
-          h.style.setProperty('--midnight', th.midnight);
-          h.style.setProperty('--surface', th.surface);
-          h.style.setProperty('--elevated', th.elevated);
-          h.style.setProperty('--glass-bg', th.glassBg);
-          h.style.setProperty('--glass-border', th.glassBorder);
-          h.style.setProperty('--glass-hover', th.glassHover);
-          h.style.setProperty('--glass-hover-border', th.glassHoverBorder);
-          h.style.setProperty('--text-primary', th.textPrimary);
-          h.style.setProperty('--text-secondary', th.textSecondary);
-          h.style.setProperty('--text-muted', th.textMuted);
-          h.style.setProperty('--text-dim', th.textDim);
-          h.style.setProperty('--accent', th.accent);
-          h.style.setProperty('--accent-hover', th.accentHover);
-          h.style.setProperty('--accent-dim', th.accentDim);
-          h.style.setProperty('--accent-glow', th.accentGlow);
-          h.style.setProperty('--accent-subtle', th.accentSubtle);
-          h.style.setProperty('--accent-contrast', th.accentContrast);
-          h.style.setProperty('--accent-success', th.success);
-          h.style.setProperty('--gradient-accent-text', th.gradientText);
-          h.style.backgroundColor = th.void;
-          h.style.color = th.textPrimary;
-          if (th.isDark) { h.classList.add('dark'); h.classList.remove('light'); }
-          else { h.classList.remove('dark'); h.classList.add('light'); }
-        } catch(e) {}
-      })();
-    </script>
+<script is:inline>
+(function(){
+document.documentElement.classList.add(
+document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+);
+})();
+</script>
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<script is:inline define:vars={{ themesJSON: JSON.stringify(themes) }}>
+(function() {
+try {
 
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta name="author" content="Hamza Ali" />
-    <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content={t.void} />
+var saved = localStorage.getItem('portfolio-theme');
+if (!saved) return;
 
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={siteURL} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={`${siteURL}/og-image.jpg`} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+var themes = JSON.parse(themesJSON);
+var th = themes[saved];
+if (!th) return;
 
-    <DynamicFavicon />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+var h = document.documentElement;
 
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Hamza Ali",
-      "jobTitle": "Digital Solutions Architect",
-      "url": siteURL,
-      "sameAs": ["https://github.com/hamzaa1i"],
-      "knowsAbout": ["Web Development", "ERP Systems", "UI/UX Design", "Brand Identity"],
-      "address": { "@type": "PostalAddress", "addressLocality": "Faisalabad", "addressRegion": "Punjab", "addressCountry": "PK" }
-    })} />
-  </head>
+h.style.setProperty('--void', th.void);
+h.style.setProperty('--midnight', th.midnight);
+h.style.setProperty('--surface', th.surface);
+h.style.setProperty('--elevated', th.elevated);
+h.style.setProperty('--glass-bg', th.glassBg);
+h.style.setProperty('--glass-border', th.glassBorder);
+h.style.setProperty('--glass-hover', th.glassHover);
+h.style.setProperty('--glass-hover-border', th.glassHoverBorder);
+h.style.setProperty('--text-primary', th.textPrimary);
+h.style.setProperty('--text-secondary', th.textSecondary);
+h.style.setProperty('--text-muted', th.textMuted);
+h.style.setProperty('--text-dim', th.textDim);
+h.style.setProperty('--accent', th.accent);
+h.style.setProperty('--accent-hover', th.accentHover);
+h.style.setProperty('--accent-dim', th.accentDim);
+h.style.setProperty('--accent-glow', th.accentGlow);
+h.style.setProperty('--accent-subtle', th.accentSubtle);
+h.style.setProperty('--accent-contrast', th.accentContrast);
+h.style.setProperty('--accent-success', th.success);
+h.style.setProperty('--gradient-accent-text', th.gradientText);
 
-  <body class="bg-void text-text-primary font-body antialiased overflow-x-hidden">
-    <Preloader />
-    <div class="css-bg-fallback" aria-hidden="true"></div>
+h.style.backgroundColor = th.void;
+h.style.color = th.textPrimary;
 
-    <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar"></div></div>
-    <div class="page-blur-overlay" aria-hidden="true"></div>
+if (th.isDark) {
+h.classList.add('dark');
+h.classList.remove('light');
+} else {
+h.classList.remove('dark');
+h.classList.add('light');
+}
 
-    <main class="content-layer relative z-content">
-      <slot />
-    </main>
+} catch(e) {}
+})();
+</script>
 
-    <div class="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Image viewer">
-      <button class="lightbox-close" aria-label="Close">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-      <img class="lightbox-image" src="" alt="Screenshot" loading="lazy" />
-    </div>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-    <Terminal />
+<title>{title}</title>
 
-    <button data-scroll-top class="scroll-to-top glass" aria-label="Scroll to top">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-    </button>
+<meta name="description" content={description} />
+<meta name="author" content="Hamza Ali" />
+<meta name="robots" content="index, follow" />
 
-    <script>
-      import { initAnimations } from '../scripts/animations.js';
+<meta name="theme-color" content={t.void} />
 
-      function boot() {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            initAnimations();
-          });
-        });
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#C8A24E" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content={siteURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={`${siteURL}/og-image.jpg`} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+
+<DynamicFavicon />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+rel="stylesheet"
+/>
+
+<script
+type="application/ld+json"
+set:html={JSON.stringify({
+"@context": "https://schema.org",
+"@type": "Person",
+"name": "Hamza Ali",
+"jobTitle": "Digital Solutions Architect",
+"url": siteURL,
+"sameAs": ["https://github.com/hamzaa1i"],
+"knowsAbout": [
+"Web Development",
+"ERP Systems",
+"UI/UX Design",
+"Brand Identity"
+],
+"address": {
+"@type": "PostalAddress",
+"addressLocality": "Faisalabad",
+"addressRegion": "Punjab",
+"addressCountry": "PK"
+}
+})}
+/>
+
+</head>
+
+<body class="bg-void text-text-primary font-body antialiased overflow-x-hidden">
+
+<Preloader />
+
+<div class="css-bg-fallback" aria-hidden="true"></div>
+
+<div class="scroll-progress" aria-hidden="true">
+<div class="scroll-progress-bar"></div>
+</div>
+
+<div class="page-blur-overlay" aria-hidden="true"></div>
+
+<main class="content-layer relative z-content">
+<slot />
+</main>
+
+<div class="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Image viewer">
+
+<button class="lightbox-close" aria-label="Close">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+stroke="currentColor" stroke-width="2"
+stroke-linecap="round" stroke-linejoin="round">
+<line x1="18" y1="6" x2="6" y2="18"/>
+<line x1="6" y1="6" x2="18" y2="18"/>
+</svg>
+</button>
+
+<img class="lightbox-image" src="" alt="Screenshot" loading="lazy" />
+
+</div>
+
+<Terminal />
+<CommandPalette />
+<MusicPlayer />
+<KeyboardShortcuts />
+<CopyToast />
+
+<button data-scroll-top class="scroll-to-top glass" aria-label="Scroll to top">
+<svg width="18" height="18" viewBox="0 0 24 24"
+fill="none" stroke="currentColor"
+stroke-width="2" stroke-linecap="round"
+stroke-linejoin="round">
+<polyline points="18 15 12 9 6 15"/>
+</svg>
+</button>
+
+<script>
+import { initAnimations } from '../scripts/animations.js';
+
+function boot() {
+requestAnimationFrame(() => {
+requestAnimationFrame(() => {
+initAnimations();
+});
+});
+}
+
+if ((window as any).__preloaderDone) {
+boot();
+} else {
+document.addEventListener('preloader:complete', boot, { once: true });
+}
+</script>
+
+<script is:inline>
+
+if ('ontouchstart' in window || navigator.maxTouchPoints > 0)
+document.documentElement.classList.add('is-touch');
+else
+document.documentElement.classList.add('is-pointer');
+
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+document.documentElement.classList.add('reduced-motion');
+
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+</script>
+
+<!-- Page Transition Overlay (minimal) -->
+<style>
+  .page-transition-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: var(--void, #09090B);
+    pointer-events: none;
+  }
+  .page-transition-overlay.hidden {
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+</style>
+<div class="page-transition-overlay" id="page-transition"></div>
+<script is:inline>
+(function() {
+  var overlay = document.getElementById('page-transition');
+  if (!overlay) return;
+
+  function reveal() {
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        overlay.classList.add('hidden');
+        setTimeout(function() { overlay.style.display = 'none'; }, 450);
+      });
+    });
+  }
+
+  if (document.readyState === 'complete') reveal();
+  else window.addEventListener('load', reveal);
+  setTimeout(reveal, 2500);
+
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('a');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    if (!href) return;
+    if (link.getAttribute('target') === '_blank') return;
+    if (link.hasAttribute('download')) return;
+    if (href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('http')) return;
+
+    if (href.startsWith('#')) {
+      setTimeout(function() { history.replaceState(null, '', window.location.pathname); }, 1500);
+      return;
+    }
+
+    if (href.startsWith('/#')) {
+      if (window.location.pathname === '/') {
+        e.preventDefault();
+        var target = document.querySelector(href.substring(1));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(function() { history.replaceState(null, '', '/'); }, 1500);
+        return;
       }
+    }
 
-      if (window.__preloaderDone) {
-        boot();
-      } else {
-        document.addEventListener('preloader:complete', boot, { once: true });
-      }
-    </script>
+    e.preventDefault();
+    overlay.style.display = 'block';
+    overlay.classList.remove('hidden');
+    overlay.style.opacity = '1';
+    overlay.style.transition = 'opacity 0.25s ease';
+    setTimeout(function() { window.location.href = href; }, 280);
+  });
+})();
+</script>
 
-    <script is:inline>
-      if ('ontouchstart' in window || navigator.maxTouchPoints > 0) document.documentElement.classList.add('is-touch');
-      else document.documentElement.classList.add('is-pointer');
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reduced-motion');
-    </script>
-  </body>
+</body>
 </html>

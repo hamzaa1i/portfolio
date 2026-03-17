@@ -170,32 +170,32 @@ a, button, [role="button"], select, label, input[type="submit"] {
    ============================================================ */
 @layer components {
 
-    /* ----- LIQUID GLASS (no backdrop-filter — perf optimized for low-end) ----- */
-  .glass {
-    background: linear-gradient(
-      135deg,
-      rgba(24, 24, 27, 0.85) 0%,
-      rgba(17, 17, 19, 0.9) 100%
-    );
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 1rem;
-    box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
-      0 2px 12px rgba(0, 0, 0, 0.15);
-    transition: all 0.4s var(--ease-out-quart);
-  }
+/* ----- LIQUID GLASS (no backdrop-filter — perf optimized for low-end) ----- */
+.glass {
+  background: linear-gradient(
+    135deg,
+    rgba(24, 24, 27, 0.85) 0%,
+    rgba(17, 17, 19, 0.9) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 1rem;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+    0 2px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s var(--ease-out-quart);
+}
 
-  .glass:hover {
-    background: linear-gradient(
-      135deg,
-      rgba(31, 31, 35, 0.9) 0%,
-      rgba(24, 24, 27, 0.95) 100%
-    );
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
-      0 4px 20px rgba(0, 0, 0, 0.2);
-  }
+.glass:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(31, 31, 35, 0.9) 0%,
+    rgba(24, 24, 27, 0.95) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 4px 20px rgba(0, 0, 0, 0.2);
+}
 
   .glass-strong {
     background: linear-gradient(
@@ -708,17 +708,19 @@ a, button, [role="button"], select, label, input[type="submit"] {
 /* ============================================================
    SCROLL-TO-TOP
    ============================================================ */
-.scroll-to-top {
+.scroll-to-top,
+[data-scroll-top] {
   position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  right: auto;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 0.75rem;
-  z-index: 50;
+  z-index: 89;
   opacity: 0;
   visibility: hidden;
   transform: translateY(16px);
@@ -726,15 +728,25 @@ a, button, [role="button"], select, label, input[type="submit"] {
   color: var(--text-muted);
 }
 
-.scroll-to-top.visible {
+.scroll-to-top.visible,
+[data-scroll-top].visible {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-.scroll-to-top:hover {
+.scroll-to-top:hover,
+[data-scroll-top]:hover {
   color: var(--accent);
   border-color: rgba(200, 162, 78, 0.3);
+}
+
+@media (max-width: 639px) {
+  .scroll-to-top,
+  [data-scroll-top] {
+    bottom: 1rem;
+    left: 1rem;
+  }
 }
 
 /* ============================================================
@@ -1283,6 +1295,16 @@ a, button, [role="button"], select, label, input[type="submit"] {
   }
 }
 
+/* Mobile menu text size for very short screens */
+@media (max-height: 640px) {
+  .mobile-nav-text {
+    font-size: 1.25rem;
+  }
+  .mobile-menu-nav {
+    gap: 0.75rem;
+  }
+}
+
 /* ============================================================
    REDUCED MOTION
    ============================================================ */
@@ -1368,6 +1390,8 @@ html:not(.dark) .css-bg-fallback::after  { background: radial-gradient(circle, r
 
 /* Glass cards — inverted for light bg */
 html:not(.dark) .glass {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.7) 0%,
@@ -1531,3 +1555,269 @@ html:not(.dark) .project-placeholder::after {
 
 /* Lightbox */
 html:not(.dark) .lightbox-overlay { background: rgba(255, 255, 255, 0.95); }
+
+/* ── Premium Card Hover — subtle lift + warmth ── */
+
+.glass {
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.5s ease,
+    background 0.4s ease;
+}
+
+.glass:not([data-draggable]):not([data-draggable-currently]):hover {
+  transform: translateY(-2px);
+}
+
+.glass:hover {
+  border-color: var(--glass-hover-border);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Draggable cards — border glow only, NO transform transition */
+[data-draggable],
+[data-draggable-currently] {
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.5s ease,
+    background 0.4s ease;
+}
+
+[data-draggable]:hover,
+[data-draggable-currently]:hover {
+  transform: none;
+  border-color: var(--glass-hover-border);
+}
+
+/* Project cards — stronger lift */
+.project-card-interactive.glass:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Stat cards — scale */
+.stat-card.glass:hover {
+  transform: scale(1.02);
+}
+
+/* Contact links — tiny lift */
+.contact-link.glass:hover {
+  transform: translateY(-1px);
+}
+
+/* Blockquote — no lift, border brightens */
+blockquote.glass:hover {
+  transform: none;
+  border-left-color: var(--accent-hover) !important;
+}
+
+/* Kill everything while dragging */
+.glass.dragging,
+.glass.dragging:hover {
+  border-color: var(--glass-border) !important;
+  box-shadow: none !important;
+}
+
+/* ── Force JetBrains Mono on music player ── */
+.music-player,
+.music-player *,
+.mp-track-name,
+.mp-track-artist,
+.mp-list-num,
+.mp-list-item-name,
+.mp-search-input,
+.mp-list-title,
+.mp-list-count,
+.mp-list-empty {
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+}
+
+/* ── Liquid Glass — premium frosted card effect ── */
+.glass {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.01) 50%,
+      rgba(255, 255, 255, 0.03) 100%
+    );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.75rem;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.02),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 0 0 0.5px rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* Enhanced hover — glass brightens slightly */
+.glass:hover {
+  border-color: rgba(255, 255, 255, 0.09);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.03),
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 0 0 0.5px rgba(255, 255, 255, 0.05);
+}
+
+/* Glass strong — for icon containers and nested glass */
+.glass-strong {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(255, 255, 255, 0.04) 100%
+    );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Light theme overrides ── */
+html:not(.dark) .glass {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.7) 0%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0.6) 100%
+    );
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    0 0 0 0.5px rgba(0, 0, 0, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+html:not(.dark) .glass:hover {
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.6),
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    0 0 0 0.5px rgba(0, 0, 0, 0.05);
+}
+
+html:not(.dark) .glass-strong {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0.6) 100%
+    );
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+/* ── Overlay scroll containers ── */
+#terminal-body,
+.cmd-list,
+#mp-list-items,
+.mp-track-list,
+.kbd-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Fix overlay scroll — prevent Lenis from capturing wheel events inside overlays ── */
+.terminal-overlay.active,
+.cmd-overlay.active,
+.kbd-overlay.active,
+.music-player.expanded .music-panel,
+[data-mobile-menu].open {
+  overscroll-behavior: contain;
+}
+
+.terminal-overlay.active *,
+.cmd-overlay.active *,
+.kbd-overlay.active *,
+.music-player.expanded .music-panel *,
+[data-mobile-menu].open * {
+  pointer-events: auto;
+}
+
+/* ── Content Skeleton System ── */
+.skel-wrap {
+  position: relative;
+}
+
+.skel-wrap .skel-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.skel-wrap.loaded .skel-placeholder {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.skel-wrap .skel-real {
+  opacity: 0;
+  transition: opacity 0.5s ease 0.1s;
+}
+
+.skel-wrap.loaded .skel-real {
+  opacity: 1;
+}
+
+/* Shimmer animation */
+.skel-bone {
+  background: linear-gradient(
+    90deg,
+    var(--glass-bg, rgba(255,255,255,0.03)) 25%,
+    rgba(255,255,255,0.06) 50%,
+    var(--glass-bg, rgba(255,255,255,0.03)) 75%
+  );
+  background-size: 200% 100%;
+  animation: skelShimmer 1.8s ease-in-out infinite;
+  border-radius: 0.375rem;
+}
+
+html:not(.dark) .skel-bone {
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.04) 25%,
+    rgba(0,0,0,0.07) 50%,
+    rgba(0,0,0,0.04) 75%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes skelShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skel-bone-text { height: 0.75rem; margin-bottom: 0.5rem; }
+.skel-bone-text:last-child { margin-bottom: 0; }
+.skel-bone-heading { height: 1.75rem; width: 50%; margin-bottom: 0.75rem; }
+.skel-bone-subheading { height: 1rem; width: 30%; margin-bottom: 0.5rem; }
+.skel-bone-card { height: 100%; min-height: 12rem; border-radius: 0.75rem; }
+.skel-bone-pill { height: 1.5rem; width: 8rem; border-radius: 999px; }
+.skel-bone-circle { border-radius: 50%; }
+.skel-bone-line-full { width: 100%; }
+.skel-bone-line-3q { width: 75%; }
+.skel-bone-line-half { width: 50%; }
+.skel-bone-line-short { width: 35%; }

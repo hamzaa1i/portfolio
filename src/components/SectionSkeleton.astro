@@ -1,0 +1,116 @@
+---
+interface Props {
+  type?: 'hero' | 'story' | 'skills' | 'work' | 'contact' | 'generic';
+}
+
+const { type = 'generic' } = Astro.props;
+---
+
+{type === 'hero' && (
+  <div class="skel-placeholder">
+    <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
+      <div class="flex-1 flex flex-col items-center lg:items-start gap-4 w-full">
+        <div class="skel-bone skel-bone-pill" style="width:10rem;"></div>
+        <div class="skel-bone" style="height:3.5rem;width:70%;border-radius:0.5rem;"></div>
+        <div class="skel-bone" style="height:1.5rem;width:40%;border-radius:0.375rem;"></div>
+        <div style="height:0.75rem;"></div>
+        <div class="skel-bone skel-bone-text skel-bone-line-full"></div>
+        <div class="skel-bone skel-bone-text skel-bone-line-3q"></div>
+        <div style="height:1rem;"></div>
+        <div class="flex gap-4">
+          <div class="skel-bone" style="height:2.5rem;width:9rem;border-radius:999px;"></div>
+          <div class="skel-bone" style="height:2.5rem;width:7rem;border-radius:999px;"></div>
+        </div>
+      </div>
+      <div class="w-full max-w-sm lg:w-80 flex-shrink-0">
+        <div class="skel-bone" style="height:14rem;border-radius:0.75rem;"></div>
+      </div>
+    </div>
+  </div>
+)}
+
+{type === 'story' && (
+  <div class="skel-placeholder">
+    <div class="flex gap-14">
+      <div class="hidden lg:block" style="width:70px;">
+        <div class="skel-bone" style="width:1rem;height:8rem;border-radius:0.25rem;"></div>
+      </div>
+      <div class="flex-1 max-w-2xl">
+        <div class="skel-bone skel-bone-text skel-bone-line-full"></div>
+        <div class="skel-bone skel-bone-text skel-bone-line-full"></div>
+        <div class="skel-bone skel-bone-text skel-bone-line-3q" style="margin-bottom:1.5rem;"></div>
+        <div class="skel-bone skel-bone-text skel-bone-line-full"></div>
+        <div class="skel-bone skel-bone-text skel-bone-line-full"></div>
+        <div class="skel-bone skel-bone-text skel-bone-line-half" style="margin-bottom:1.5rem;"></div>
+        <div class="skel-bone skel-bone-text skel-bone-line-full"></div>
+        <div class="skel-bone skel-bone-text skel-bone-line-3q" style="margin-bottom:2rem;"></div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="skel-bone" style="height:5rem;border-radius:0.75rem;"></div>
+          <div class="skel-bone" style="height:5rem;border-radius:0.75rem;"></div>
+          <div class="skel-bone" style="height:5rem;border-radius:0.75rem;"></div>
+          <div class="skel-bone" style="height:5rem;border-radius:0.75rem;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{type === 'skills' && (
+  <div class="skel-placeholder">
+    <div class="text-center mb-6">
+      <div class="skel-bone skel-bone-subheading mx-auto" style="width:6rem;"></div>
+      <div class="skel-bone skel-bone-heading mx-auto" style="width:10rem;"></div>
+    </div>
+    <div class="hidden lg:block" style="height:clamp(380px,55vh,620px);position:relative;">
+      {Array.from({length: 8}).map((_, i) => (
+        <div class="skel-bone skel-bone-circle absolute" style={`width:3.5rem;height:3.5rem;top:${10 + i * 10}%;left:${5 + (i * 13) % 80}%;`}></div>
+      ))}
+    </div>
+  </div>
+)}
+
+{type === 'work' && (
+  <div class="skel-placeholder">
+    <div class="mb-6">
+      <div class="skel-bone skel-bone-subheading" style="width:5rem;"></div>
+      <div class="skel-bone skel-bone-heading" style="width:12rem;"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="skel-bone skel-bone-card"></div>
+      <div class="skel-bone skel-bone-card"></div>
+      <div class="skel-bone skel-bone-card"></div>
+      <div class="skel-bone skel-bone-card"></div>
+    </div>
+  </div>
+)}
+
+{type === 'contact' && (
+  <div class="skel-placeholder">
+    <div class="text-center mb-8">
+      <div class="skel-bone skel-bone-subheading mx-auto" style="width:5rem;"></div>
+      <div class="skel-bone skel-bone-heading mx-auto" style="width:14rem;"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div class="lg:col-span-3">
+        <div class="skel-bone" style="height:20rem;border-radius:0.75rem;"></div>
+      </div>
+      <div class="lg:col-span-2 flex flex-col gap-3">
+        <div class="skel-bone" style="height:3.5rem;border-radius:0.75rem;"></div>
+        <div class="skel-bone" style="height:3.5rem;border-radius:0.75rem;"></div>
+        <div class="skel-bone" style="height:3.5rem;border-radius:0.75rem;"></div>
+        <div class="skel-bone" style="height:3.5rem;border-radius:0.75rem;"></div>
+      </div>
+    </div>
+  </div>
+)}
+
+{type === 'generic' && (
+  <div class="skel-placeholder">
+    <div class="skel-bone skel-bone-subheading" style="width:5rem;"></div>
+    <div class="skel-bone skel-bone-heading" style="width:12rem;margin-bottom:1.5rem;"></div>
+    <div class="skel-bone skel-bone-text skel-bone-line-full"></div>
+    <div class="skel-bone skel-bone-text skel-bone-line-full"></div>
+    <div class="skel-bone skel-bone-text skel-bone-line-3q" style="margin-bottom:2rem;"></div>
+    <div class="skel-bone skel-bone-card" style="min-height:8rem;"></div>
+  </div>
+)}

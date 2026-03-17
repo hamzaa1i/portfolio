@@ -2,51 +2,36 @@
 import ThemeSwitcher from './ThemeSwitcher.astro';
 
 const navItems = [
-  { label: 'about', href: '#story' },
-  { label: 'skills', href: '#skills' },
-  { label: 'work', href: '#work' },
-  { label: 'contact', href: '#contact' },
+  { label: 'about', href: '/#story' },
+  { label: 'skills', href: '/#skills' },
+  { label: 'work', href: '/#work' },
+  { label: 'contact', href: '/#contact' },
 ];
 ---
 
-<header
-  data-header
-  class="floating-header"
->
-  <div class="flex items-center justify-between h-full px-6">
-    <!-- Logo — ~ opens terminal -->
-    <div class="relative z-10 select-none flex items-center" data-logo-area>
+<header data-header class="floating-header">
+  <div class="header-inner">
+    <!-- Logo -->
+    <div class="header-logo" data-logo-area>
       <button
         data-terminal-trigger
-        class="terminal-trigger font-mono text-[0.85rem] font-semibold text-accent-primary hover:text-accent-hover transition-colors duration-300"
+        class="terminal-trigger"
         aria-label="Open terminal"
         title="Open terminal"
-        >~</button><a href="#hero" data-nav-link class="font-mono text-[0.85rem] font-semibold tracking-tight text-text-muted hover:text-text-primary transition-colors duration-300">/<span class="text-text-primary">hamza</span></a>
+      >~</button><a href="/" class="logo-text" data-logo-home>/<span class="logo-name">hamza</span></a>
     </div>
 
     <!-- Desktop Nav -->
-    <nav class="hidden lg:flex items-center gap-5" aria-label="Main navigation">
+    <nav class="header-nav" aria-label="Main navigation">
       {navItems.map((item) => (
         <a href={item.href} data-nav-link class="code-nav">{item.label}</a>
       ))}
+      <a href="/writing" class="code-nav">writing</a>
+    </nav>
 
-      <div class="w-px h-3.5 bg-white/8 mx-0.5"></div>
-
-      <!-- Resume Download -->
-      <a
-        href="/resume.pdf"
-        download="Hamza_Ali_Resume.pdf"
-        class="header-icon-btn"
-        data-sound="click"
-        aria-label="Download resume"
-        title="Download resume"
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-      </a>
-
-      <!-- Sound Mute Toggle -->
+    <!-- Desktop Controls -->
+    <div class="header-controls">
+      <!-- Sound Toggle -->
       <button
         data-sound-toggle
         class="header-icon-btn"
@@ -63,6 +48,7 @@ const navItems = [
 
       <ThemeSwitcher />
 
+      <!-- CTA -->
       <a
         href="https://wa.me/923329555786"
         target="_blank"
@@ -70,17 +56,17 @@ const navItems = [
         data-magnetic
         data-magnetic-strength="0.25"
         data-magnetic-radius="60"
-        class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono text-[0.75rem] font-medium text-void bg-accent-primary hover:bg-accent-hover transition-colors duration-200"
+        class="header-cta"
       >
         <span>contact me</span>
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M7 17L17 7" /><path d="M7 7h10v10" />
+          <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
         </svg>
       </a>
-    </nav>
+    </div>
 
     <!-- Mobile Hamburger -->
-    <button data-menu-toggle class="lg:hidden relative z-[100] w-9 h-9 flex items-center justify-center" aria-label="Toggle menu" aria-expanded="false">
+    <button data-menu-toggle class="header-hamburger" aria-label="Toggle menu" aria-expanded="false">
       <div class="hamburger-lines">
         <span class="hamburger-line line-1"></span>
         <span class="hamburger-line line-2"></span>
@@ -91,31 +77,72 @@ const navItems = [
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" data-mobile-menu class="mobile-menu-overlay" aria-hidden="true">
-    <nav class="relative z-10 flex flex-col items-center justify-center h-full gap-6">
+    <nav class="mobile-menu-nav">
       {navItems.map((item, i) => (
         <a href={item.href} data-nav-link class="mobile-nav-link" style={`--delay: ${i * 0.08}s`}>
-          <span class="font-mono text-xs text-text-dim mr-3">0{i + 1}</span>
-          <span class="font-mono text-2xl sm:text-3xl font-semibold text-text-primary">
+          <span class="mobile-nav-num">0{i + 1}</span>
+          <span class="mobile-nav-text">
             <span class="text-accent-primary">.</span>{item.label}<span class="text-text-dim">()</span>
           </span>
         </a>
       ))}
-      <div class="mt-6 mobile-nav-link" style="--delay: 0.32s">
-        <a href="https://wa.me/923329555786" target="_blank" rel="noopener noreferrer" class="btn-primary">
-          <span>contact me</span>
-        </a>
+      <a href="/writing" class="mobile-nav-link" style="--delay: 0.32s">
+        <span class="mobile-nav-num">05</span>
+        <span class="mobile-nav-text">
+          <span class="text-accent-primary">.</span>writing<span class="text-text-dim">()</span>
+        </span>
+      </a>
+      <div class="mobile-nav-link" style="--delay: 0.4s">
+        <div class="mobile-nav-actions">
+          <a href="/resume.pdf" download="Hamza_Ali_Resume.pdf" class="btn-secondary btn-sm">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>resume</span>
+          </a>
+          <a href="https://wa.me/923329555786" target="_blank" rel="noopener noreferrer" class="btn-primary btn-sm">
+            <span>contact me</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </nav>
   </div>
 </header>
 
 <style>
+  /* ── Inner layout ── */
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 1.5rem;
+  }
+
+  /* ── Logo ── */
+  .header-logo {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    user-select: none;
+  }
   .terminal-trigger {
     background: none;
     border: none;
     padding: 0.25rem 0;
     margin: 0;
     line-height: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    cursor: pointer;
+    transition: color 0.3s ease;
     position: relative;
   }
   .terminal-trigger::after {
@@ -131,8 +158,95 @@ const navItems = [
     transition: transform 0.3s ease;
     opacity: 0.5;
   }
-  .terminal-trigger:hover::after {
-    transform: scaleX(1);
+  .terminal-trigger:hover { color: var(--accent-hover); }
+  .terminal-trigger:hover::after { transform: scaleX(1); }
+
+  .logo-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+  }
+  .logo-text:hover { color: var(--text-primary); }
+  .logo-name { color: var(--text-primary); }
+
+  /* ── Desktop Nav ── */
+  .header-nav {
+    display: none;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  @media (min-width: 1024px) {
+    .header-nav { display: flex; }
+  }
+
+  .code-nav-page::before { content: ''; }
+  .code-nav-page::after { content: ''; }
+
+  /* ── Controls (desktop) ── */
+  .header-controls {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  @media (min-width: 1024px) {
+    .header-controls { display: flex; }
+  }
+
+  .header-icon-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+    background: none;
+    border: none;
+    padding: 0;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .header-icon-btn:hover {
+    color: var(--accent);
+  }
+
+  .header-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.4rem 0.875rem;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--accent-contrast);
+    background: var(--accent);
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 0.25rem;
+  }
+  .header-cta:hover {
+    background: var(--accent-hover);
+  }
+
+  /* ── Mobile Hamburger ── */
+  .header-hamburger {
+    display: flex;
+    position: relative;
+    z-index: 100;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  @media (min-width: 1024px) {
+    .header-hamburger { display: none; }
   }
 
   .hamburger-lines {
@@ -158,18 +272,30 @@ const navItems = [
   [data-menu-toggle].open .line-2 { opacity: 0; width: 0; }
   [data-menu-toggle].open .line-3 { transform: translateY(-5px) rotate(-45deg); }
 
+  /* ── Mobile Menu Overlay ── */
   .mobile-menu-overlay {
     position: fixed;
     inset: 0;
     z-index: 90;
-    background: rgba(9, 9, 11, 0.97);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    background: var(--void, rgba(9, 9, 11, 0.97));
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.5s var(--ease-out-expo), visibility 0.5s;
   }
   .mobile-menu-overlay.open { opacity: 1; visibility: visible; }
+
+.mobile-menu-nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+  padding: 4rem 2rem 2rem;
+  overflow-y: auto;
+}
 
   .mobile-nav-link {
     display: flex;
@@ -183,35 +309,79 @@ const navItems = [
     opacity: 1;
     transform: translateY(0);
   }
-  .mobile-nav-link:hover span.font-mono:last-child {
-    color: var(--accent) !important;
+
+  .mobile-nav-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-right: 0.75rem;
+    min-width: 1.5rem;
   }
-    .header-icon-btn {
-    width: 28px;
-    height: 28px;
+  .mobile-nav-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+  }
+  .mobile-nav-link:hover .mobile-nav-text,
+  .mobile-nav-link:active .mobile-nav-text {
+    color: var(--accent);
+  }
+
+  .mobile-nav-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    transition: color 0.3s ease, transform 0.2s ease;
-    background: none;
-    border: none;
-    padding: 0;
-  }
-  .header-icon-btn:hover {
-    color: var(--accent);
-    transform: scale(1.1);
+    gap: 0.75rem;
+    margin-top: 0.5rem;
   }
 </style>
 
 <script is:inline>
   (function() {
+    /* Terminal trigger */
     var trigger = document.querySelector('[data-terminal-trigger]');
-    if (!trigger) return;
-    trigger.addEventListener('click', function(e) {
+    if (trigger) {
+      trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.dispatchEvent(new CustomEvent('terminal:toggle'));
+      });
+    }
+
+/* Logo click — scroll to top on homepage, navigate on other pages */
+var logoHome = document.querySelector('[data-logo-home]');
+if (logoHome) {
+  logoHome.addEventListener('click', function(e) {
+    if (window.location.pathname === '/') {
       e.preventDefault();
       e.stopPropagation();
-      document.dispatchEvent(new CustomEvent('terminal:toggle'));
+      e.stopImmediatePropagation();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.location.hash) {
+        history.replaceState(null, '', '/');
+      }
+    }
+    /* On other pages — do nothing here, let page-fade handle navigation to / */
+  }, true);
+}
+
+    /* Mobile menu — close on nav link click */
+    var mobileLinks = document.querySelectorAll('[data-mobile-menu] a[data-nav-link]');
+    mobileLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        var menu = document.querySelector('[data-mobile-menu]');
+        var toggle = document.querySelector('[data-menu-toggle]');
+        if (menu && menu.classList.contains('open')) {
+          menu.classList.remove('open');
+          if (toggle) {
+            toggle.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+          }
+          menu.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+      });
     });
   })();
 </script>

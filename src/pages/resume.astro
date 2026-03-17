@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const experience = [
+  {
+    title: 'Freelance Developer & Designer',
+    company: 'Reve Stitching',
+    period: 'October 2024 — Present',
+    current: true,
+    points: [
+      'Built production website (revestitching.com) with Astro 5, GSAP, and Supabase',
+      'Implemented ERPNext for inventory tracking and workflow automation',
+      'Designed complete brand identity from logo to company profile',
+      'All projects scoped, built, and delivered independently',
+    ],
+  },
+  {
+    title: 'Store Assistant',
+    company: 'Reve Stitching',
+    period: 'October 2025 — Present',
+    current: true,
+    points: [
+      'Managing fabric inventory and daily store operations',
+      'Supporting factory floor with ERP system rollout and adoption',
+      'Testing and improving systems using real production data',
+    ],
+  },
+];
+
+const education = [
+  {
+    degree: 'ICS (Intermediate in Computer Science)',
+    school: 'Punjab Board',
+    period: '2024 — 2026',
+    current: true,
+    detail: 'Part 1: 80.36%',
+  },
+  {
+    degree: 'BSCS (Planned)',
+    school: 'FAST NUCES, Faisalabad',
+    period: '2026 — 2030',
+    current: false,
+    detail: 'Admission test: July 2026',
+  },
+];
+
+const skillGroups = [
+  { name: 'Frontend', skills: ['Astro', 'React', 'Tailwind CSS', 'JavaScript', 'HTML/CSS'] },
+  { name: 'Animation', skills: ['GSAP', 'ScrollTrigger', 'Lenis'] },
+  { name: 'Backend', skills: ['ERPNext', 'Python', 'Supabase', 'PostgreSQL'] },
+  { name: 'Design', skills: ['Brand Identity', 'UI/UX', 'Figma'] },
+  { name: 'Tools', skills: ['Git', 'Vercel', 'VS Code', 'Claude/GPT'] },
+];
+---
+
+<Layout title="Resume — Hamza Ali">
+  <Header />
+
+  <main class="min-h-screen px-6" style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);">
+    <div class="max-w-2xl mx-auto">
+      <!-- Header -->
+      <div class="mb-10">
+        <a href="/" class="inline-flex items-center gap-1.5 text-text-dim font-mono text-xs hover:text-accent-primary transition-colors mb-6">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          back to home
+        </a>
+
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-2">
+          <div>
+            <h1 class="text-heading-1 font-heading font-bold text-text-primary">Hamza Ali</h1>
+            <p class="text-body text-text-secondary mt-1">Web Developer · ERP Specialist · Brand Designer</p>
+          </div>
+          <a href="/resume.pdf" download="Hamza_Ali_Resume.pdf" class="btn-primary btn-sm flex-shrink-0 self-start sm:self-auto">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>download pdf</span>
+          </a>
+        </div>
+
+        <div class="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[0.65rem] text-text-dim mt-3">
+          <span>hamzaali.dev@proton.me</span>
+          <span>github.com/hamzaa1i</span>
+          <span>Faisalabad, Pakistan</span>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <section class="mb-10">
+        <h2 class="font-heading text-sm font-semibold text-accent-primary tracking-wider uppercase mb-5">Experience</h2>
+        <div class="space-y-6">
+          {experience.map((exp) => (
+            <div class="relative pl-6 border-l border-white/[0.06]">
+              <div class="absolute left-0 top-1.5 w-2 h-2 rounded-full -translate-x-[4.5px]"
+                   style={exp.current ? 'background: var(--accent);' : 'background: var(--text-dim);'}></div>
+              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 mb-2">
+                <h3 class="font-heading text-sm font-semibold text-text-primary">{exp.title}</h3>
+                <span class="font-mono text-[0.6rem] text-text-dim">{exp.period}</span>
+              </div>
+              <p class="font-mono text-xs text-text-muted mb-2">{exp.company}</p>
+              <ul class="space-y-1">
+                {exp.points.map((point) => (
+                  <li class="flex items-start gap-2 text-body-sm text-text-secondary">
+                    <span class="text-accent-primary mt-1.5 flex-shrink-0 text-[0.4rem]">●</span>
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section class="mb-10">
+        <h2 class="font-heading text-sm font-semibold text-accent-primary tracking-wider uppercase mb-5">Education</h2>
+        <div class="space-y-4">
+          {education.map((edu) => (
+            <div class="relative pl-6 border-l border-white/[0.06]">
+              <div class="absolute left-0 top-1.5 w-2 h-2 rounded-full -translate-x-[4.5px]"
+                   style={edu.current ? 'background: var(--accent);' : 'background: var(--text-dim);'}></div>
+              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 mb-1">
+                <h3 class="font-heading text-sm font-semibold text-text-primary">{edu.degree}</h3>
+                <span class="font-mono text-[0.6rem] text-text-dim">{edu.period}</span>
+              </div>
+              <p class="font-mono text-xs text-text-muted">{edu.school}</p>
+              {edu.detail && <p class="text-body-sm text-text-secondary mt-1">{edu.detail}</p>}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Skills -->
+      <section class="mb-10">
+        <h2 class="font-heading text-sm font-semibold text-accent-primary tracking-wider uppercase mb-5">Skills</h2>
+        <div class="space-y-3">
+          {skillGroups.map((group) => (
+            <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
+              <span class="font-mono text-[0.65rem] text-text-dim tracking-wide min-w-[5rem]">{group.name}</span>
+              <div class="flex flex-wrap gap-1.5">
+                {group.skills.map((skill) => (
+                  <span class="font-mono text-[0.6rem] tracking-wider px-2.5 py-1 rounded-full border border-white/[0.06] text-text-secondary">{skill}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section class="glass p-5 mb-10">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
+          <div>
+            <p class="text-sm font-heading font-semibold text-text-primary mb-1">Interested in working together?</p>
+            <p class="text-xs text-text-secondary">I'm currently available for freelance projects.</p>
+          </div>
+          <a href="/#contact" class="btn-primary btn-sm flex-shrink-0">
+            <span>get in touch</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="py-10"></div>
+  <Footer />
+</Layout>
