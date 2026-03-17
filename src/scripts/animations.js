@@ -1149,6 +1149,917 @@ function initDraggableCard() {
 }
 
 /* ============================================================
+   MODULE 24: SMOOTH PARALLAX
+   Section headings scroll at 0.8x speed — subtle depth
+   ============================================================ */
+function initParallax() {
+  if (REDUCED_MOTION) return;
+
+  const elements = document.querySelectorAll('[data-parallax]');
+  if (!elements.length) return;
+
+  elements.forEach((el) => {
+    const speed = parseFloat(el.getAttribute('data-parallax') || '0.8');
+    const distance = (1 - speed) * 100;
+
+    gsap.fromTo(el,
+      { y: -distance },
+      {
+        y: distance,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      }
+    );
+  });
+}
+
+/* ============================================================
+   MODULE 25: SOUND DESIGN
+   Subtle UI sounds with mute toggle
+   ============================================================ */
+function initSoundDesign() {
+  let muted = false;
+  try {
+    muted = localStorage.getItem('portfolio-muted') === '1';
+  } catch (e) {}
+
+  const sounds = {
+    click: new Audio('/sounds/click.mp3'),
+    hover: new Audio('/sounds/hover.mp3'),
+    whoosh: new Audio('/sounds/whoosh.mp3'),
+  };
+
+  Object.values(sounds).forEach((audio) => {
+    audio.volume = 0.15;
+    audio.preload = 'auto';
+  });
+
+  function play(name) {
+    if (muted || !sounds[name]) return;
+    sounds[name].currentTime = 0;
+    sounds[name].play().catch(() => {});
+  }
+
+  /* Sound toggle button */
+  const toggle = document.querySelector('[data-sound-toggle]');
+  const onIcon = toggle?.querySelector('[data-sound-on]');
+  const offIcon = toggle?.querySelector('[data-sound-off]');
+
+  function updateToggle() {
+    if (!toggle || !onIcon || !offIcon) return;
+    if (muted) {
+      onIcon.style.display = 'none';
+      offIcon.style.display = 'block';
+    } else {
+      onIcon.style.display = 'block';
+      offIcon.style.display = 'none';
+    }
+  }
+
+  updateToggle();
+
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      muted = !muted;
+      try { localStorage.setItem('portfolio-muted', muted ? '1' : '0'); } catch (e) {}
+      updateToggle();
+      if (!muted) play('click');
+    });
+  }
+
+  /* Click sounds */
+  document.querySelectorAll('[data-sound="click"], .btn-primary, .btn-secondary, [data-nav-link]').forEach((el) => {
+    el.addEventListener('click', () => play('click'));
+  });
+
+  /* Hover sounds on cards */
+  document.querySelectorAll('.project-card-interactive, .contact-link, .skill-orb').forEach((el) => {
+    el.addEventListener('mouseenter', () => play('hover'));
+  });
+
+  /* Whoosh on card expand */
+  document.addEventListener('click', function (e) {
+    const card = e.target.closest('.project-card-interactive:not(.expanded)');
+    if (card) play('whoosh');
+  });
+}
+
+/* ============================================================
+   MODULE 26: EASTER EGGS — 13 hidden interactions
+   1.  Click logo 5x        → Theme roulette
+   2.  Type "matrix"         → Matrix rain
+   3.  Terminal "matrix"     → Matrix rain (via event)
+   4.  Hold spacebar 3s      → Gravity drop
+   5.  Click void zone       → Secret message
+   6.  Konami code           → CRT retro mode
+   7.  Type "hireme"         → Celebration pulse
+   8.  Type "rotate"         → Barrel roll
+   9.  Availability dot 7x   → Escalating messages
+   10. Type "stats"          → Dev stats overlay
+   11. Type "pk"/"pakistan"   → Pakistan flag
+   12. Type "42"             → Hitchhiker quote
+   13. 30s idle              → Screen dim
+   ============================================================ */
+function initEasterEggs() {
+  let eggActive = false;
+
+  /* ── Shared: get accent color ── */
+  function getAccent() {
+    return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#C8A24E';
+  }
+
+  /* ── Trigger: Matrix Rain ── */
+  function triggerMatrix() {
+    if (eggActive) return;
+    eggActive = true;
+
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;';
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const cols = Math.floor(canvas.width / 18);
+    const drops = Array(cols).fill(0);
+    const chars = '~/ハムザ01アイウエオカキクケコ{}()=>;<>ABCDEF';
+    const accent = getAccent();
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = '14px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * 18;
+        const y = drops[i] * 18;
+
+        ctx.fillStyle = Math.random() > 0.3 ? accent : '#22c55e';
+        ctx.globalAlpha = 0.6 + Math.random() * 0.4;
+        ctx.fillText(char, x, y);
+        ctx.globalAlpha = 1;
+
+        if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+
+    const interval = setInterval(draw, 45);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      gsap.to(canvas, {
+        opacity: 0, duration: 1.5, ease: 'power2.in',
+        onComplete: () => { canvas.remove(); eggActive = false; },
+      });
+    }, 8000);
+  }
+
+  /* ── Trigger: CRT Retro Mode (Konami) ── */
+  function triggerCRT() {
+    if (eggActive) return;
+    eggActive = true;
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden;';
+
+    const scanlines = document.createElement('div');
+    scanlines.style.cssText = 'position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);';
+    overlay.appendChild(scanlines);
+
+    const tint = document.createElement('div');
+    tint.style.cssText = 'position:absolute;inset:0;background:rgba(0,255,65,0.04);mix-blend-mode:overlay;';
+    overlay.appendChild(tint);
+
+    document.body.appendChild(overlay);
+
+    const origFilter = document.body.style.filter;
+    document.body.style.filter = 'saturate(0.2) brightness(0.85) contrast(1.15) sepia(0.3) hue-rotate(80deg)';
+
+    let flickerCount = 0;
+    const flickerInterval = setInterval(() => {
+      flickerCount++;
+      if (flickerCount > 40) { clearInterval(flickerInterval); return; }
+      overlay.style.opacity = Math.random() > 0.7 ? '0.7' : '1';
+    }, 100);
+
+    setTimeout(() => {
+      clearInterval(flickerInterval);
+      overlay.style.opacity = '1';
+
+      const shutoff = document.createElement('div');
+      shutoff.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#FFFFFF;pointer-events:none;opacity:0;';
+      document.body.appendChild(shutoff);
+
+      gsap.to(shutoff, {
+        opacity: 1, duration: 0.08,
+        onComplete: () => {
+          gsap.to(shutoff, {
+            scaleY: 0.003, duration: 0.3, ease: 'power3.in',
+            onComplete: () => {
+              gsap.to(shutoff, {
+                scaleX: 0, opacity: 0, duration: 0.2, ease: 'power2.in',
+                onComplete: () => {
+                  shutoff.remove();
+                  overlay.remove();
+                  document.body.style.filter = origFilter || '';
+                  eggActive = false;
+                },
+              });
+            },
+          });
+        },
+      });
+    }, 6000);
+  }
+
+  /* ── Trigger: Hire Me Celebration ── */
+/* ── Trigger: Hire Me Celebration ── */
+function triggerHireMe() {
+  if (eggActive) return;
+  eggActive = true;
+
+  const accent = getAccent();
+  const maxDim = Math.max(window.innerWidth, window.innerHeight) * 2.5;
+
+  /* Shockwave */
+  const wave = document.createElement('div');
+  wave.style.cssText =
+    'position:fixed;top:50%;left:50%;z-index:9998;width:0;height:0;border-radius:50%;' +
+    'background:radial-gradient(circle,' + accent + '20,' + accent + '05,transparent);' +
+    'transform:translate(-50%,-50%);pointer-events:none;';
+  document.body.appendChild(wave);
+
+  gsap.to(wave, {
+    width: maxDim, height: maxDim, opacity: 0,
+    duration: 1.2, ease: 'power2.out',
+    onComplete: () => wave.remove(),
+  });
+
+  /* Particles */
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    const size = 3 + Math.random() * 5;
+    const angle = (Math.PI * 2 * i) / 20;
+    const dist = 100 + Math.random() * 200;
+
+    p.style.cssText =
+      'position:fixed;top:50%;left:50%;z-index:9998;width:' + size + 'px;height:' + size +
+      'px;border-radius:50%;background:' + accent + ';pointer-events:none;transform:translate(-50%,-50%);';
+    document.body.appendChild(p);
+
+    gsap.to(p, {
+      x: Math.cos(angle) * dist, y: Math.sin(angle) * dist,
+      opacity: 0, scale: 0,
+      duration: 0.8 + Math.random() * 0.4, ease: 'power2.out',
+      delay: Math.random() * 0.1,
+      onComplete: () => p.remove(),
+    });
+  }
+
+  /* Backdrop */
+  const backdrop = document.createElement('div');
+  backdrop.style.cssText =
+    'position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,0.6);' +
+    'backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;' +
+    'transition:opacity 0.5s ease;cursor:pointer;';
+  document.body.appendChild(backdrop);
+  requestAnimationFrame(() => { backdrop.style.opacity = '1'; });
+
+  /* Glass card message */
+  const msg = document.createElement('div');
+  msg.style.cssText =
+    'position:fixed;top:50%;left:50%;z-index:9998;transform:translate(-50%,-50%) scale(0.95);' +
+    'text-align:center;pointer-events:auto;opacity:0;cursor:pointer;' +
+    'background:var(--glass-bg, rgba(255,255,255,0.03));' +
+    'border:1px solid var(--glass-border, rgba(255,255,255,0.06));' +
+    'padding:2.5rem 3rem;border-radius:1rem;' +
+    'box-shadow:0 25px 60px rgba(0,0,0,0.4), inset 0 1px 0 0 rgba(255,255,255,0.04);';
+
+  msg.innerHTML =
+    '<p style="font-family:\'JetBrains Mono\',monospace;font-size:clamp(1.5rem,5vw,2.5rem);' +
+    'font-weight:700;color:var(--text-primary, #FAFAFA);margin-bottom:1rem;' +
+    'text-shadow:0 0 40px ' + accent + '40;">' +
+    "let's do this.</p>" +
+    '<a href="#contact" style="font-family:\'JetBrains Mono\',monospace;font-size:clamp(0.8rem,2vw,1rem);' +
+    'color:' + accent + ';text-decoration:underline;text-underline-offset:4px;pointer-events:auto;">' +
+    'take me to contact ↓</a>' +
+    '<p style="font-family:\'JetBrains Mono\',monospace;font-size:0.6rem;' +
+    'color:var(--text-dim, #3F3F46);margin-top:1.5rem;">click anywhere to dismiss</p>';
+
+  document.body.appendChild(msg);
+
+gsap.to(msg, {
+  opacity: 1, scale: 1, duration: 0.5, delay: 0.3, ease: 'back.out(1.5)',
+});
+
+  function dismiss() {
+    if (!msg.parentElement) return;
+    gsap.to(msg, {
+      opacity: 0, scale: 0.95, duration: 0.25, ease: 'power2.in',
+    });
+    backdrop.style.opacity = '0';
+    setTimeout(() => {
+      msg.remove();
+      backdrop.remove();
+      eggActive = false;
+    }, 300);
+  }
+
+  /* Click card to dismiss */
+  msg.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') return;
+    dismiss();
+  });
+
+  /* Click backdrop to dismiss */
+  backdrop.addEventListener('click', dismiss);
+
+  /* Contact link scrolls + dismisses */
+  msg.querySelector('a').addEventListener('click', (e) => {
+    e.preventDefault();
+    dismiss();
+    const contact = document.querySelector('#contact');
+    if (contact && lenisInstance) {
+      lenisInstance.scrollTo(contact, { duration: 1.4 });
+    } else if (contact) {
+      contact.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  /* ESC to dismiss */
+  function onEsc(e) {
+    if (e.key === 'Escape') { dismiss(); document.removeEventListener('keydown', onEsc); }
+  }
+  document.addEventListener('keydown', onEsc);
+}
+
+  /* ── Trigger: Barrel Roll ── */
+  function triggerBarrelRoll() {
+    if (eggActive) return;
+    eggActive = true;
+
+    const html = document.documentElement;
+    const origOverflow = html.style.overflow;
+    html.style.overflow = 'hidden';
+    document.body.style.willChange = 'transform';
+
+    gsap.to(document.body, {
+      rotation: 360,
+      duration: 1.5,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        gsap.set(document.body, { rotation: 0, clearProps: 'transform' });
+        html.style.overflow = origOverflow || '';
+        document.body.style.willChange = '';
+        eggActive = false;
+      },
+    });
+  }
+
+  /* ── Trigger: Dev Stats Overlay ── */
+  function triggerDevStats() {
+    if (eggActive) return;
+    eggActive = true;
+
+    const accent = getAccent();
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText =
+      'position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;' +
+      'background:rgba(0,0,0,0.85);opacity:0;transition:opacity 0.5s ease;cursor:pointer;';
+
+    overlay.innerHTML =
+      '<div style="background:rgba(24,24,27,0.95);border:1px solid rgba(255,255,255,0.1);' +
+      'border-radius:0.875rem;padding:1.5rem 2rem;font-family:\'JetBrains Mono\',monospace;' +
+      'max-width:340px;width:90%;box-shadow:0 25px 60px rgba(0,0,0,0.5);">' +
+        '<div style="color:' + accent + ';font-weight:600;font-size:0.85rem;margin-bottom:0.75rem;">~/hamza dev stats</div>' +
+        '<div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:0.75rem;"></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">lines of code</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="12847">0</span></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">cups of chai</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="2341">0</span></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">bugs squashed</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="847">0</span></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">git commits</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="394">0</span></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">mass prayers</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="1">0</span></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">sleep lost</span><span style="color:' + accent + ';font-size:0.75rem;">&#8734; hrs</span></div>' +
+        '<div style="border-top:1px solid rgba(255,255,255,0.06);margin-top:0.5rem;padding-top:0.75rem;">' +
+          '<span style="color:#52525B;font-size:0.65rem;">powered by chai &amp; dua</span>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => { overlay.style.opacity = '1'; });
+
+    overlay.querySelectorAll('[data-egg-count]').forEach((el) => {
+      const target = parseInt(el.getAttribute('data-egg-count'));
+      const obj = { value: 0 };
+      gsap.to(obj, {
+        value: target, duration: 1.8, delay: 0.3, ease: 'power2.out',
+        onUpdate: () => { el.textContent = Math.round(obj.value).toLocaleString(); },
+      });
+    });
+
+    function close() {
+      if (!overlay.parentElement) return;
+      overlay.style.opacity = '0';
+      setTimeout(() => { overlay.remove(); eggActive = false; }, 500);
+    }
+
+    overlay.addEventListener('click', close);
+    setTimeout(close, 6000);
+  }
+
+  /* ── Trigger: Pakistan Flag ── */
+  function triggerPakistan() {
+    if (eggActive) return;
+    eggActive = true;
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText =
+      'position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;' +
+      'pointer-events:none;overflow:hidden;';
+
+    /* Green background */
+    const bg = document.createElement('div');
+    bg.style.cssText = 'position:absolute;inset:0;background:#01411C;transform:scaleX(0);transform-origin:left;';
+    overlay.appendChild(bg);
+
+    /* White stripe (left 25%) */
+    const stripe = document.createElement('div');
+    stripe.style.cssText = 'position:absolute;left:0;top:0;bottom:0;width:25%;background:#FFFFFF;transform:scaleX(0);transform-origin:left;';
+    overlay.appendChild(stripe);
+
+    /* Crescent + star SVG */
+    const svgWrap = document.createElement('div');
+    svgWrap.style.cssText = 'position:relative;z-index:1;opacity:0;margin-left:8%;';
+    svgWrap.innerHTML =
+      '<svg width="160" height="160" viewBox="0 0 160 160" fill="none">' +
+        '<circle cx="80" cy="80" r="45" fill="#FFFFFF"/>' +
+        '<circle cx="92" cy="80" r="37" fill="#01411C"/>' +
+        '<polygon points="118,62 121,73 132,73 123,80 126,91 118,84 110,91 113,80 104,73 115,73" fill="#FFFFFF"/>' +
+      '</svg>';
+    overlay.appendChild(svgWrap);
+
+    /* Text */
+    const text = document.createElement('p');
+    text.style.cssText =
+      'position:absolute;bottom:18%;left:50%;transform:translateX(-50%);' +
+      'font-family:"JetBrains Mono",monospace;font-size:clamp(0.8rem,2vw,1.1rem);' +
+      'color:#FFFFFF;opacity:0;white-space:nowrap;z-index:1;letter-spacing:0.05em;';
+    text.textContent = 'Pakistan Zindabad';
+    overlay.appendChild(text);
+
+    document.body.appendChild(overlay);
+
+    gsap.to(bg, { scaleX: 1, duration: 0.6, ease: 'power2.out' });
+    gsap.to(stripe, { scaleX: 1, duration: 0.4, ease: 'power2.out', delay: 0.15 });
+    gsap.to(svgWrap, { opacity: 1, duration: 0.6, delay: 0.4, ease: 'power2.out' });
+    gsap.to(text, { opacity: 0.85, duration: 0.5, delay: 0.7, ease: 'power2.out' });
+
+    setTimeout(() => {
+      gsap.to(overlay, {
+        opacity: 0, duration: 0.8,
+        onComplete: () => { overlay.remove(); eggActive = false; },
+      });
+    }, 5000);
+  }
+
+  /* ── Trigger: The Answer (42) ── */
+  function trigger42() {
+    if (eggActive) return;
+    eggActive = true;
+
+    const accent = getAccent();
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText =
+      'position:fixed;inset:0;z-index:9998;display:flex;flex-direction:column;' +
+      'align-items:center;justify-content:center;background:rgba(0,0,0,0.92);' +
+      'opacity:0;transition:opacity 0.8s ease;pointer-events:none;';
+
+    const quote = document.createElement('p');
+    quote.style.cssText =
+      'font-family:"JetBrains Mono",monospace;font-size:clamp(1rem,3vw,1.5rem);' +
+      'color:#FAFAFA;text-align:center;max-width:500px;padding:0 2rem;line-height:1.6;';
+    quote.textContent = '';
+    overlay.appendChild(quote);
+
+    const attr = document.createElement('p');
+    attr.style.cssText =
+      'font-family:"JetBrains Mono",monospace;font-size:clamp(0.7rem,1.5vw,0.85rem);' +
+      'color:' + accent + ';margin-top:1rem;opacity:0;transition:opacity 0.5s ease;';
+    attr.textContent = '— Douglas Adams';
+    overlay.appendChild(attr);
+
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => { overlay.style.opacity = '1'; });
+
+    const fullText = 'the answer to life, the universe, and everything.';
+    let idx = 0;
+
+    const typeInterval = setInterval(() => {
+      if (idx < fullText.length) {
+        quote.textContent += fullText[idx];
+        idx++;
+      } else {
+        clearInterval(typeInterval);
+        setTimeout(() => { attr.style.opacity = '1'; }, 300);
+      }
+    }, 50);
+
+    setTimeout(() => {
+      overlay.style.opacity = '0';
+      setTimeout(() => { overlay.remove(); eggActive = false; }, 800);
+    }, 5000);
+  }
+
+  /* ── Listen for terminal-triggered eggs ── */
+  document.addEventListener('easter:matrix', triggerMatrix);
+
+  /* ── Egg 1: Click Logo 5x → Theme Roulette ── */
+  (function () {
+    const logoArea = document.querySelector('[data-logo-area]');
+    if (!logoArea) return;
+
+    let clicks = 0;
+    let timer = null;
+
+    logoArea.addEventListener('click', function (e) {
+      if (e.target.closest('[data-terminal-trigger]')) return;
+
+      clicks++;
+      clearTimeout(timer);
+      timer = setTimeout(function () { clicks = 0; }, 2000);
+
+      if (clicks >= 5) {
+        clicks = 0;
+        if (eggActive) return;
+        eggActive = true;
+
+        var allThemes = window.__eggThemes || {};
+        var keys = Object.keys(allThemes);
+        if (!keys.length) { eggActive = false; return; }
+
+        var originalKey = null;
+        try { originalKey = localStorage.getItem('portfolio-theme'); } catch (ex) {}
+        if (!originalKey || !allThemes[originalKey]) originalKey = keys[0];
+
+        gsap.to(logoArea, {
+          rotation: 720, duration: 3, ease: 'power4.out',
+          onComplete: function () { gsap.set(logoArea, { rotation: 0 }); },
+        });
+
+        var cycleCount = 0;
+        var maxCycles = 20;
+        var h = document.documentElement;
+        var dot = document.querySelector('.theme-dot-inner');
+
+        var cycleInterval = setInterval(function () {
+          var randomKey = keys[Math.floor(Math.random() * keys.length)];
+          var th = allThemes[randomKey];
+          if (th) {
+            h.style.setProperty('--accent', th.accent);
+            h.style.setProperty('--void', th.void);
+            h.style.setProperty('--text-primary', th.textPrimary);
+            h.style.setProperty('--text-secondary', th.textSecondary);
+            h.style.setProperty('--accent-glow', th.accentGlow);
+            h.style.backgroundColor = th.void;
+            if (dot) dot.style.background = th.accent;
+          }
+          cycleCount++;
+          if (cycleCount >= maxCycles) {
+            clearInterval(cycleInterval);
+            setTimeout(function () {
+              var restoreTh = allThemes[originalKey];
+              if (restoreTh) {
+                h.style.setProperty('--void', restoreTh.void);
+                h.style.setProperty('--midnight', restoreTh.midnight);
+                h.style.setProperty('--surface', restoreTh.surface);
+                h.style.setProperty('--elevated', restoreTh.elevated);
+                h.style.setProperty('--glass-bg', restoreTh.glassBg);
+                h.style.setProperty('--glass-border', restoreTh.glassBorder);
+                h.style.setProperty('--glass-hover', restoreTh.glassHover);
+                h.style.setProperty('--glass-hover-border', restoreTh.glassHoverBorder);
+                h.style.setProperty('--text-primary', restoreTh.textPrimary);
+                h.style.setProperty('--text-secondary', restoreTh.textSecondary);
+                h.style.setProperty('--text-muted', restoreTh.textMuted);
+                h.style.setProperty('--text-dim', restoreTh.textDim);
+                h.style.setProperty('--accent', restoreTh.accent);
+                h.style.setProperty('--accent-hover', restoreTh.accentHover);
+                h.style.setProperty('--accent-dim', restoreTh.accentDim);
+                h.style.setProperty('--accent-glow', restoreTh.accentGlow);
+                h.style.setProperty('--accent-subtle', restoreTh.accentSubtle);
+                h.style.setProperty('--accent-contrast', restoreTh.accentContrast);
+                h.style.setProperty('--accent-success', restoreTh.success);
+                h.style.setProperty('--gradient-accent-text', restoreTh.gradientText);
+                h.style.backgroundColor = restoreTh.void;
+                h.style.color = restoreTh.textPrimary;
+                if (restoreTh.isDark) { h.classList.add('dark'); h.classList.remove('light'); }
+                else { h.classList.remove('dark'); h.classList.add('light'); }
+                if (dot) dot.style.background = restoreTh.accent;
+                try { localStorage.setItem('portfolio-theme', originalKey); } catch (ex) {}
+              }
+              document.dispatchEvent(new CustomEvent('theme:change', { detail: { key: originalKey } }));
+              eggActive = false;
+            }, 300);
+          }
+        }, 150);
+      }
+    });
+  })();
+
+  /* ── Eggs 2,7,8,10,11,12: Typed Word Triggers (merged buffer) ── */
+  (function () {
+    let buffer = '';
+
+    document.addEventListener('keydown', function (e) {
+      var tag = document.activeElement ? document.activeElement.tagName : '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+      /* Only capture printable single characters */
+      if (e.key.length === 1) {
+        buffer += e.key.toLowerCase();
+        if (buffer.length > 30) buffer = buffer.slice(-30);
+      }
+
+      /* Check triggers — longest matches first */
+      if (buffer.includes('matrix')) { buffer = ''; triggerMatrix(); }
+      else if (buffer.includes('hireme') || buffer.includes('hire me')) { buffer = ''; triggerHireMe(); }
+      else if (buffer.includes('rotate')) { buffer = ''; triggerBarrelRoll(); }
+      else if (buffer.includes('pakistan')) { buffer = ''; triggerPakistan(); }
+      else if (buffer.includes('stats')) { buffer = ''; triggerDevStats(); }
+      else if (buffer.endsWith('42')) { buffer = ''; trigger42(); }
+      else if (buffer.endsWith('pk')) { buffer = ''; triggerPakistan(); }
+    });
+  })();
+
+  /* ── Egg 4: Hold Spacebar 3s → Gravity Drop ── */
+  (function () {
+    var spaceTimer = null;
+    var spaceDown = false;
+    var spaceBlocking = false;
+
+    window.addEventListener('keydown', function (e) {
+      if (e.key !== ' ') return;
+      var tag = document.activeElement ? document.activeElement.tagName : '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (spaceBlocking) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    }, { capture: true });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== ' ' || e.repeat) return;
+      var tag = document.activeElement ? document.activeElement.tagName : '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      spaceDown = true;
+      spaceBlocking = true;
+
+      spaceTimer = setTimeout(function () {
+        if (!spaceDown || eggActive) return;
+        eggActive = true;
+
+        var targets = gsap.utils.toArray(
+          '.section-inner > *, .stat-card, .skill-orb, .project-card-interactive, .floating-footer'
+        );
+
+        if (!targets.length) { eggActive = false; return; }
+
+        var tl = gsap.timeline({
+          onComplete: function () {
+            gsap.to(targets, {
+              y: 0, rotation: 0, opacity: 1,
+              duration: 1.2, ease: 'elastic.out(1, 0.4)', stagger: 0.02,
+              onComplete: function () { eggActive = false; },
+            });
+          },
+        });
+
+        tl.to(targets, {
+          y: function () { return window.innerHeight * 0.5 + Math.random() * 300; },
+          rotation: function () { return (Math.random() - 0.5) * 40; },
+          opacity: 0.3, duration: 0.8, ease: 'power2.in', stagger: 0.015,
+        });
+      }, 3000);
+    });
+
+    document.addEventListener('keyup', function (e) {
+      if (e.key !== ' ') return;
+      spaceDown = false;
+      spaceBlocking = false;
+      clearTimeout(spaceTimer);
+    });
+  })();
+
+  /* ── Egg 5: Click Void Zone → Secret Message ── */
+  (function () {
+    const voidZone = document.querySelector('[data-void-zone]');
+    if (!voidZone) return;
+
+    voidZone.addEventListener('click', function () {
+      if (eggActive) return;
+      eggActive = true;
+
+      const accent = getAccent();
+
+      const msg = document.createElement('div');
+      msg.style.cssText =
+        'position:fixed;inset:0;z-index:9998;display:flex;flex-direction:column;' +
+        'align-items:center;justify-content:center;background:rgba(0,0,0,0.9);' +
+        'opacity:0;transition:opacity 0.8s ease;pointer-events:none;';
+
+      msg.innerHTML =
+        '<p style="font-family:JetBrains Mono,monospace;font-size:clamp(1.2rem,4vw,2rem);' +
+        'color:#FAFAFA;letter-spacing:-0.02em;font-weight:700;margin-bottom:0.5rem;' +
+        'text-shadow:0 0 40px ' + accent + '40;">you found the void.</p>' +
+        '<p style="font-family:JetBrains Mono,monospace;font-size:clamp(0.8rem,2vw,1rem);' +
+        'color:' + accent + ';font-weight:400;opacity:0.7;">nice.</p>';
+
+      document.body.appendChild(msg);
+      requestAnimationFrame(() => { msg.style.opacity = '1'; });
+
+      setTimeout(() => {
+        msg.style.opacity = '0';
+        setTimeout(() => { msg.remove(); eggActive = false; }, 800);
+      }, 4000);
+    });
+  })();
+
+  /* ── Egg 6: Konami Code → CRT Retro Mode ── */
+  (function () {
+    var KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    var idx = 0;
+
+    document.addEventListener('keydown', function (e) {
+      var tag = document.activeElement ? document.activeElement.tagName : '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+      if (e.key === KONAMI[idx]) {
+        idx++;
+        if (idx === KONAMI.length) {
+          idx = 0;
+          triggerCRT();
+        }
+      } else {
+        idx = 0;
+        if (e.key === KONAMI[0]) idx = 1;
+      }
+    });
+  })();
+
+  /* ── Egg 9: Availability Dot Rapid Clicks → Escalating Messages ── */
+  (function () {
+    var container = document.querySelector('[data-availability]');
+    var textEl = document.querySelector('[data-availability-text]');
+    var dot = document.querySelector('[data-availability-dot]');
+    if (!container || !textEl || !dot) return;
+
+    var originalText = textEl.textContent.trim();
+    var messages = [
+      originalText,
+      "Yes, I'm actually available",
+      "Seriously, hire me",
+      "I'll start tomorrow",
+      "Okay you can stop clicking",
+      "...",
+    ];
+
+    var clicks = 0;
+    var timer = null;
+
+    function reset() {
+      clicks = 0;
+      textEl.textContent = originalText;
+      gsap.to(dot, { scale: 1, duration: 0.3, ease: 'elastic.out(1, 0.5)' });
+    }
+
+    container.addEventListener('click', function () {
+      if (eggActive) return;
+
+      clicks++;
+      clearTimeout(timer);
+      timer = setTimeout(reset, 2500);
+
+      /* Grow dot + change text */
+      if (clicks <= messages.length) {
+        textEl.textContent = messages[clicks - 1];
+        gsap.to(dot, { scale: 1 + clicks * 0.35, duration: 0.2, ease: 'back.out(2)' });
+      }
+
+      /* Explosion on 7th click */
+      if (clicks >= 7) {
+        eggActive = true;
+        clearTimeout(timer);
+
+        var rect = dot.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+
+        for (var i = 0; i < 15; i++) {
+          var p = document.createElement('div');
+          var size = 3 + Math.random() * 5;
+          var angle = (Math.PI * 2 * i) / 15;
+          var dist = 40 + Math.random() * 80;
+          p.style.cssText =
+            'position:fixed;top:' + cy + 'px;left:' + cx + 'px;z-index:9998;' +
+            'width:' + size + 'px;height:' + size + 'px;border-radius:50%;' +
+            'background:#10B981;pointer-events:none;transform:translate(-50%,-50%);';
+          document.body.appendChild(p);
+          gsap.to(p, {
+            x: Math.cos(angle) * dist, y: Math.sin(angle) * dist,
+            opacity: 0, duration: 0.6 + Math.random() * 0.3, ease: 'power2.out',
+            onComplete: function () { this.targets()[0].remove(); },
+          });
+        }
+
+        gsap.to(dot, { scale: 0, duration: 0.2 });
+        textEl.textContent = 'Currently taking on new projects ;)';
+
+        setTimeout(function () {
+          gsap.to(dot, { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
+          textEl.textContent = originalText;
+          clicks = 0;
+          eggActive = false;
+        }, 5000);
+      }
+    });
+  })();
+
+  /* ── Egg 13: 30s Idle → Dim Screen ── */
+  (function () {
+    var idleTimer = null;
+    var idleShown = false;
+    var idleOverlay = null;
+
+    function dismissIdle() {
+      if (!idleOverlay) return;
+      var el = idleOverlay;
+      idleOverlay = null;
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 0.5s ease';
+      setTimeout(function () { if (el.parentElement) el.remove(); }, 500);
+    }
+
+    function resetIdle() {
+      clearTimeout(idleTimer);
+      if (idleOverlay) { dismissIdle(); return; }
+      if (idleShown) return;
+      idleTimer = setTimeout(showIdle, 30000);
+    }
+
+    function showIdle() {
+      if (eggActive || idleShown) return;
+      idleShown = true;
+
+      var accent = getAccent();
+
+      idleOverlay = document.createElement('div');
+      idleOverlay.style.cssText =
+        'position:fixed;inset:0;z-index:9997;display:flex;flex-direction:column;' +
+        'align-items:center;justify-content:center;background:rgba(0,0,0,0);' +
+        'transition:background 2s ease;cursor:pointer;';
+
+      idleOverlay.innerHTML =
+        '<p style="font-family:\'JetBrains Mono\',monospace;font-size:clamp(1rem,3vw,1.5rem);' +
+        'color:#FAFAFA;opacity:0;transition:opacity 1s ease 1s;text-align:center;padding:0 2rem;">' +
+        "you've been staring at this for a while.</p>" +
+        '<p style="font-family:\'JetBrains Mono\',monospace;font-size:clamp(0.7rem,1.5vw,0.85rem);' +
+        'color:' + accent + ';opacity:0;transition:opacity 1s ease 2s;margin-top:0.75rem;' +
+        'text-align:center;padding:0 2rem;">' +
+        'go build something. or hire me to build it for you.</p>';
+
+      document.body.appendChild(idleOverlay);
+
+      requestAnimationFrame(function () {
+        idleOverlay.style.background = 'rgba(0,0,0,0.85)';
+        idleOverlay.querySelectorAll('p').forEach(function (p) { p.style.opacity = '1'; });
+      });
+
+      idleOverlay.addEventListener('click', dismissIdle);
+    }
+
+    ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'].forEach(function (evt) {
+      document.addEventListener(evt, resetIdle, { passive: true });
+    });
+
+    resetIdle();
+  })();
+}
+
+/* ============================================================
    MASTER INIT
    ============================================================ */
 export function initAnimations() {
@@ -1193,6 +2104,15 @@ export function initAnimations() {
   initScrollProgress();
   initScrollToTop();
   initScrollIndicator();
+
+  /* Parallax depth */
+  initParallax();
+
+  /* Sound design */
+  initSoundDesign();
+
+  /* Easter eggs */
+  initEasterEggs();
 
   /* Content */
   initTypingEffect();

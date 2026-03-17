@@ -17,7 +17,7 @@ const { name, icon = '⚡', category, learning = false, floatClass = 'animate-fl
   ]}
   data-category={category}
 >
-  <span class="text-base flex-shrink-0" aria-hidden="true">{icon}</span>
+  <span class="text-base flex-shrink-0" aria-hidden="true" set:html={icon}></span>
   <div class="flex items-center gap-1.5 min-w-0">
     <span class="text-xs font-mono font-medium text-text-primary truncate leading-tight whitespace-nowrap">
       {name}

@@ -4,6 +4,7 @@ import { themes } from '../config/theme';
 import '../styles/global.css';
 import Terminal from '../components/Terminal.astro';
 import Preloader from '../components/Preloader.astro';
+import DynamicFavicon from '../components/DynamicFavicon.astro';
 
 interface Props {
   title?: string;
@@ -109,7 +110,7 @@ const themeStyle = [
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <DynamicFavicon />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />

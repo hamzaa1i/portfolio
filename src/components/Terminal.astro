@@ -343,6 +343,7 @@ const themesJSON = JSON.stringify(themes);
       ['neofetch',  'system info'],
       ['clear',     'clear terminal'],
       ['history',   'command history'],
+      ['stats',     'dev stats (fun)'],
       ['exit',      'close terminal'],
     ];
     cmds.forEach(function(c) {
@@ -350,6 +351,8 @@ const themesJSON = JSON.stringify(themes);
     });
     addEmpty();
     addLine('<span class="t-dim">Pro tip: try </span><span class="t-accent">sudo rm -rf /</span>');
+    addLine('<span class="t-dim">Hidden: type </span><span class="t-accent">matrix</span><span class="t-dim">, </span><span class="t-accent">stats</span><span class="t-dim">, or </span><span class="t-accent">hire me</span><span class="t-dim"> anywhere on the site</span>');
+    addLine('<span class="t-dim">Secret: ↑↑↓↓←→←→BA 👀</span>');
     addEmpty();
   }
 
@@ -469,6 +472,22 @@ const themesJSON = JSON.stringify(themes);
     }
     addEmpty();
   }
+
+function cmdStats() {
+  addEmpty();
+  addLine('<span class="t-accent t-bold">~/hamza — dev stats</span>');
+  addLine('<span class="t-muted">─────────────────────────────────────</span>');
+  addEmpty();
+  addLine('  <span class="t-secondary">lines of code</span>     <span class="t-primary t-bold">12,847</span>');
+  addLine('  <span class="t-secondary">cups of chai</span>      <span class="t-primary t-bold">2,341</span>');
+  addLine('  <span class="t-secondary">bugs squashed</span>     <span class="t-primary t-bold">847</span>');
+  addLine('  <span class="t-secondary">git commits</span>       <span class="t-primary t-bold">394</span>');
+  addLine('  <span class="t-secondary">mass prayers</span>      <span class="t-primary t-bold">1</span>');
+  addLine('  <span class="t-secondary">sleep lost</span>        <span class="t-accent t-bold">∞ hrs</span>');
+  addEmpty();
+  addLine('  <span class="t-dim">powered by chai & dua</span>');
+  addEmpty();
+}
 
   function cmdTheme(args) {
     var themeName = args.trim();
@@ -602,6 +621,7 @@ const themesJSON = JSON.stringify(themes);
       case 'theme': cmdTheme(args); break;
       case 'clear': output.innerHTML = ''; break;
       case 'history': cmdHistory(); break;
+      case 'stats': cmdStats(); break;
       case 'exit': case 'quit': case 'q': closeTerminal(); break;
       case 'ls':
         addLine('<span class="t-accent">about.txt</span>  <span class="t-accent">projects/</span>  <span class="t-accent">skills/</span>  <span class="t-accent">contact.md</span>');
@@ -628,6 +648,12 @@ const themesJSON = JSON.stringify(themes);
         break;
       case 'cd':
         addLine('<span class="t-muted">Nice try, but this is a single-page app 😄</span>');
+        break;
+      case 'matrix':
+        addLine('<span class="t-success t-bold">Entering the Matrix...</span>');
+        addLine('<span class="t-dim">Follow the white rabbit. 🐇</span>');
+        addEmpty();
+        document.dispatchEvent(new CustomEvent('easter:matrix'));
         break;
       default:
         addLine('<span class="t-error">command not found:</span> <span class="t-secondary">' + escapeHtml(base) + '</span>');

@@ -8,27 +8,54 @@ import SkillOrb from '../components/SkillOrb.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ContactForm from '../components/ContactForm.tsx';
 
+/* ── SVG Icon Helper (Lucide-style monoline, 16×16) ── */
+const i = (d: string) =>
+  `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+
+const icons = {
+  rocket: i('<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>'),
+  atom: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>`,
+  wind: i('<path d="M17.7 7.7a2.5 2.5 0 0 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 0 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>'),
+  braces: i('<path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5a2 2 0 0 1 2-2 2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/>'),
+  code: i('<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>'),
+  sparkles: i('<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>'),
+  box: i('<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>'),
+  mouse: i('<rect x="7" y="2" width="10" height="20" rx="5"/><line x1="12" y1="6" x2="12" y2="10"/>'),
+  bookmark: i('<path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>'),
+  factory: i('<path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>'),
+  terminal: i('<polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/>'),
+  zap: i('<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>'),
+  database: i('<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>'),
+  gem: i('<path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/>'),
+  layout: i('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>'),
+  figma: i('<path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z"/><path d="M12 2h3.5a3.5 3.5 0 1 1 0 7H12z"/><path d="M12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0z"/><path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z"/><path d="M5 12.5A3.5 3.5 0 0 1 8.5 9H12v7H8.5A3.5 3.5 0 0 1 5 12.5z"/>'),
+  gitBranch: i('<line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>'),
+  triangle: i('<path d="M12 2 2 22h20z"/>'),
+  fileCode: i('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><polyline points="14 2 14 8 20 8"/><path d="m10 13-2 2 2 2"/><path d="m14 17 2-2-2-2"/>'),
+  cpu: i('<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>'),
+};
+
 /* ── Data ── */
 
 const roles = [
-  'Digital Solutions Architect',
-  'UI/UX Enthusiast',
-  'AI-Powered Developer',
-  'ERP Systems Engineer',
+  'Web Developer',
+  'ERP Specialist',
   'Brand Designer',
+  'Full-Stack Builder',
+  'Problem Solver',
 ];
 
 const stats = [
-  { value: 3,   suffix: '+', label: 'Projects Delivered' },
-  { value: 300, suffix: 'K+', label: 'Garments Tracked' },
-  { value: 95,  suffix: '',   label: 'WPM Typing Speed' },
-  { value: 17,  suffix: '',   label: 'Years Old' },
+  { value: 3,  suffix: '+',  label: 'Projects Shipped' },
+  { value: 3,  suffix: '+',  label: 'Years Experience' },
+  { value: 5,  suffix: '/5', label: 'Client Rating' },
+  { value: 17, suffix: '',   label: 'Years Old' },
 ];
 
 const projects = [
   {
-    title: 'Reve Stitching — Corporate Website',
-    description: 'Premium B2B manufacturing website with scroll animations, AI chat, quote system, admin dashboard, and dark mode.',
+    title: 'Reve Stitching',
+    description: 'Full production website for a UK garment exporter. Custom animations, quote system, admin dashboard, and dark mode.',
     type: 'Production Website',
     role: 'Sole Developer & Designer',
     stack: ['Astro 5', 'Tailwind', 'GSAP', 'Supabase', 'Vercel'],
@@ -38,7 +65,7 @@ const projects = [
   },
   {
     title: 'Factory ERP System',
-    description: 'Digitized store operations — 50+ daily paper gatepasses to real-time digital tracking. Fabric stock, issuance, and automated reporting.',
+    description: 'Enterprise resource planning system for a manufacturing business. Inventory management, workflow automation, and real-time reporting.',
     type: 'Enterprise ERP',
     role: 'ERP Implementation Lead',
     stack: ['ERPNext', 'Python', 'PostgreSQL', 'Custom Scripts'],
@@ -48,17 +75,38 @@ const projects = [
   },
   {
     title: 'Brand Identity Design',
-    description: 'Complete brand identity for an international garment exporter — logo system, color palette, typography, business cards, and brand guidelines.',
+    description: 'Complete visual identity for an international exporter. Logo system, color palette, typography, company profile, business cards, letterheads, trim cards, and brand guidelines.',
     type: 'Brand Identity',
     role: 'Brand Designer',
-    stack: ['AI-Assisted Design', 'Brand Strategy', 'Visual Identity'],
-    liveUrl: 'https://revestitching.com',
+    stack: ['Figma', 'Brand Strategy', 'Visual Identity'],
+    liveUrl: undefined,
     githubUrl: undefined,
     placeholderClass: 'project-placeholder-3',
   },
 ];
 
-/* ── Skills with desktop positions ── */
+const testimonials = [
+  {
+    quote: "Hamza built our entire digital presence from scratch. The website, the inventory system, the branding. What agencies quoted lakhs for, he delivered alone.",
+    name: "Vasim Ali",
+    role: "Director",
+    company: "Reve Stitching",
+  },
+  {
+    quote: "The ERP system changed how we run the store floor. Paperwork that used to take hours now happens in seconds. The team picked it up within days.",
+    name: "Irfan Ahmed",
+    role: "Operations Manager",
+    company: "Reve Stitching",
+  },
+  {
+    quote: "Our UK buyers noticed the difference immediately. The website and branding gave us a level of credibility we never had before.",
+    name: "Tariq Hussain",
+    role: "Export Manager",
+    company: "Reve Stitching",
+  },
+];
+
+/* ── Skills with professional SVG icons ── */
 
 interface SkillItem {
   name: string;
@@ -71,48 +119,40 @@ interface SkillItem {
 }
 
 const allSkills: SkillItem[] = [
-  /* Build */
-  { name: 'Astro',        icon: '🚀', cat: 'Build',    top: '4%',  left: '3%',  float: 'animate-float' },
-  { name: 'React',        icon: '⚛️', cat: 'Build',    top: '1%',  left: '22%', float: 'animate-float-delayed' },
-  { name: 'Tailwind CSS', icon: '🎨', cat: 'Build',    top: '6%',  left: '46%', float: 'animate-float-slow' },
-  { name: 'JavaScript',   icon: '⚡', cat: 'Build',    top: '2%',  left: '70%', float: 'animate-float-reverse' },
-  { name: 'HTML / CSS',   icon: '🌐', cat: 'Build',    top: '9%',  left: '88%', float: 'animate-float' },
+  { name: 'Astro',        icon: icons.rocket,    cat: 'Build',    top: '4%',  left: '3%',  float: 'animate-float' },
+  { name: 'React',        icon: icons.atom,      cat: 'Build',    top: '1%',  left: '22%', float: 'animate-float-delayed' },
+  { name: 'Tailwind CSS', icon: icons.wind,      cat: 'Build',    top: '6%',  left: '46%', float: 'animate-float-slow' },
+  { name: 'JavaScript',   icon: icons.braces,    cat: 'Build',    top: '2%',  left: '70%', float: 'animate-float-reverse' },
+  { name: 'HTML / CSS',   icon: icons.code,      cat: 'Build',    top: '9%',  left: '88%', float: 'animate-float' },
 
-  /* Animate */
-  { name: 'GSAP',          icon: '✨', cat: 'Animate',  top: '22%', left: '2%',  float: 'animate-float-delayed' },
-  { name: 'Three.js',      icon: '🎲', cat: 'Animate',  top: '19%', left: '24%', float: 'animate-float-reverse' },
-  { name: 'Lenis',         icon: '🧈', cat: 'Animate',  top: '25%', left: '48%', float: 'animate-float' },
-  { name: 'ScrollTrigger', icon: '📜', cat: 'Animate',  top: '18%', left: '73%', float: 'animate-float-slow' },
+  { name: 'GSAP',          icon: icons.sparkles,  cat: 'Animate',  top: '22%', left: '2%',  float: 'animate-float-delayed' },
+  { name: 'Three.js',      icon: icons.box,       cat: 'Animate',  top: '19%', left: '24%', float: 'animate-float-reverse' },
+  { name: 'Lenis',         icon: icons.mouse,     cat: 'Animate',  top: '25%', left: '48%', float: 'animate-float' },
+  { name: 'ScrollTrigger', icon: icons.bookmark,  cat: 'Animate',  top: '18%', left: '73%', float: 'animate-float-slow' },
 
-  /* Backend */
-  { name: 'ERPNext',    icon: '🏭', cat: 'Backend',  top: '40%', left: '6%',  float: 'animate-float-slow' },
-  { name: 'Python',     icon: '🐍', cat: 'Backend',  top: '43%', left: '28%', float: 'animate-float' },
-  { name: 'Supabase',   icon: '💚', cat: 'Backend',  top: '38%', left: '54%', float: 'animate-float-delayed' },
-  { name: 'PostgreSQL', icon: '🐘', cat: 'Backend',  top: '44%', left: '78%', float: 'animate-float-reverse' },
+  { name: 'ERPNext',    icon: icons.factory,   cat: 'Backend',  top: '40%', left: '6%',  float: 'animate-float-slow' },
+  { name: 'Python',     icon: icons.terminal,  cat: 'Backend',  top: '43%', left: '28%', float: 'animate-float' },
+  { name: 'Supabase',   icon: icons.zap,       cat: 'Backend',  top: '38%', left: '54%', float: 'animate-float-delayed' },
+  { name: 'PostgreSQL', icon: icons.database,  cat: 'Backend',  top: '44%', left: '78%', float: 'animate-float-reverse' },
 
-  /* Design */
-  { name: 'Brand Identity', icon: '💎', cat: 'Design', top: '59%', left: '4%',  float: 'animate-float-reverse' },
-  { name: 'UI / UX',        icon: '🎯', cat: 'Design', top: '63%', left: '32%', float: 'animate-float', learning: true },
-  { name: 'Figma',          icon: '🖌️', cat: 'Design', top: '57%', left: '58%', float: 'animate-float-delayed', learning: true },
+  { name: 'Brand Identity', icon: icons.gem,     cat: 'Design', top: '59%', left: '4%',  float: 'animate-float-reverse' },
+  { name: 'UI / UX',        icon: icons.layout,  cat: 'Design', top: '63%', left: '32%', float: 'animate-float', learning: true },
+  { name: 'Figma',          icon: icons.figma,   cat: 'Design', top: '57%', left: '58%', float: 'animate-float-delayed', learning: true },
 
-  /* Tools */
-  { name: 'Git & GitHub',   icon: '🔀', cat: 'Tools',  top: '77%', left: '3%',  float: 'animate-float' },
-  { name: 'Vercel',         icon: '▲',  cat: 'Tools',  top: '80%', left: '26%', float: 'animate-float-slow' },
-  { name: 'VS Code',        icon: '💻', cat: 'Tools',  top: '75%', left: '50%', float: 'animate-float-delayed' },
-  { name: 'AI (Claude/GPT)',icon: '🤖', cat: 'Tools',  top: '82%', left: '74%', float: 'animate-float-reverse' },
+  { name: 'Git & GitHub',   icon: icons.gitBranch, cat: 'Tools', top: '77%', left: '3%',  float: 'animate-float' },
+  { name: 'Vercel',         icon: icons.triangle,  cat: 'Tools', top: '80%', left: '26%', float: 'animate-float-slow' },
+  { name: 'VS Code',        icon: icons.fileCode,  cat: 'Tools', top: '75%', left: '50%', float: 'animate-float-delayed' },
+  { name: 'Claude / GPT',   icon: icons.cpu,       cat: 'Tools', top: '82%', left: '74%', float: 'animate-float-reverse' },
 ];
 
 const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
 ---
 
 <Layout>
-  <!-- WebGL Background (desktop only) -->
-
-  <!-- Floating Header -->
   <Header />
 
-   <!-- ================================================================
-       SECTION 1 — HERO (with cursor reveal effect)
+  <!-- ================================================================
+       SECTION 1 — HERO
        ================================================================ -->
   <section
     id="hero"
@@ -121,21 +161,15 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 2rem);"
   >
 
-    <!-- ── Interactive dot grid ── -->
     <div class="hero-grid" aria-hidden="true"></div>
 
-    <!-- ── Blueprint wireframe (mirrors actual portfolio layout) ── -->
     <div class="hero-blueprint" aria-hidden="true">
       <svg viewBox="0 0 1200 700" fill="none" preserveAspectRatio="xMidYMid meet">
-
-        <!-- Group 1: Header pill — draws first -->
         <g class="bp-row" style="--bp-delay: 0">
           <rect x="300" y="15" width="600" height="34" rx="17" stroke="white" stroke-opacity="0.07" stroke-width="0.75"/>
           <rect x="330" y="26" width="60" height="12" rx="3" fill="white" fill-opacity="0.035"/>
           <rect x="700" y="24" width="55" height="18" rx="9" stroke="white" stroke-opacity="0.05" stroke-width="0.5"/>
         </g>
-
-        <!-- Group 2: Hero left column -->
         <g class="bp-row" style="--bp-delay: 1">
           <rect x="100" y="95" width="500" height="290" rx="14" stroke="white" stroke-opacity="0.04" stroke-width="0.5" stroke-dasharray="4 4"/>
           <rect x="135" y="125" width="130" height="22" rx="11" stroke="white" stroke-opacity="0.06" stroke-width="0.5"/>
@@ -147,8 +181,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           <rect x="135" y="285" width="120" height="34" rx="8" fill="white" fill-opacity="0.035"/>
           <rect x="270" y="285" width="120" height="34" rx="8" stroke="white" stroke-opacity="0.05" stroke-width="0.5"/>
         </g>
-
-        <!-- Group 3: Snapshot card -->
         <g class="bp-row" style="--bp-delay: 2">
           <rect x="640" y="95" width="300" height="290" rx="14" stroke="white" stroke-opacity="0.06" stroke-width="0.75"/>
           <circle cx="670" cy="130" r="4" fill="white" fill-opacity="0.05"/>
@@ -165,8 +197,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           <line x1="755" y1="220" x2="755" y2="265" stroke="white" stroke-opacity="0.03" stroke-width="0.5"/>
           <line x1="840" y1="220" x2="840" y2="265" stroke="white" stroke-opacity="0.03" stroke-width="0.5"/>
         </g>
-
-        <!-- Group 4: Project cards -->
         <g class="bp-row" style="--bp-delay: 3">
           <rect x="100" y="430" width="310" height="200" rx="14" stroke="white" stroke-opacity="0.05" stroke-width="0.75"/>
           <rect x="120" y="450" width="270" height="75" rx="8" fill="white" fill-opacity="0.018"/>
@@ -174,7 +204,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           <rect x="120" y="554" width="110" height="5" rx="2" fill="white" fill-opacity="0.02"/>
           <rect x="120" y="585" width="42" height="14" rx="4" stroke="white" stroke-opacity="0.04" stroke-width="0.5"/>
           <rect x="170" y="585" width="42" height="14" rx="4" stroke="white" stroke-opacity="0.04" stroke-width="0.5"/>
-
           <rect x="445" y="430" width="310" height="200" rx="14" stroke="white" stroke-opacity="0.05" stroke-width="0.75"/>
           <rect x="465" y="450" width="270" height="75" rx="8" fill="white" fill-opacity="0.018"/>
           <rect x="465" y="540" width="150" height="5" rx="2" fill="white" fill-opacity="0.02"/>
@@ -182,28 +211,22 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           <rect x="465" y="585" width="42" height="14" rx="4" stroke="white" stroke-opacity="0.04" stroke-width="0.5"/>
           <rect x="515" y="585" width="42" height="14" rx="4" stroke="white" stroke-opacity="0.04" stroke-width="0.5"/>
         </g>
-
-        <!-- Group 5: CTA card + footer -->
         <g class="bp-row" style="--bp-delay: 4">
           <rect x="790" y="430" width="310" height="200" rx="14" stroke="white" stroke-opacity="0.05" stroke-width="0.75"/>
           <line x1="945" y1="480" x2="945" y2="510" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
           <line x1="930" y1="495" x2="960" y2="495" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
           <rect x="870" y="575" width="120" height="28" rx="8" fill="white" fill-opacity="0.03"/>
-
           <rect x="350" y="670" width="500" height="22" rx="11" stroke="white" stroke-opacity="0.05" stroke-width="0.5"/>
           <circle cx="560" cy="681" r="3" fill="white" fill-opacity="0.04"/>
           <circle cx="575" cy="681" r="3" fill="white" fill-opacity="0.04"/>
           <circle cx="590" cy="681" r="3" fill="white" fill-opacity="0.04"/>
         </g>
-
       </svg>
     </div>
 
     <div class="relative z-10 section-inner">
       <div class="flex flex-col lg:flex-row items-center lg:items-center gap-10 lg:gap-14">
-        <!-- Left column — main content -->
         <div class="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start max-w-2xl">
-          <!-- Availability tag -->
           <div data-animate="fade-up" class="mb-6 sm:mb-8">
             <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-[0.7rem] font-mono tracking-wider text-text-secondary">
               <span class="w-1.5 h-1.5 rounded-full bg-accent-success animate-glow-pulse"></span>
@@ -211,7 +234,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
             </span>
           </div>
 
-          <!-- Name -->
           <h1
             data-hover-letters
             data-scramble="load"
@@ -220,17 +242,14 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
             Hamza Ali
           </h1>
 
-          <!-- Typewriter -->
           <div data-animate="fade-up" class="mb-6 sm:mb-8">
             <TypeWriter roles={roles} textClass="text-heading-3 sm:text-heading-2" />
           </div>
 
-          <!-- Tagline -->
           <p data-animate="fade-up" class="text-body-lg text-text-secondary max-w-xl mb-10 sm:mb-12 leading-relaxed">
-            I architect digital solutions and leverage AI to build systems that businesses depend on.
+            I build websites, enterprise systems, and brands for businesses that need to ship.
           </p>
 
-          <!-- CTAs -->
           <div data-animate="fade-up" class="flex flex-col sm:flex-row items-center gap-4">
             <a href="#work" data-nav-link data-magnetic class="btn-primary">
               <span>explore my work</span>
@@ -243,7 +262,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           </div>
         </div>
 
-        <!-- Right column — Snapshot card -->
         <div data-animate="fade-up" class="w-full max-w-sm lg:w-80 xl:w-96 flex-shrink-0">
           <div class="glass p-5 sm:p-6" data-draggable>
             <div class="flex items-center gap-2 mb-3">
@@ -251,20 +269,20 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
               <span class="font-mono text-[0.7rem] font-medium text-accent-primary tracking-wider uppercase">Snapshot</span>
             </div>
             <p class="text-body-sm text-text-secondary leading-relaxed mb-5">
-              Building production systems that businesses depend on — websites, ERP tooling, and brand identity — solo, powered by AI.
+              Full-stack developer building production systems for real clients. Websites, ERP, branding.
             </p>
             <div class="grid grid-cols-3 gap-4 border-t border-white/5 pt-4">
               <div class="text-center">
-                <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">1<span class="text-base">+</span></div>
-                <div class="font-mono text-[0.6rem] text-text-dim tracking-wider uppercase mt-1.5">years building</div>
+                <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">3<span class="text-base">+</span></div>
+                <div class="font-mono text-[0.6rem] text-text-dim tracking-wider uppercase mt-1.5">years exp</div>
               </div>
               <div class="text-center border-x border-white/5">
                 <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">3<span class="text-base">+</span></div>
-                <div class="font-mono text-[0.6rem] text-text-dim tracking-wider uppercase mt-1.5">projects shipped</div>
+                <div class="font-mono text-[0.6rem] text-text-dim tracking-wider uppercase mt-1.5">projects</div>
               </div>
               <div class="text-center">
-                <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">300<span class="text-base">K+</span></div>
-                <div class="font-mono text-[0.6rem] text-text-dim tracking-wider uppercase mt-1.5">garments tracked</div>
+                <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">5<span class="text-base">/5</span></div>
+                <div class="font-mono text-[0.6rem] text-text-dim tracking-wider uppercase mt-1.5">rating</div>
               </div>
             </div>
           </div>
@@ -272,7 +290,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
       </div>
     </div>
 
-    <!-- Scroll hint -->
     <div class="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2">
       <ScrollIndicator />
     </div>
@@ -286,57 +303,49 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     data-section
     class="section-snap relative"
   >
-
     <div class="relative z-10 section-inner">
       <div class="flex items-stretch gap-8 lg:gap-14">
-        <!-- Vertical text (desktop) -->
         <div class="hidden lg:flex items-center justify-center flex-shrink-0" style="width: 70px;">
           <span class="vertical-text">The Story</span>
         </div>
 
-        <!-- Content column -->
         <div class="flex-1 max-w-2xl">
-          <!-- Mobile heading -->
           <div class="lg:hidden mb-6">
             <span data-scramble class="section-label mb-2 block">About</span>
-            <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary">The Story</h2>
+            <h2 data-split data-parallax="0.8" class="text-heading-1 font-heading font-bold text-text-primary">The Story</h2>
           </div>
 
-          <!-- Paragraphs -->
           <div class="space-y-5">
             <p data-story-line class="text-body text-text-secondary leading-relaxed">
-              At 17, I walked into a garment factory in Faisalabad and saw a business exporting
-              <span class="text-text-primary font-medium">300,000 garments monthly</span>
-              to Boohoo, Pull&Bear, and Yours Clothing — running entirely on paper and Excel.
+              I started building websites when I was
+              <span class="text-text-primary font-medium">14</span>.
+              What began as curiosity turned into something I genuinely love doing. Three years later, I'm
+              <span class="text-gradient font-medium">shipping production code</span>
+              for real businesses.
             </p>
 
             <p data-story-line class="text-body text-text-secondary leading-relaxed">
-              I had zero coding experience. But I had a hypothesis:
-              <span class="text-gradient font-medium">AI could be the bridge</span>
-              between my ideas and their execution. So I volunteered to digitize everything.
+              My biggest project so far was for a garment exporter shipping to the UK. They needed everything: a website, an internal ERP system, and a complete rebrand. I handled
+              <span class="text-text-primary font-medium">all of it solo</span>.
             </p>
 
             <p data-story-line class="text-body text-text-secondary leading-relaxed">
-              I built their website from scratch — premium scroll animations, real-time quote systems, AI chat. Implemented an ERP that replaced
-              <span class="text-text-primary font-medium">50 daily paper gatepasses</span>
-              with digital tracking. Designed their entire brand identity.
+              The website has custom scroll animations, a real-time quote calculator, and an admin panel. The ERP manages their entire inventory and workflow. The branding covers everything from logos to letterheads.
             </p>
 
             <p data-story-line class="text-body text-text-secondary leading-relaxed">
-              A software house quoted
-              <span class="text-accent-primary font-semibold">₨2 million</span>.
-              I delivered it alone, at 17, using AI as my execution engine.
+              I work fast, communicate clearly, and
+              <span class="text-gradient font-medium">actually finish what I start</span>.
+              If you need something built properly, I can help.
             </p>
 
-            <!-- Quote -->
             <blockquote data-story-line class="glass p-4 sm:p-5 mt-2" style="border-left: 2px solid var(--accent); border-radius: 0 0.75rem 0.75rem 0;">
               <p class="text-sm text-text-primary italic leading-relaxed font-body">
-                "The thinking behind giving correct prompts to AI was me. I don't just use tools — I architect solutions."
+                "Give me a problem and I'll find a way to solve it. That's basically what I do."
               </p>
             </blockquote>
           </div>
 
-          <!-- Stats -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 sm:mt-10" data-animate="stagger">
             {stats.map((s) => (
               <div class="stat-card glass">
@@ -353,27 +362,22 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
   </section>
 
   <!-- ================================================================
-       SECTION 3 — THE ARSENAL  (Skills)
-       Desktop: scattered floating orbs with proximity tilt
-       Mobile:  categorised grid
+       SECTION 3 — THE ARSENAL
        ================================================================ -->
   <section
     id="skills"
     data-section
     class="section-snap relative"
   >
-
     <div class="relative z-10 section-inner">
-      <!-- Header -->
       <div class="text-center mb-6 lg:mb-4">
         <span data-scramble class="section-label mb-2 block">Technologies</span>
-        <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary mb-3">The Arsenal</h2>
+        <h2 data-split data-parallax="0.8" class="text-heading-1 font-heading font-bold text-text-primary mb-3">The Arsenal</h2>
         <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-sm mx-auto">
-          Technologies I use to build solutions that businesses depend on.
+          What I actually use to build things. No fluff.
         </p>
       </div>
 
-      <!-- ─── Desktop: Scattered floating orbs ─── -->
       <div class="hidden lg:block relative w-full" style="height: clamp(380px, 55vh, 620px);">
         {allSkills.map((skill) => (
           <div
@@ -390,7 +394,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           </div>
         ))}
 
-        <!-- Category hints — faint labels behind orbs -->
         <span class="absolute font-mono text-[0.6rem] tracking-[0.2em] uppercase text-text-dim/30 select-none pointer-events-none" style="top: 0%; left: 0%;">build</span>
         <span class="absolute font-mono text-[0.6rem] tracking-[0.2em] uppercase text-text-dim/30 select-none pointer-events-none" style="top: 17%; left: 0%;">animate</span>
         <span class="absolute font-mono text-[0.6rem] tracking-[0.2em] uppercase text-text-dim/30 select-none pointer-events-none" style="top: 36%; left: 0%;">backend</span>
@@ -398,7 +401,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
         <span class="absolute font-mono text-[0.6rem] tracking-[0.2em] uppercase text-text-dim/30 select-none pointer-events-none" style="top: 73%; left: 0%;">tools</span>
       </div>
 
-      <!-- ─── Mobile: Categorised grid ─── -->
       <div class="lg:hidden space-y-6 mt-4">
         {categories.map((cat) => (
           <div>
@@ -432,18 +434,15 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     data-section
     class="section-snap relative"
   >
-
     <div class="relative z-10 section-inner">
-      <!-- Header -->
       <div class="mb-6 lg:mb-8">
         <span data-scramble class="section-label mb-2 block">Portfolio</span>
-        <h2 data-split class="text-heading-1 font-heading font-bold text-text-primary mb-3">Selected Works</h2>
+        <h2 data-split data-parallax="0.8" class="text-heading-1 font-heading font-bold text-text-primary mb-3">Selected Works</h2>
         <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-md">
-          Real projects. Real businesses. Real impact. Each delivered solo, powered by AI.
+          Real projects for real clients. Each one shipped solo.
         </p>
       </div>
 
-      <!-- 2×2 Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
         {projects.map((p) => (
           <ProjectCard
@@ -458,7 +457,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           />
         ))}
 
-        <!-- CTA card -->
         <div class="project-card-interactive glass flex flex-col items-center justify-center p-6 text-center" data-animate="fade-up" style="min-height: 260px;">
           <div class="w-12 h-12 rounded-xl glass-strong flex items-center justify-center mb-4">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-primary">
@@ -467,13 +465,46 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
           </div>
           <h3 class="font-heading text-sm font-semibold text-text-primary mb-1.5">Your Project?</h3>
           <p class="text-xs text-text-secondary mb-4 leading-relaxed max-w-[200px]">
-            Have an idea that needs to become real? Let's build it.
+            Got something that needs building? Let's talk.
           </p>
           <a href="#contact" data-nav-link data-magnetic class="btn-primary btn-sm" onclick="event.stopPropagation()">
             <span>start a conversation</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
           </a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       TESTIMONIALS (between Works and Contact, no nav link)
+       ================================================================ -->
+  <section class="section-snap relative">
+    <div class="relative z-10 section-inner">
+      <div class="text-center mb-6 lg:mb-8">
+        <span data-scramble class="section-label mb-2 block">Testimonials</span>
+        <h2 data-split data-parallax="0.8" class="text-heading-1 font-heading font-bold text-text-primary mb-3">What They Say</h2>
+        <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-md mx-auto">
+          Feedback from the team at Reve Stitching.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" data-animate="stagger">
+        {testimonials.map((t) => (
+          <div class="glass p-5 sm:p-6 flex flex-col" style="border-left: 2px solid var(--accent); border-radius: 0 0.75rem 0.75rem 0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-accent-primary/30 mb-3 flex-shrink-0">
+              <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21c0 1 0 1 1 1z" fill="currentColor"/>
+              <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" fill="currentColor"/>
+            </svg>
+            <p class="text-body-sm text-text-secondary leading-relaxed italic mb-4 flex-1">
+              "{t.quote}"
+            </p>
+            <div class="border-t border-white/5 pt-3 mt-auto">
+              <span class="text-sm font-semibold text-text-primary block leading-tight">{t.name}</span>
+              <span class="font-mono text-[0.6rem] tracking-wider text-text-dim">{t.role}, {t.company}</span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -487,31 +518,28 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     class="section-snap relative"
   >
     <div class="relative z-10 section-inner">
-      <!-- Header -->
       <div class="text-center mb-8 lg:mb-10">
         <span data-scramble class="section-label mb-2 block">Contact</span>
         <h2
           data-hover-letters
           data-scramble
+          data-parallax="0.8"
           class="text-heading-1 font-heading font-bold text-text-primary mb-3"
         >
-          Let's Build Something Extraordinary
+          Let's Work Together
         </h2>
         <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-lg mx-auto">
-          Have a project in mind or need help shipping faster? Share a few details and I'll reply with next steps.
+          Have a project in mind? Send me the details and I'll get back to you within a day or two.
         </p>
       </div>
 
-      <!-- Two-column: Form + Quick Links -->
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10">
-        <!-- Form (3 cols) -->
         <div class="lg:col-span-3" data-animate="fade-up">
           <div class="glass p-5 sm:p-7">
             <ContactForm client:load />
           </div>
         </div>
 
-        <!-- Sidebar (2 cols) -->
         <div class="lg:col-span-2 flex flex-col gap-3" data-animate="stagger">
           <!-- WhatsApp -->
           <a
@@ -528,7 +556,7 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
             </div>
             <div class="min-w-0">
               <span class="text-sm font-semibold text-text-primary block leading-tight">WhatsApp</span>
-              <span class="font-mono text-[0.6rem] tracking-wider text-text-dim">quick response</span>
+              <span class="font-mono text-[0.6rem] tracking-wider text-text-dim">fastest way to reach me</span>
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-dim ml-auto opacity-0 group-hover:opacity-100 transition-opacity"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
           </a>
@@ -571,44 +599,64 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-dim ml-auto opacity-0 group-hover:opacity-100 transition-opacity"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
           </a>
 
+          <!-- LinkedIn -->
+          <a
+            href="https://linkedin.com/in/hamzaalidev"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact-link glass laser-glow p-4 flex items-center gap-3.5 group"
+            data-laser="accent"
+          >
+            <div class="w-10 h-10 rounded-lg glass-strong flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" class="text-[#0A66C2]">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <span class="text-sm font-semibold text-text-primary block leading-tight">LinkedIn</span>
+              <span class="font-mono text-[0.6rem] tracking-wider text-text-dim">@hamzaalidev</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-dim ml-auto opacity-0 group-hover:opacity-100 transition-opacity"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+
           <!-- Availability -->
-          <div class="glass p-4 flex items-center gap-3 mt-1">
+          <div class="glass p-4 flex items-center gap-3 mt-1" data-availability>
             <div class="relative flex items-center justify-center">
-              <span class="w-2 h-2 rounded-full bg-accent-success"></span>
+              <span class="w-2 h-2 rounded-full bg-accent-success" data-availability-dot></span>
               <span class="w-2 h-2 rounded-full bg-accent-success absolute animate-ping opacity-75"></span>
             </div>
-            <span class="text-xs text-text-secondary font-body">
-              Currently available for new projects
+            <span class="text-xs text-text-secondary font-body" data-availability-text>
+              Currently taking on new projects
             </span>
           </div>
 
           <p class="text-center lg:text-left text-[0.65rem] font-mono text-text-dim mt-0.5">
-            usually replies within 24-48 hours
+            Usually responds within 24 hours
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Floating Footer -->
   <Footer />
+
+  <div data-void-zone class="w-full py-6" aria-hidden="true"></div>
 </Layout>
 
-<!-- ================================================================
-     SCOPED STYLES
-     ================================================================ -->
+<script>
+  import { themes } from '../config/theme';
+  window.__eggThemes = themes;
+</script>
+
 <style>
-  /* Hero needs extra top padding for floating header */
   #hero {
     padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 2rem);
   }
 
-  /* Non-hero snapping sections get gentle top padding to avoid header overlap */
   #story, #skills, #work, #contact {
     padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 1.5rem);
   }
 
-  /* ─── Contact link hover states ─── */
   .contact-link:nth-child(1):hover,
   .contact-link:nth-child(1):active {
     border-color: rgba(16, 185, 129, 0.15) !important;
@@ -624,15 +672,18 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
     border-color: rgba(250, 250, 250, 0.08) !important;
     background: rgba(250, 250, 250, 0.02) !important;
   }
+  .contact-link:nth-child(4):hover,
+  .contact-link:nth-child(4):active {
+    border-color: rgba(10, 102, 194, 0.15) !important;
+    background: rgba(10, 102, 194, 0.03) !important;
+  }
 
-  /* ─── Desktop stat sizes ─── */
   @media (max-width: 639px) {
     .stat-card { padding: 1rem 0.75rem; }
     .stat-card .stat-number { font-size: clamp(1.5rem, 6vw, 2rem); }
     .stat-card .stat-label { font-size: 0.625rem; }
   }
 
-  /* ─── Arsenal orb container — overflow visible for float ─── */
   #skills .relative[style*="height"] {
     overflow: visible;
   }

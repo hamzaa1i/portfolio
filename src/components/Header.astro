@@ -13,15 +13,15 @@ const navItems = [
   data-header
   class="floating-header"
 >
-  <div class="flex items-center justify-between h-full px-5">
+  <div class="flex items-center justify-between h-full px-6">
     <!-- Logo — ~ opens terminal -->
-    <div class="relative z-10 select-none flex items-center">
+    <div class="relative z-10 select-none flex items-center" data-logo-area>
       <button
         data-terminal-trigger
-        class="terminal-trigger font-mono text-[0.8rem] font-semibold text-accent-primary hover:text-accent-hover transition-colors duration-300"
+        class="terminal-trigger font-mono text-[0.85rem] font-semibold text-accent-primary hover:text-accent-hover transition-colors duration-300"
         aria-label="Open terminal"
         title="Open terminal"
-      >~</button><a href="#hero" data-nav-link class="font-mono text-[0.8rem] font-semibold tracking-tight text-text-muted hover:text-text-primary transition-colors duration-300">/<span class="text-text-primary">hamza</span></a>
+        >~</button><a href="#hero" data-nav-link class="font-mono text-[0.85rem] font-semibold tracking-tight text-text-muted hover:text-text-primary transition-colors duration-300">/<span class="text-text-primary">hamza</span></a>
     </div>
 
     <!-- Desktop Nav -->
@@ -32,6 +32,35 @@ const navItems = [
 
       <div class="w-px h-3.5 bg-white/8 mx-0.5"></div>
 
+      <!-- Resume Download -->
+      <a
+        href="/resume.pdf"
+        download="Hamza_Ali_Resume.pdf"
+        class="header-icon-btn"
+        data-sound="click"
+        aria-label="Download resume"
+        title="Download resume"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </a>
+
+      <!-- Sound Mute Toggle -->
+      <button
+        data-sound-toggle
+        class="header-icon-btn"
+        aria-label="Toggle sound"
+        title="Toggle sound"
+      >
+        <svg data-sound-on width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+        <svg data-sound-off width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+        </svg>
+      </button>
+
       <ThemeSwitcher />
 
       <a
@@ -41,7 +70,7 @@ const navItems = [
         data-magnetic
         data-magnetic-strength="0.25"
         data-magnetic-radius="60"
-        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-[0.7rem] font-medium text-void bg-accent-primary hover:bg-accent-hover transition-colors duration-200"
+        class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono text-[0.75rem] font-medium text-void bg-accent-primary hover:bg-accent-hover transition-colors duration-200"
       >
         <span>contact me</span>
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -156,6 +185,22 @@ const navItems = [
   }
   .mobile-nav-link:hover span.font-mono:last-child {
     color: var(--accent) !important;
+  }
+    .header-icon-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: color 0.3s ease, transform 0.2s ease;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .header-icon-btn:hover {
+    color: var(--accent);
+    transform: scale(1.1);
   }
 </style>
 

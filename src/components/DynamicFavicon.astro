@@ -1,0 +1,47 @@
+---
+// DynamicFavicon.astro — Custom drawn ~/h vector logo
+// Crisp at 16x16, perfectly spaced, dynamic colors.
+---
+
+<link id="dynamic-favicon" rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<script is:inline>
+(function () {
+  function updateFavicon() {
+    var s = getComputedStyle(document.documentElement);
+    var bg = (s.getPropertyValue('--void').trim() || '#09090B');
+    var ac = (s.getPropertyValue('--accent').trim() || '#C8A24E');
+    var sl = (s.getPropertyValue('--text-muted').trim() || '#71717A');
+    var tx = (s.getPropertyValue('--text-primary').trim() || '#FAFAFA');
+
+    // Drawing the logo with explicit SVG paths (no text blur)
+    var svg =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
+      '<rect width="32" height="32" rx="6" fill="' + bg + '"/>' +
+      '<path d="M 5 16.5 Q 7 14 9 16.5 T 13 16.5" fill="none" stroke="' + ac + '" stroke-width="2.5" stroke-linecap="round"/>' +
+      '<path d="M 14 23 L 18 9" fill="none" stroke="' + sl + '" stroke-width="2.5" stroke-linecap="round"/>' +
+      '<path d="M 21 8 V 23 M 21 15.5 C 21 12 27 12 27 15.5 V 23" fill="none" stroke="' + tx + '" stroke-width="2.5" stroke-linecap="round"/>' +
+      '</svg>';
+
+    var link = document.getElementById('dynamic-favicon');
+    if (!link) {
+      link = document.createElement('link');
+      link.id = 'dynamic-favicon';
+      link.rel = 'icon';
+      link.type = 'image/svg+xml';
+      document.head.appendChild(link);
+    }
+    link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateFavicon);
+  } else {
+    setTimeout(updateFavicon, 0);
+  }
+
+  document.addEventListener('theme:change', function () {
+    setTimeout(updateFavicon, 50);
+  });
+})();
+</script>
