@@ -2085,7 +2085,7 @@ function initEasterEggs() {
   /* ── Listen for terminal-triggered eggs ── */
   document.addEventListener("easter:matrix", triggerMatrix);
 
-  /* ── Egg 1: Click Logo 5x → Theme Roulette ── */
+  /* ── Egg 1: Click Logo 5x → Glitch Pulse ── */
   (function () {
     const logoArea = document.querySelector("[data-logo-area]");
     if (!logoArea) return;
@@ -2107,108 +2107,112 @@ function initEasterEggs() {
         if (eggActive) return;
         eggActive = true;
 
-        var allThemes = window.__eggThemes || {};
-        var keys = Object.keys(allThemes);
-        if (!keys.length) {
-          eggActive = false;
-          return;
-        }
+        var accent = getAccent();
+        var rect = logoArea.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
 
-        var originalKey = null;
-        try {
-          originalKey = localStorage.getItem("portfolio-theme");
-        } catch (ex) {}
-        if (!originalKey || !allThemes[originalKey]) originalKey = keys[0];
+        /* 1. Logo glitch shake */
+        var shakeTl = gsap.timeline();
+        var shakes = [
+          { x: -4, y: 0, duration: 0.04 },
+          { x: 6, y: -2, duration: 0.04 },
+          { x: -3, y: 3, duration: 0.03 },
+          { x: 5, y: -1, duration: 0.04 },
+          { x: -6, y: 2, duration: 0.03 },
+          { x: 3, y: -3, duration: 0.04 },
+          { x: -2, y: 1, duration: 0.03 },
+          { x: 0, y: 0, duration: 0.05 },
+        ];
 
+        shakes.forEach(function (s) {
+          shakeTl.to(logoArea, {
+            x: s.x,
+            y: s.y,
+            duration: s.duration,
+            ease: "none",
+          });
+        });
+
+        /* 2. Logo accent glow flash */
         gsap.to(logoArea, {
-          rotation: 720,
-          duration: 3,
-          ease: "power4.out",
+          textShadow: "0 0 30px " + accent + ", 0 0 60px " + accent + "60",
+          duration: 0.15,
+          yoyo: true,
+          repeat: 1,
+          ease: "power2.out",
           onComplete: function () {
-            gsap.set(logoArea, { rotation: 0 });
+            gsap.set(logoArea, { textShadow: "none" });
           },
         });
 
-        var cycleCount = 0;
-        var maxCycles = 20;
-        var h = document.documentElement;
-        var dot = document.querySelector(".theme-dot-inner");
+        /* 3. Shockwave ring */
+        var ring = document.createElement("div");
+        ring.style.cssText =
+          "position:fixed;top:" + cy + "px;left:" + cx + "px;z-index:9998;" +
+          "width:0;height:0;border-radius:50%;pointer-events:none;" +
+          "border:2px solid " + accent + ";" +
+          "transform:translate(-50%,-50%);opacity:0.8;";
+        document.body.appendChild(ring);
 
-        var cycleInterval = setInterval(function () {
-          var randomKey = keys[Math.floor(Math.random() * keys.length)];
-          var th = allThemes[randomKey];
-          if (th) {
-            h.style.setProperty("--accent", th.accent);
-            h.style.setProperty("--void", th.void);
-            h.style.setProperty("--text-primary", th.textPrimary);
-            h.style.setProperty("--text-secondary", th.textSecondary);
-            h.style.setProperty("--accent-glow", th.accentGlow);
-            h.style.backgroundColor = th.void;
-            if (dot) dot.style.background = th.accent;
-          }
-          cycleCount++;
-          if (cycleCount >= maxCycles) {
-            clearInterval(cycleInterval);
-            setTimeout(function () {
-              var restoreTh = allThemes[originalKey];
-              if (restoreTh) {
-                h.style.setProperty("--void", restoreTh.void);
-                h.style.setProperty("--midnight", restoreTh.midnight);
-                h.style.setProperty("--surface", restoreTh.surface);
-                h.style.setProperty("--elevated", restoreTh.elevated);
-                h.style.setProperty("--glass-bg", restoreTh.glassBg);
-                h.style.setProperty("--glass-border", restoreTh.glassBorder);
-                h.style.setProperty("--glass-hover", restoreTh.glassHover);
-                h.style.setProperty(
-                  "--glass-hover-border",
-                  restoreTh.glassHoverBorder,
-                );
-                h.style.setProperty("--text-primary", restoreTh.textPrimary);
-                h.style.setProperty(
-                  "--text-secondary",
-                  restoreTh.textSecondary,
-                );
-                h.style.setProperty("--text-muted", restoreTh.textMuted);
-                h.style.setProperty("--text-dim", restoreTh.textDim);
-                h.style.setProperty("--accent", restoreTh.accent);
-                h.style.setProperty("--accent-hover", restoreTh.accentHover);
-                h.style.setProperty("--accent-dim", restoreTh.accentDim);
-                h.style.setProperty("--accent-glow", restoreTh.accentGlow);
-                h.style.setProperty("--accent-subtle", restoreTh.accentSubtle);
-                h.style.setProperty(
-                  "--accent-contrast",
-                  restoreTh.accentContrast,
-                );
-                h.style.setProperty("--accent-success", restoreTh.success);
-                h.style.setProperty(
-                  "--gradient-accent-text",
-                  restoreTh.gradientText,
-                );
-                h.style.backgroundColor = restoreTh.void;
-                h.style.color = restoreTh.textPrimary;
-                if (restoreTh.isDark) {
-                  h.classList.add("dark");
-                  h.classList.remove("light");
-                } else {
-                  h.classList.remove("dark");
-                  h.classList.add("light");
-                }
-                if (dot) dot.style.background = restoreTh.accent;
-                try {
-                  localStorage.setItem("portfolio-theme", originalKey);
-                } catch (ex) {}
-              }
-              document.dispatchEvent(
-                new CustomEvent("theme:change", {
-                  detail: { key: originalKey },
-                }),
-              );
-              eggActive = false;
-            }, 300);
-          }
-        }, 150);
+        gsap.to(ring, {
+          width: 300,
+          height: 300,
+          opacity: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          onComplete: function () { ring.remove(); },
+        });
+
+        /* 4. Particles */
+        for (var i = 0; i < 12; i++) {
+          var p = document.createElement("div");
+          var size = 2 + Math.random() * 4;
+          var angle = (Math.PI * 2 * i) / 12 + (Math.random() - 0.5) * 0.3;
+          var dist = 60 + Math.random() * 100;
+
+          p.style.cssText =
+            "position:fixed;top:" + cy + "px;left:" + cx + "px;z-index:9998;" +
+            "width:" + size + "px;height:" + size + "px;border-radius:50%;" +
+            "background:" + accent + ";pointer-events:none;" +
+            "transform:translate(-50%,-50%);";
+          document.body.appendChild(p);
+
+          gsap.to(p, {
+            x: Math.cos(angle) * dist,
+            y: Math.sin(angle) * dist,
+            opacity: 0,
+            scale: 0,
+            duration: 0.5 + Math.random() * 0.3,
+            ease: "power2.out",
+            delay: Math.random() * 0.05,
+            onComplete: function () { this.targets()[0].remove(); },
+          });
+        }
+
+        /* 5. Brief screen flash */
+        var flash = document.createElement("div");
+        flash.style.cssText =
+          "position:fixed;inset:0;z-index:9997;pointer-events:none;" +
+          "background:" + accent + ";opacity:0;";
+        document.body.appendChild(flash);
+
+        gsap.to(flash, {
+          opacity: 0.06,
+          duration: 0.08,
+          yoyo: true,
+          repeat: 1,
+          ease: "power2.out",
+          onComplete: function () { flash.remove(); },
+        });
+
+        /* Done */
+        setTimeout(function () {
+          gsap.set(logoArea, { clearProps: "x,y,textShadow" });
+          eggActive = false;
+        }, 800);
       }
-    });
+    }, true);
   })();
 
   /* ── Eggs 2,7,8,10,11,12: Typed Word Triggers (merged buffer) ── */
@@ -2290,7 +2294,9 @@ function initEasterEggs() {
 
         var targets = gsap.utils.toArray(
           ".section-inner > *, .stat-card, .skill-orb, .project-card-interactive, .floating-footer",
-        );
+        ).filter(function(el) {
+          return !el.classList.contains('skel-placeholder');
+        });
 
         if (!targets.length) {
           eggActive = false;
@@ -2307,6 +2313,9 @@ function initEasterEggs() {
               ease: "elastic.out(1, 0.4)",
               stagger: 0.02,
               onComplete: function () {
+                targets.forEach(function(t) {
+                  gsap.set(t, { clearProps: "all" });
+                });
                 eggActive = false;
               },
             });
