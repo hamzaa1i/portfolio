@@ -1,20 +1,16 @@
 ---
-// Preloader.astro — Brand-consistent ~/hamza entry sequence
-// Colored typing: ~ (accent) / (dim) hamza (primary)
-// Thin line caret instead of block
+// Preloader.astro — ~/hamza system boot sequence
+// Brand typing → boot log → command prompt → launch
+// Theme-aware · Skippable · Session-cached
 ---
 
 <div id="preloader" aria-hidden="true">
   <div class="pl-inner">
-    <div class="pl-logo">
-      <span id="pl-text"></span><span class="pl-caret"></span>
+    <div class="pl-brand" id="pl-brand">
+      <span id="pl-brand-text"></span><span class="pl-caret" id="pl-brand-caret"></span>
     </div>
-    <div class="pl-track" id="pl-track">
-      <div class="pl-fill" id="pl-fill"></div>
-    </div>
-    <div class="pl-meta" id="pl-meta">
-      <span id="pl-pct">0</span><span class="pl-dim">%</span>
-    </div>
+    <div class="pl-boot" id="pl-boot"></div>
+    <div class="pl-prompt" id="pl-prompt"></div>
   </div>
 </div>
 
@@ -25,84 +21,117 @@
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: var(--void, #09090B);
+    background: var(--void, #09090b);
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 2rem;
   }
 
   #preloader.pl-exit {
     animation: plOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
+
   @keyframes plOut {
-    to {
-      opacity: 0;
-      transform: translateY(-30px);
-    }
+    to { opacity: 0; transform: translateY(-24px); }
   }
 
   .pl-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.75rem;
+    max-width: 540px;
+    width: 100%;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
   }
 
-  .pl-logo {
-    display: flex;
-    align-items: center;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: clamp(1.75rem, 5vw, 2.75rem);
+  /* ── Brand ── */
+  .pl-brand {
+    font-size: clamp(2.75rem, 8vw, 4.5rem);
     font-weight: 700;
     letter-spacing: -0.03em;
-    min-height: 1.3em;
+    margin-bottom: 2.5rem;
+    min-height: 1.2em;
+    display: flex;
+    align-items: center;
   }
 
-  /* Thin line caret */
   .pl-caret {
     display: inline-block;
-    width: 2px;
-    height: 0.85em;
-    background: var(--accent, #C8A24E);
+    width: 3px;
+    height: 0.82em;
+    background: var(--accent, #c8a24e);
     margin-left: 2px;
     border-radius: 1px;
     vertical-align: baseline;
     animation: plBlink 1s step-end infinite;
   }
+
   @keyframes plBlink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
   }
 
-  .pl-track {
-    width: min(260px, 55vw);
-    height: 2px;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 2px;
+  /* ── Boot Lines ── */
+  .pl-boot {
+    font-size: clamp(0.62rem, 1.2vw, 0.74rem);
+    line-height: 1.9;
+  }
+
+  .pl-line {
+    opacity: 0;
+    transform: translateX(-3px);
+    animation: plLineIn 0.25s ease forwards;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @keyframes plLineIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .pl-ok { color: #10b981; font-weight: 600; }
+  .pl-fail { color: #ef4444; font-weight: 600; }
+  .pl-warn { color: #f59e0b; font-weight: 600; }
+  .pl-service { color: var(--text-secondary, #a1a1aa); }
+
+  /* ── Separator ── */
+  .pl-sep {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.04);
+    margin: 0.85rem 0;
     opacity: 0;
     transition: opacity 0.4s ease;
   }
 
-  .pl-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--accent, #C8A24E);
-    border-radius: 2px;
-    box-shadow: 0 0 10px rgba(200, 162, 78, 0.25);
+  .pl-sep.visible { opacity: 1; }
+
+  /* ── Prompt ── */
+  .pl-prompt {
+    font-size: clamp(0.62rem, 1.2vw, 0.74rem);
+    line-height: 1.9;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
-  .pl-meta {
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 0.7rem;
-    color: var(--text-dim, #3F3F46);
-    letter-spacing: 0.12em;
-    font-variant-numeric: tabular-nums;
-    opacity: 0;
-    transition: opacity 0.4s ease;
+  .pl-prompt.visible { opacity: 1; }
+
+  .pl-user { color: var(--accent, #c8a24e); font-weight: 700; }
+  .pl-at { color: var(--text-dim, #3f3f46); }
+  .pl-host { color: var(--text-muted, #71717a); font-weight: 500; }
+  .pl-colon { color: var(--text-dim, #3f3f46); }
+  .pl-path { color: var(--accent, #c8a24e); opacity: 0.7; font-weight: 500; }
+  .pl-dollar { color: var(--text-dim, #3f3f46); }
+  .pl-cmd { color: var(--text-primary, #fafafa); font-weight: 500; }
+
+  /* ── Light theme ── */
+  html:not(.dark) .pl-sep {
+    background: rgba(0, 0, 0, 0.06);
   }
-  .pl-dim {
-    opacity: 0.5;
+
+  /* ── Mobile ── */
+  @media (max-width: 480px) {
+    .pl-inner { max-width: 100%; }
+    .pl-brand { font-size: clamp(2.25rem, 11vw, 3.25rem); margin-bottom: 2rem; }
+    .pl-boot, .pl-prompt { font-size: 0.6rem; }
   }
 </style>
 
@@ -139,10 +168,7 @@
     setTimeout(function () { try { el.remove(); } catch (e) {} }, 1200);
   }
 
-  if (isReturn || noMotion) {
-    finish();
-    return;
-  }
+  if (isReturn || noMotion) { finish(); return; }
 
   document.documentElement.style.overflow = 'hidden';
 
@@ -150,71 +176,153 @@
   document.addEventListener('click', skip);
   document.addEventListener('keydown', skip);
 
-  var textEl  = document.getElementById('pl-text');
-  var trackEl = document.getElementById('pl-track');
-  var fillEl  = document.getElementById('pl-fill');
-  var metaEl  = document.getElementById('pl-meta');
-  var pctEl   = document.getElementById('pl-pct');
+  var brandTextEl = document.getElementById('pl-brand-text');
+  var brandCaretEl = document.getElementById('pl-brand-caret');
+  var bootEl = document.getElementById('pl-boot');
+  var promptEl = document.getElementById('pl-prompt');
 
-  if (!textEl || !fillEl || !pctEl) { finish(); return; }
+  if (!brandTextEl || !bootEl || !promptEl) { finish(); return; }
 
-  /* ── Brand colors per character ── */
+  /* ── Theme colors ── */
   var s = getComputedStyle(document.documentElement);
-  var accentColor  = s.getPropertyValue('--accent').trim() || '#C8A24E';
-  var dimColor     = s.getPropertyValue('--text-dim').trim() || '#3F3F46';
+  var accentColor = s.getPropertyValue('--accent').trim() || '#C8A24E';
+  var dimColor = s.getPropertyValue('--text-dim').trim() || '#3F3F46';
   var primaryColor = s.getPropertyValue('--text-primary').trim() || '#FAFAFA';
 
+  /* ── Brand characters ── */
   var chars = [
-    { ch: '~', color: accentColor },
-    { ch: '/', color: dimColor },
-    { ch: 'h', color: primaryColor },
-    { ch: 'a', color: primaryColor },
-    { ch: 'm', color: primaryColor },
-    { ch: 'z', color: primaryColor },
-    { ch: 'a', color: primaryColor },
+    { ch: '~', color: accentColor, weight: '700' },
+    { ch: '/', color: dimColor, weight: '400', opacity: '0.5' },
+    { ch: 'h', color: primaryColor, weight: '700' },
+    { ch: 'a', color: primaryColor, weight: '700' },
+    { ch: 'm', color: primaryColor, weight: '700' },
+    { ch: 'z', color: primaryColor, weight: '700' },
+    { ch: 'a', color: primaryColor, weight: '700' },
   ];
 
-  var ci   = 0;
-  var prog = 0;
+  /* ── Boot lines ── */
+  var lines = [
+    { status: 'ok',   text: 'Starting system kernel...' },
+    { status: 'ok',   text: 'Loaded render-engine.service' },
+    { status: 'ok',   text: 'Mounted /dev/portfolio' },
+    { status: 'ok',   text: 'Started theme-engine.service' },
+    { status: 'ok',   text: 'Loaded font-stack.target' },
+    { status: 'ok',   text: 'Started sound-system.service' },
+    { status: 'fail', text: 'Failed to start sleep.service' },
+    { status: 'ok',   text: 'Reached target system.ready' },
+  ];
 
-  function typeNext() {
+  var ci = 0;
+  var li = 0;
+
+  /* ── Phase 1: Type ~/hamza (slow, deliberate) ── */
+  function typeBrand() {
     if (window.__preloaderDone) return;
     if (ci < chars.length) {
       var span = document.createElement('span');
       span.textContent = chars[ci].ch;
       span.style.color = chars[ci].color;
-      if (ci === 0) span.style.fontWeight = '700';
-      else if (ci === 1) { span.style.fontWeight = '400'; span.style.opacity = '0.5'; }
-      else span.style.fontWeight = '700';
-      textEl.appendChild(span);
+      span.style.fontWeight = chars[ci].weight;
+      if (chars[ci].opacity) span.style.opacity = chars[ci].opacity;
+      brandTextEl.appendChild(span);
       ci++;
-      setTimeout(typeNext, 70 + Math.random() * 50);
+
+      /* Slower for first two chars (~ and /), steady for the rest */
+      var delay = ci <= 2 ? (160 + Math.random() * 60) : (110 + Math.random() * 50);
+      setTimeout(typeBrand, delay);
     } else {
-      if (trackEl) trackEl.style.opacity = '1';
-      if (metaEl) metaEl.style.opacity = '1';
-      setTimeout(tick, 200);
+      /* Pause — let the brand name breathe */
+      setTimeout(startBoot, 600);
     }
   }
 
-  function tick() {
+  /* ── Phase 2: Boot lines (staggered, deliberate) ── */
+  function startBoot() {
+    if (window.__preloaderDone) return;
+    addBootLine();
+  }
+
+  function addBootLine() {
+    if (window.__preloaderDone) return;
+    if (li < lines.length) {
+      var div = document.createElement('div');
+      div.className = 'pl-line';
+      var line = lines[li];
+
+      var tag;
+      if (line.status === 'ok') tag = '<span class="pl-ok">[  OK  ]</span>';
+      else if (line.status === 'fail') tag = '<span class="pl-fail">[FAILED]</span>';
+      else tag = '<span class="pl-warn">[ WARN ]</span>';
+
+      div.innerHTML = tag + ' <span class="pl-service">' + line.text + '</span>';
+      bootEl.appendChild(div);
+      li++;
+
+      /* Timing: failed line gets a longer dramatic pause */
+      var delay;
+      if (line.status === 'fail') {
+        delay = 380;
+      } else if (li === lines.length) {
+        /* Last line (system.ready) — slightly longer pause before prompt */
+        delay = 300;
+      } else {
+        delay = 160 + Math.random() * 120;
+      }
+
+      setTimeout(addBootLine, delay);
+    } else {
+      showPromptSection();
+    }
+  }
+
+  /* ── Phase 3: Separator + prompt + command ── */
+  function showPromptSection() {
     if (window.__preloaderDone) return;
 
-    var inc = prog < 30 ? 3 + Math.random() * 5
-            : prog < 70 ? 2 + Math.random() * 3
-            : prog < 90 ? 1 + Math.random() * 2
-            : 0.5 + Math.random();
+    /* Hide brand caret */
+    if (brandCaretEl) brandCaretEl.style.display = 'none';
 
-    prog = Math.min(100, prog + inc);
-    fillEl.style.width = prog + '%';
-    pctEl.textContent = Math.round(prog);
+    /* Add separator */
+    var sep = document.createElement('div');
+    sep.className = 'pl-sep';
+    bootEl.appendChild(sep);
+    requestAnimationFrame(function () { sep.classList.add('visible'); });
 
-    if (prog < 100) {
-      setTimeout(tick, 18 + Math.random() * 18);
-    } else {
-      setTimeout(finish, 300);
-    }
+    setTimeout(function () {
+      if (window.__preloaderDone) return;
+
+      promptEl.innerHTML =
+        '<span class="pl-user">hamza</span>' +
+        '<span class="pl-at">@</span>' +
+        '<span class="pl-host">portfolio</span>' +
+        '<span class="pl-colon">:</span>' +
+        '<span class="pl-path">~</span>' +
+        '<span class="pl-dollar">$ </span>' +
+        '<span class="pl-cmd"></span>' +
+        '<span class="pl-caret"></span>';
+
+      promptEl.classList.add('visible');
+
+      var cmd = './start.sh';
+      var cmdEl = promptEl.querySelector('.pl-cmd');
+      var cmdI = 0;
+
+      function typeCmd() {
+        if (window.__preloaderDone) return;
+        if (cmdI < cmd.length) {
+          cmdEl.textContent += cmd[cmdI];
+          cmdI++;
+          setTimeout(typeCmd, 55 + Math.random() * 35);
+        } else {
+          setTimeout(finish, 400);
+        }
+      }
+
+      setTimeout(typeCmd, 200);
+    }, 350);
   }
 
-  setTimeout(typeNext, 200);
+  /* ── Start ── */
+  setTimeout(typeBrand, 350);
 })();
 </script>

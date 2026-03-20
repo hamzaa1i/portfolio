@@ -465,7 +465,7 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
   />
 ))}
 
-          <div class="project-card-interactive glass flex flex-col items-center justify-center p-6 text-center" data-animate="fade-up" style="min-height: 260px;">
+          <div class="project-cta glass flex flex-col items-center justify-center p-6 text-center" data-animate="fade-up" style="min-height: 260px;">
             <div class="w-12 h-12 rounded-xl glass-strong flex items-center justify-center mb-4">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent-primary">
                 <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -560,14 +560,14 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-dim ml-auto opacity-0 group-hover:opacity-100 transition-opacity"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
 
-            <!-- GitHub -->
-  <a
-    href="https://github.com/hamzaa1i"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="contact-link glass laser-glow p-4 flex items-center gap-3.5 group"
-    data-laser="dark"
-  >
+          <!-- GitHub -->
+          <a
+          href="https://github.com/hamzaa1i"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contact-link glass laser-glow p-4 flex items-center gap-3.5 group"
+          data-laser="github"
+          >
               <div class="w-10 h-10 rounded-lg glass-strong flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" class="text-text-primary">
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -581,13 +581,13 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
             </a>
 
             <!-- LinkedIn -->
-  <a
-    href="https://linkedin.com/in/hamzaalidev"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="contact-link glass laser-glow p-4 flex items-center gap-3.5 group"
-    data-laser="accent"
-  >
+            <a
+            href="https://linkedin.com/in/hamzaalidev"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact-link glass laser-glow p-4 flex items-center gap-3.5 group"
+            data-laser="linkedin"
+            >
               <div class="w-10 h-10 rounded-lg glass-strong flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" class="text-[#0A66C2]">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -610,10 +610,6 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
                 Currently taking on new projects
               </span>
             </div>
-
-            <p class="text-center lg:text-left text-[0.65rem] font-mono text-text-dim mt-0.5">
-              Usually responds within 24 hours
-            </p>
           </div>
         </div>
       </div>
@@ -622,7 +618,7 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
 
   <Footer />
 
-  <div data-void-zone class="w-full py-6" aria-hidden="true"></div>
+  <div data-void-zone class="w-full h-16" aria-hidden="true"></div>
 </Layout>
 
 <script>
@@ -649,35 +645,72 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
   })();
 </script>
 
+<script>
+  (function() {
+    var cta = document.querySelector('.project-cta');
+    if (!cta) return;
+    cta.addEventListener('mousemove', function(e) {
+      var rect = cta.getBoundingClientRect();
+      cta.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+      cta.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+    });
+  })();
+</script>
+
 <style>
   #hero {
     padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 2rem);
   }
 
-  #story, #skills, #work, #contact {
+  #story, #skills, #contact {
     padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 1.5rem);
   }
 
-  .contact-link:nth-child(1):hover,
-  .contact-link:nth-child(1):active {
-    border-color: rgba(16, 185, 129, 0.15) !important;
-    background: rgba(16, 185, 129, 0.03) !important;
+  #work {
+    padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 1.5rem);
+    padding-bottom: 2rem;
+    min-height: auto;
   }
-  .contact-link:nth-child(2):hover,
-  .contact-link:nth-child(2):active {
-    border-color: rgba(200, 162, 78, 0.15) !important;
-    background: rgba(200, 162, 78, 0.03) !important;
-  }
-  .contact-link:nth-child(3):hover,
-  .contact-link:nth-child(3):active {
-    border-color: rgba(250, 250, 250, 0.08) !important;
-    background: rgba(250, 250, 250, 0.02) !important;
-  }
-  .contact-link:nth-child(4):hover,
-  .contact-link:nth-child(4):active {
-    border-color: rgba(10, 102, 194, 0.15) !important;
-    background: rgba(10, 102, 194, 0.03) !important;
-  }
+
+/* WhatsApp - always green */
+.contact-link[data-laser="green"]:hover,
+.contact-link[data-laser="green"]:active {
+  border-color: rgba(16, 185, 129, 0.15) !important;
+  background: rgba(16, 185, 129, 0.03) !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.08);
+}
+
+/* Email - theme accent */
+.contact-link[data-laser="accent"]:hover,
+.contact-link[data-laser="accent"]:active {
+  border-color: var(--accent-glow) !important;
+  background: var(--accent-subtle) !important;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+/* GitHub - dark mode */
+.contact-link[data-laser="github"]:hover,
+.contact-link[data-laser="github"]:active {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background: rgba(36, 41, 46, 0.5) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* GitHub - light mode */
+html:not(.dark) .contact-link[data-laser="github"]:hover,
+html:not(.dark) .contact-link[data-laser="github"]:active {
+  border-color: rgba(36, 41, 46, 0.25) !important;
+  background: rgba(36, 41, 46, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(36, 41, 46, 0.15), 0 0 0 1px rgba(36, 41, 46, 0.1);
+}
+
+/* LinkedIn - always blue */
+.contact-link[data-laser="linkedin"]:hover,
+.contact-link[data-laser="linkedin"]:active {
+  border-color: rgba(10, 102, 194, 0.2) !important;
+  background: rgba(10, 102, 194, 0.04) !important;
+  box-shadow: 0 4px 16px rgba(10, 102, 194, 0.12);
+}
 
   @media (max-width: 639px) {
     .stat-card { padding: 1rem 0.75rem; }
@@ -688,4 +721,53 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
   #skills .relative[style*="height"] {
     overflow: visible;
   }
+  .project-cta {
+    transition: transform 0.4s var(--ease-out-quart), box-shadow 0.4s var(--ease-out-quart), border-color 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      var(--accent-glow) 0%,
+      transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .project-cta:hover::before {
+    opacity: 1;
+  }
+
+  .project-cta:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18), 0 6px 16px var(--accent-glow);
+    border-color: var(--accent-glow);
+  }
+
+  .project-cta > * {
+    position: relative;
+    z-index: 1;
+  }
+#work {
+  min-height: auto;
+  padding-bottom: 0;
+}
+
+#work .grid {
+  overflow: visible;
+}
+
+#contact {
+  margin-top: 0;
+  min-height: auto;
+  padding-bottom: clamp(3rem, 6vh, 5rem);
+}
 </style>

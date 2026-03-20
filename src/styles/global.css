@@ -378,59 +378,60 @@ input[type="submit"] {
   }
 
   /* ----- BUTTONS ----- */
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.75rem;
-    border-radius: 0.75rem;
-    font-family: "JetBrains Mono", monospace;
-    font-weight: 500;
-    font-size: 0.875rem;
-    color: var(--void);
-    background: var(--accent);
-    border: none;
-    transition: all 0.3s var(--ease-out-quart);
-    white-space: nowrap;
-    user-select: none;
-  }
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--void);
+  background: var(--accent);
+  border: none;
+  transition: all 0.3s var(--ease-out-quart);
+  white-space: nowrap;
+  user-select: none;
+}
 
-  .btn-primary:hover {
-    background: var(--accent-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 30px rgba(200, 162, 78, 0.2);
-  }
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px var(--accent-glow); /* ← CHANGED: now theme-aware */
+}
 
-  .btn-primary:active {
-    transform: translateY(0);
-  }
+.btn-primary:active {
+  transform: translateY(0);
+}
 
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.75rem;
-    border-radius: 0.75rem;
-    font-family: "JetBrains Mono", monospace;
-    font-weight: 500;
-    font-size: 0.875rem;
-    color: var(--text-primary);
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    transition: all 0.3s var(--ease-out-quart);
-    white-space: nowrap;
-    user-select: none;
-  }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.3s var(--ease-out-quart);
+  white-space: nowrap;
+  user-select: none;
+}
 
-  .btn-secondary:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-1px);
-  }
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--accent-glow); /* ← ADDED: theme-aware glow */
+}
 
-  .btn-secondary:active {
-    transform: translateY(0);
-  }
+.btn-secondary:active {
+  transform: translateY(0);
+}
 
   .btn-sm {
     padding: 0.5rem 1.25rem;
@@ -647,6 +648,14 @@ input[type="submit"] {
   --laser-color: rgba(0, 0, 0, 0.4);
 }
 
+.contact-link.laser-glow[data-laser="linkedin"] {
+  --laser-color: rgba(10, 102, 194, 0.6);
+}
+
+.contact-link.laser-glow[data-laser="github"] {
+  --laser-color: rgba(255, 255, 255, 0.45);
+}
+
 @media (pointer: coarse), (max-width: 1023px) {
   .laser-glow::before {
     display: none;
@@ -711,51 +720,6 @@ input[type="submit"] {
   [data-draggable]::after {
     display: none;
   }
-}
-
-/* ============================================================
-   PROJECT CARD POPUP EFFECT
-   ============================================================ */
-.project-card-interactive {
-  transition:
-    transform 0.5s var(--ease-out-expo),
-    box-shadow 0.5s var(--ease-out-expo),
-    z-index 0s;
-  position: relative;
-}
-
-/* Hover pop — !important overrides GSAP inline transforms from scroll reveals */
-.project-card-interactive:not(.expanded):hover {
-  transform: scale(1.05) !important;
-  z-index: 65;
-  box-shadow:
-    0 25px 80px rgba(0, 0, 0, 0.5),
-    0 0 40px rgba(200, 162, 78, 0.06);
-}
-
-/* Expanded state — arrow cursor, no hover pop */
-.project-card-interactive.expanded {
-  cursor:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='32' viewBox='0 0 28 32'%3E%3Cpath d='M3 3L3 27L9.5 20.5L15 29L19 27L13.5 18.5L22 18.5Z' fill='%23000000' stroke='%23FFFFFF' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")
-      3 3,
-    auto !important;
-}
-.project-card-interactive.expanded * {
-  cursor:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='32' viewBox='0 0 28 32'%3E%3Cpath d='M3 3L3 27L9.5 20.5L15 29L19 27L13.5 18.5L22 18.5Z' fill='%23000000' stroke='%23FFFFFF' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")
-      3 3,
-    auto !important;
-}
-
-/* Full popup on click — card moves to body, escapes stacking context */
-.project-card-interactive.expanded {
-  position: fixed;
-  z-index: 75;
-  max-height: 85vh;
-  overflow-y: auto;
-  box-shadow:
-    0 40px 100px rgba(0, 0, 0, 0.6),
-    0 0 60px rgba(200, 162, 78, 0.08);
 }
 
 /* Blur overlay behind expanded card */
@@ -1384,14 +1348,13 @@ input[type="submit"] {
     transform: scale(1.03);
   }
 
-  .contact-link {
-    transition: all 0.4s var(--ease-out-quart);
-  }
-  .contact-link:hover {
-    border-color: rgba(200, 162, 78, 0.15) !important;
-    background: var(--accent-subtle) !important;
-    transform: translateY(-2px);
-  }
+.contact-link {
+  transition: all 0.4s var(--ease-out-quart);
+}
+.contact-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px var(--accent-glow);
+}
 
   .content-layer {
     position: relative;
@@ -1430,14 +1393,6 @@ input[type="submit"] {
     padding-bottom: clamp(4rem, 10vh, 6rem);
   }
 
-  /* Disable card popup on mobile */
-  .project-card-interactive:hover {
-    transform: none;
-    z-index: auto;
-    box-shadow: none;
-  }
-}
-
 @media (max-width: 639px) {
   :root {
     --container-padding: 1rem;
@@ -1450,7 +1405,7 @@ input[type="submit"] {
     font-size: 0.8125rem;
   }
 }
-
+}
 /* Mobile menu text size for very short screens */
 @media (max-height: 640px) {
   .mobile-nav-text {
@@ -1730,6 +1685,14 @@ html:not(.dark) input[type="submit"] {
     auto;
 }
 
+html:not(.dark) .project-card-interactive.expanded,
+html:not(.dark) .project-card-interactive.expanded * {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='32' viewBox='0 0 28 32'%3E%3Cpath d='M3 3L3 27L9.5 20.5L15 29L19 27L13.5 18.5L22 18.5Z' fill='%23FFFFFF' stroke='%23000000' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")
+      3 3,
+    auto !important;
+}
+
 /* Theme switcher dropdown */
 html:not(.dark) .theme-dropdown-panel {
   background: rgba(255, 255, 255, 0.94);
@@ -1741,14 +1704,6 @@ html:not(.dark) .theme-opt:hover {
 }
 html:not(.dark) .theme-opt.active {
   background: rgba(0, 0, 0, 0.03);
-}
-
-html:not(.dark) .project-card-interactive.expanded,
-html:not(.dark) .project-card-interactive.expanded * {
-  cursor:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='32' viewBox='0 0 28 32'%3E%3Cpath d='M3 3L3 27L9.5 20.5L15 29L19 27L13.5 18.5L22 18.5Z' fill='%23FFFFFF' stroke='%23000000' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")
-      3 3,
-    auto !important;
 }
 
 /* Project placeholders */
@@ -1825,15 +1780,6 @@ html:not(.dark) .lightbox-overlay {
 [data-draggable-currently]:hover {
   transform: none;
   border-color: var(--glass-hover-border);
-}
-
-/* Project cards — stronger lift */
-.project-card-interactive.glass:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.15),
-    0 4px 12px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 /* Stat cards — scale */
