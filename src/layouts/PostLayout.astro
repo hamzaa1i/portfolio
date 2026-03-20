@@ -19,14 +19,34 @@ const {
   readingTime,
   tags = [],
   description = '',
-  backUrl = '/blog',
-  backLabel = 'back to blog',
+  backUrl = '/writing',
+  backLabel = 'back to writing',
 } = Astro.props;
+
+const articleSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "datePublished": date,
+  "author": {
+    "@type": "Person",
+    "name": "Hamza Ali",
+    "url": "https://hamzaalidev.vercel.app"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Hamza Ali"
+  },
+  "keywords": tags.join(', ')
+});
 ---
 
-<Layout title={`${title} — Hamza Ali`}>
+<Layout title={`${title} — Hamza Ali`} description={description}>
   <Header />
-<div class="reading-progress" id="reading-progress"></div>
+
+  <div class="reading-progress" id="reading-progress"></div>
+
   <main
     class="min-h-screen px-6"
     style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);"
@@ -82,26 +102,40 @@ const {
 
   <div class="py-10"></div>
   <Footer />
+
+  <script type="application/ld+json" set:html={articleSchema}></script>
+
   <script>
-  (function() {
-    var bar = document.getElementById('reading-progress');
-    if (!bar) return;
+    (function() {
+      var bar = document.getElementById('reading-progress');
+      if (!bar) return;
 
-    function update() {
-      var scrollTop = window.scrollY;
-      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (docHeight <= 0) return;
-      var progress = Math.min((scrollTop / docHeight) * 100, 100);
-      bar.style.width = progress + '%';
-    }
+      function update() {
+        var scrollTop = window.scrollY;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) return;
+        var progress = Math.min((scrollTop / docHeight) * 100, 100);
+        bar.style.width = progress + '%';
+      }
 
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-  })();
-</script>
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+  </script>
 </Layout>
 
 <style is:global>
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--accent);
+    z-index: 9999;
+    transition: width 0.1s linear;
+  }
+
   .post-content h2 {
     font-family: 'JetBrains Mono', monospace;
     font-size: clamp(1.25rem, 3vw, 1.5rem);
@@ -119,16 +153,6 @@ const {
     margin-top: 2rem;
     margin-bottom: 0.75rem;
   }
-  .reading-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: var(--accent);
-  z-index: 9999;
-  transition: width 0.1s linear;
-}
   .post-content p {
     font-family: 'Inter', system-ui, sans-serif;
     font-size: clamp(0.9rem, 1.5vw, 1rem);

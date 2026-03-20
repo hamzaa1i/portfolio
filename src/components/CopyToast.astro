@@ -1,5 +1,5 @@
 <div id="copy-toast" class="copy-toast">
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="copy-toast-icon"></span>
   <span id="copy-toast-text">Copied!</span>
 </div>
 
@@ -31,28 +31,47 @@
     visibility: visible;
     transform: translateX(-50%) translateY(0);
   }
+  #copy-toast-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+  #copy-toast-icon svg {
+    width: 14px;
+    height: 14px;
+  }
 </style>
 
 <script is:inline>
 (function() {
   var toast = document.getElementById('copy-toast');
   var toastText = document.getElementById('copy-toast-text');
+  var toastIcon = document.getElementById('copy-toast-icon');
   if (!toast) return;
 
   var timer = null;
 
-  function showToast(text) {
-    if (toastText) toastText.textContent = text || 'Copied!';
+  var icons = {
+    copy: '<svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
+    music: '<svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+    info: '<svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  };
+
+  function showToast(text, type) {
+    if (toastText) toastText.textContent = text || 'Done';
+    if (toastIcon) toastIcon.innerHTML = icons[type || 'info'] || icons.info;
     clearTimeout(timer);
     toast.classList.add('visible');
     timer = setTimeout(function() {
       toast.classList.remove('visible');
-    }, 2000);
+    }, 2500);
   }
 
   window.__showToast = showToast;
 
-  /* Email links — single click copies, double click opens mail client */
   document.querySelectorAll('a[href^="mailto:"]').forEach(function(link) {
     var clickCount = 0;
     var clickTimer = null;
@@ -63,17 +82,15 @@
 
       if (clickCount === 1) {
         clickTimer = setTimeout(function() {
-          /* Single click — copy email */
           var email = link.getAttribute('href').replace('mailto:', '');
           if (navigator.clipboard) {
             navigator.clipboard.writeText(email).then(function() {
-              showToast('Email copied — double-click to open mail app');
+              showToast('Email copied — double-click to open mail app', 'copy');
             });
           }
           clickCount = 0;
         }, 300);
       } else if (clickCount === 2) {
-        /* Double click — open mail client */
         clearTimeout(clickTimer);
         clickCount = 0;
         window.location.href = link.getAttribute('href');

@@ -7,20 +7,20 @@ import PostLayout from '../../layouts/PostLayout.astro';
   date="November 2025"
   readingTime="6 min read"
   tags={['Astro 5', 'Tailwind CSS', 'GSAP', 'Supabase', 'Vercel']}
-  description="How I built a full production website for a UK garment exporter shipping 300,000+ pieces monthly."
+  description="How I built a full production website for a garment exporter shipping to the UK."
   backUrl="/work"
   backLabel="back to case studies"
 >
 
 <h2>The Client</h2>
 
-<p>Reve Stitching is a garment manufacturing and export company based in Faisalabad, Pakistan. They export over 300,000 garments every month to major UK and EU brands including Boohoo, Pull&Bear, and Yours Clothing.</p>
+<p>Reve Stitching is a garment manufacturing and export company based in Faisalabad, Pakistan. They export large volumes of garments every month to UK and EU brands including Boohoo, Pull&Bear, and Yours Clothing.</p>
 
-<p>When I started working with them, they had no online presence whatsoever. No website, no digital brand, nothing. International buyers had no way to evaluate them before making contact.</p>
+<p>When I started working with them, they had no online presence. No website, no digital brand, nothing. International buyers had no way to evaluate them before making contact.</p>
 
 <h2>The Problem</h2>
 
-<p>In the garment export industry, credibility is everything. UK buyers receive dozens of factory pitches weekly. Without a professional website, Reve Stitching was competing with one hand tied behind their back.</p>
+<p>In the garment export industry, credibility is everything. UK buyers receive dozens of factory pitches every week. Without a professional website, Reve Stitching was competing at a disadvantage.</p>
 
 <p>They needed:</p>
 <ul>
@@ -28,53 +28,51 @@ import PostLayout from '../../layouts/PostLayout.astro';
   <li>A system for buyers to request quotes and samples online</li>
   <li>An admin dashboard for the team to manage incoming requests</li>
   <li>Mobile responsiveness for buyers browsing on phones</li>
-  <li>Fast loading speeds (their buyers are in the UK, server latency matters)</li>
+  <li>Fast loading speeds for UK-based visitors</li>
 </ul>
 
 <h2>Technical Decisions</h2>
 
-<p><strong>Framework: Astro 5</strong> — I chose Astro because the site is content-heavy with minimal client-side interactivity. Astro ships zero JavaScript by default, which means blazing fast page loads. The islands architecture lets me add React components only where needed (like the quote form).</p>
+<p><strong>Framework: Astro 5.</strong> The site is content-heavy with minimal client-side interactivity. Astro ships zero JavaScript by default, which keeps page loads fast. The islands architecture lets me add React components only where needed, like the quote form.</p>
 
-<p><strong>Styling: Tailwind CSS</strong> — Utility-first CSS let me iterate on the design rapidly without fighting specificity issues. The design went through 4 major revisions before the client was satisfied.</p>
+<p><strong>Styling: Tailwind CSS.</strong> Utility-first CSS let me iterate on the design quickly without fighting specificity issues. The design went through 4 major revisions before the client was satisfied.</p>
 
-<p><strong>Animations: GSAP + ScrollTrigger</strong> — The client wanted premium scroll animations. I implemented section reveals, parallax effects, and staggered content loading. Performance was critical since I tested on low-end devices.</p>
+<p><strong>Animations: GSAP + ScrollTrigger.</strong> The client wanted premium scroll animations. I built section reveals, parallax effects, and staggered content loading. Performance was critical since I tested on low-end devices.</p>
 
-<p><strong>Backend: Supabase</strong> — Quote requests, sample inquiries, and contact form submissions all flow into Supabase. Row Level Security ensures only authenticated admin users can view submissions. Real-time subscriptions update the dashboard without page refresh.</p>
+<p><strong>Backend: Supabase.</strong> Quote requests, sample inquiries, and contact form submissions all flow into Supabase. Row Level Security ensures only authenticated admin users can view submissions. Real-time subscriptions update the dashboard without page refresh.</p>
 
-<p><strong>Hosting: Vercel</strong> — Edge deployment means UK-based buyers get sub-100ms response times. Automatic deploys from GitHub mean I can push updates without any manual deployment process.</p>
+<p><strong>Hosting: Vercel.</strong> Edge deployment means UK-based buyers get fast response times. Automatic deploys from GitHub mean I can push updates without any manual process.</p>
 
 <h2>Key Features</h2>
 
-<p><strong>Quote Calculator:</strong> Buyers enter garment details (fabric type, quantity, complexity) and get an instant ballpark quote. This pre-qualifies leads before they reach the sales team.</p>
+<p><strong>Quote Calculator.</strong> Buyers enter garment details (fabric type, quantity, complexity) and get an instant ballpark quote. This pre-qualifies leads before they reach the sales team.</p>
 
-<p><strong>Sample Request System:</strong> A multi-step form that collects garment specifications, reference images, and delivery requirements. All submissions are stored in Supabase with file attachments.</p>
+<p><strong>Sample Request System.</strong> A multi-step form that collects garment specifications, reference images, and delivery requirements. All submissions are stored in Supabase with file attachments.</p>
 
-<p><strong>Admin Dashboard:</strong> The factory team can view, filter, and respond to all incoming requests. Built with React islands inside the Astro framework.</p>
+<p><strong>Admin Dashboard.</strong> The factory team can view, filter, and respond to all incoming requests. Built with React islands inside the Astro framework.</p>
 
-<p><strong>Dark Mode:</strong> Full dark/light theme support with smooth transitions. Persisted via localStorage.</p>
+<p><strong>Dark Mode.</strong> Full dark/light theme support with smooth transitions. Persisted via localStorage.</p>
 
-<p><strong>AI Chat Widget:</strong> An embedded chat that answers common buyer questions about capabilities, minimums, and processes.</p>
+<p><strong>AI Chat Widget.</strong> An embedded chat that answers common buyer questions about capabilities, minimums, and lead times.</p>
 
 <h2>Challenges</h2>
 
-<p>The biggest technical challenge was <strong>scroll animation performance</strong>. My initial implementation used too many simultaneous animations, causing frame drops on the client's older office computers. I had to refactor to use visibility-gated animations (only running when elements are in viewport) and batch DOM reads to avoid layout thrashing.</p>
+<p>The biggest technical challenge was scroll animation performance. My initial implementation used too many simultaneous animations, causing frame drops on the client's older office computers. I refactored to use visibility-gated animations that only run when elements are in the viewport, and batched DOM reads to avoid layout thrashing.</p>
 
-<p>The biggest non-technical challenge was <strong>content</strong>. The client had no existing copy, no product photography, and no clear brand messaging. I had to write all the website copy, coordinate product photo shoots, and establish the brand voice from scratch.</p>
+<p>The biggest non-technical challenge was content. The client had no existing copy, no product photography, and no clear brand messaging. I wrote all the website copy, coordinated product photo shoots, and established the brand voice from scratch.</p>
 
-<h2>Results</h2>
+<h2>Impact</h2>
 
 <ul>
   <li>Site launched and immediately used in buyer presentations</li>
   <li>Quote requests started coming in within the first week</li>
   <li>UK buyers specifically mentioned the website quality during meetings</li>
-  <li>Page load time: under 1.5 seconds on 3G connections</li>
-  <li>Lighthouse score: 95+ on all metrics</li>
+  <li>Page load time under 1.5 seconds on 3G connections</li>
+  <li>Lighthouse score 95+ across all metrics</li>
 </ul>
 
 <p>The site is live at <a href="https://revestitching.com" target="_blank" rel="noopener">revestitching.com</a>.</p>
 
-<blockquote>
-  <p>A software house quoted ₨2 million for this scope. I delivered it solo.</p>
-</blockquote>
+<p>Local agencies quoted lakhs for this scope. I delivered it solo.</p>
 
 </PostLayout>

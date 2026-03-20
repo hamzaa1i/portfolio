@@ -4,57 +4,57 @@ import PostLayout from '../../layouts/PostLayout.astro';
 
 <PostLayout
   title="Factory ERP System — Case Study"
-  date="January 2025"
+  date="December 2025"
   readingTime="5 min read"
   tags={['ERPNext', 'Python', 'PostgreSQL', 'Custom Scripts']}
-  description="How I replaced 50+ daily paper processes with a digital ERP system for a garment manufacturing business."
+  description="How I replaced paper-based processes with a digital ERP system for a garment factory."
   backUrl="/work"
   backLabel="back to case studies"
 >
 
 <h2>Background</h2>
 
-<p>The factory processes over 300,000 garments monthly. Every fabric roll, every dyeing batch, every cut piece, every finished garment was tracked on paper. The store department alone generated over 50 handwritten gatepasses daily.</p>
+<p>The factory handles a high volume of garment production every month. Every fabric roll, every dyeing batch, every cut piece, every finished garment was tracked on paper. The store department alone generated dozens of handwritten gatepasses daily.</p>
 
 <p>The problems were systemic:</p>
 
 <ul>
-  <li><strong>Lost records</strong> — Paper gatepasses got misplaced, making inventory reconciliation impossible</li>
-  <li><strong>Slow reporting</strong> — End-of-day reports required hours of manual compilation</li>
-  <li><strong>No real-time visibility</strong> — Management couldn't check stock levels without physically walking to the store</li>
-  <li><strong>Duplicate entries</strong> — Same data written in multiple registers, leading to inconsistencies</li>
-  <li><strong>No audit trail</strong> — When discrepancies arose, tracing the source was nearly impossible</li>
+  <li><strong>Lost records.</strong> Paper gatepasses got misplaced, making inventory reconciliation impossible.</li>
+  <li><strong>Slow reporting.</strong> End-of-day reports required hours of manual compilation.</li>
+  <li><strong>No real-time visibility.</strong> Management couldn't check stock levels without physically walking to the store.</li>
+  <li><strong>Duplicate entries.</strong> Same data written in multiple registers, leading to inconsistencies.</li>
+  <li><strong>No audit trail.</strong> When discrepancies came up, tracing the source was nearly impossible.</li>
 </ul>
 
 <h2>Why ERPNext</h2>
 
-<p>I evaluated several options before choosing ERPNext:</p>
+<p>I looked at several options before choosing ERPNext.</p>
 
-<p><strong>SAP / Oracle:</strong> Way beyond budget. License costs alone would exceed the entire project budget.</p>
+<p><strong>SAP and Oracle</strong> were way beyond budget. License costs alone would exceed the entire project budget.</p>
 
-<p><strong>Custom-built system:</strong> Would take 6+ months and require ongoing maintenance. Not feasible as a solo developer.</p>
+<p><strong>Custom-built system</strong> would take months and require ongoing maintenance. Not feasible as a solo developer.</p>
 
-<p><strong>ERPNext:</strong> Open-source, Python-based, with built-in manufacturing modules. I could customize it heavily while still benefiting from a mature, battle-tested core.</p>
+<p><strong>ERPNext</strong> was the right fit. Open-source, Python-based, with built-in manufacturing modules. I could customize it heavily while still building on a mature, battle-tested core.</p>
 
 <h2>Implementation</h2>
 
-<p><strong>Phase 1: Fabric Inventory</strong> — Digitized the fabric store. Every roll now has a digital record with weight, color, lot number, and supplier information. Stock levels update in real-time as fabric moves through the factory.</p>
+<p><strong>Phase 1: Fabric Inventory.</strong> Digitized the fabric store. Every roll now has a digital record with weight, color, lot number, and supplier information. Stock levels update in real time as fabric moves through the factory.</p>
 
-<p><strong>Phase 2: Digital Gatepasses</strong> — Replaced handwritten gatepasses with digital forms. Workers scan or enter gatepass numbers on tablets. Each gatepass is timestamped, attributed to a specific user, and linked to the relevant production order.</p>
+<p><strong>Phase 2: Digital Gatepasses.</strong> Replaced handwritten gatepasses with digital forms. Workers enter gatepass numbers on tablets. Each gatepass is timestamped, attributed to a specific user, and linked to the relevant production order.</p>
 
-<p><strong>Phase 3: Issuance Tracking</strong> — Fabric issuance from store to cutting floor to stitching floor is now tracked digitally. Each issuance creates a record that links back to the original fabric roll, creating a complete chain of custody.</p>
+<p><strong>Phase 3: Issuance Tracking.</strong> Fabric issuance from store to cutting floor to stitching floor is now tracked digitally. Each issuance creates a record that links back to the original fabric roll, creating a complete chain of custody.</p>
 
-<p><strong>Phase 4: Automated Reporting</strong> — Daily, weekly, and monthly reports generate automatically. Management gets real-time dashboards showing inventory levels, production throughput, and bottlenecks.</p>
+<p><strong>Phase 4: Automated Reporting.</strong> Daily, weekly, and monthly reports generate automatically. Management gets real-time dashboards showing inventory levels, production throughput, and bottlenecks.</p>
 
 <h2>Technical Details</h2>
 
 <p>The customization was extensive. ERPNext's standard manufacturing module assumes a different workflow than Pakistani garment factories. I wrote custom doctypes in Python using the Frappe framework:</p>
 
 <ul>
-  <li><strong>Fabric Roll Doctype</strong> — Tracks individual rolls with roll-level attributes (not just SKU-level)</li>
-  <li><strong>Dyeing Gatepass Doctype</strong> — Custom workflow for sending fabric to external dyeing units and receiving it back</li>
-  <li><strong>Issuance Doctype</strong> — Links fabric rolls to cutting orders to finished garments</li>
-  <li><strong>Custom Reports</strong> — Python scripts that aggregate data across all custom doctypes</li>
+  <li><strong>Fabric Roll Doctype.</strong> Tracks individual rolls with roll-level attributes, not just SKU-level.</li>
+  <li><strong>Dyeing Gatepass Doctype.</strong> Custom workflow for sending fabric to external dyeing units and receiving it back.</li>
+  <li><strong>Issuance Doctype.</strong> Links fabric rolls to cutting orders to finished garments.</li>
+  <li><strong>Custom Reports.</strong> Python scripts that aggregate data across all custom doctypes.</li>
 </ul>
 
 <p>The database runs on PostgreSQL for reliability and performance at scale.</p>
@@ -63,31 +63,24 @@ import PostLayout from '../../layouts/PostLayout.astro';
 
 <p>The hardest part wasn't building the system. It was getting the team to use it.</p>
 
-<p>Most factory floor workers had never used anything beyond WhatsApp. I handled adoption by:</p>
+<p>Most factory floor workers had never used anything beyond WhatsApp. I handled adoption by sitting with each person individually for their specific workflow, keeping the interface as simple as possible with large buttons and minimal fields, running paper and digital systems in parallel for two weeks, and showing the team how much faster reporting became.</p>
+
+<p>Within a few weeks, everyone was using the digital system exclusively.</p>
+
+<h2>Impact</h2>
 
 <ul>
-  <li>Sitting with each person individually for their specific workflow</li>
-  <li>Making the interface as simple as possible (large buttons, minimal fields)</li>
-  <li>Running paper and digital systems in parallel for two weeks</li>
-  <li>Showing the team how much faster reporting became</li>
-</ul>
-
-<p>Within three weeks, everyone was using the digital system exclusively.</p>
-
-<h2>Results</h2>
-
-<ul>
-  <li>50+ daily paper processes replaced with digital workflows</li>
+  <li>Dozens of daily paper processes replaced with digital workflows</li>
   <li>Inventory discrepancies reduced significantly</li>
   <li>Reporting time went from hours to seconds</li>
   <li>Management has real-time visibility into all operations</li>
   <li>Complete audit trail for every fabric movement</li>
 </ul>
 
-<p>The system is internal and not publicly accessible, but it has been running in production for months without issues.</p>
+<p>The system is internal and not publicly accessible, but it has been running in production for months.</p>
 
 <blockquote>
-  <p>The hardest part of an ERP implementation is never the code. It is getting people to trust the new system over the old paper they have used for years.</p>
+  <p>The hardest part of an ERP implementation is never the code. It's getting people to trust the new system.</p>
 </blockquote>
 
 </PostLayout>

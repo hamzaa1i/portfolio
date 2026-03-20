@@ -57,32 +57,35 @@ const stats = [
 const projects = [
   {
     title: 'Reve Stitching',
-    description: 'Full production website for a UK garment exporter. Custom animations, quote system, admin dashboard, and dark mode.',
+    description: 'Full production website for a garment exporter shipping to the UK. Custom animations, quote system, admin dashboard, and dark mode.',
     type: 'Production Website',
     role: 'Sole Developer & Designer',
     stack: ['Astro 5', 'Tailwind', 'GSAP', 'Supabase', 'Vercel'],
     liveUrl: 'https://revestitching.com',
     githubUrl: 'https://github.com/hamzaa1i/reve-stitching',
+    caseStudyUrl: '/work/reve-stitching',
     placeholderClass: 'project-placeholder-1',
   },
   {
     title: 'Factory ERP System',
-    description: 'Enterprise resource planning system for a manufacturing business. Inventory management, workflow automation, and real-time reporting.',
+    description: 'ERP system for a manufacturing business. Inventory tracking, workflow automation, and real-time reporting.',
     type: 'Enterprise ERP',
     role: 'ERP Implementation Lead',
     stack: ['ERPNext', 'Python', 'PostgreSQL', 'Custom Scripts'],
     liveUrl: undefined,
     githubUrl: undefined,
+    caseStudyUrl: '/work/erp-system',
     placeholderClass: 'project-placeholder-2',
   },
   {
     title: 'Brand Identity Design',
-    description: 'Complete visual identity for an international exporter. Logo system, color palette, typography, company profile, business cards, letterheads, trim cards, and brand guidelines.',
+    description: 'Complete visual identity for a garment exporter. Logo system, color palette, typography, company profile, business cards, letterheads, and brand guidelines.',
     type: 'Brand Identity',
     role: 'Brand Designer',
     stack: ['Figma', 'Brand Strategy', 'Visual Identity'],
     liveUrl: undefined,
     githubUrl: undefined,
+    caseStudyUrl: '/work/brand-identity',
     placeholderClass: 'project-placeholder-3',
   },
 ];
@@ -448,18 +451,19 @@ const categories = ['Build', 'Animate', 'Backend', 'Design', 'Tools'];
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
-          {projects.map((p) => (
-            <ProjectCard
-              title={p.title}
-              description={p.description}
-              type={p.type}
-              role={p.role}
-              stack={p.stack}
-              liveUrl={p.liveUrl}
-              githubUrl={p.githubUrl}
-              placeholderClass={p.placeholderClass}
-            />
-          ))}
+{projects.map((p) => (
+  <ProjectCard
+    title={p.title}
+    description={p.description}
+    type={p.type}
+    role={p.role}
+    stack={p.stack}
+    liveUrl={p.liveUrl}
+    githubUrl={p.githubUrl}
+    caseStudyUrl={p.caseStudyUrl}
+    placeholderClass={p.placeholderClass}
+  />
+))}
 
           <div class="project-card-interactive glass flex flex-col items-center justify-center p-6 text-center" data-animate="fade-up" style="min-height: 260px;">
             <div class="w-12 h-12 rounded-xl glass-strong flex items-center justify-center mb-4">

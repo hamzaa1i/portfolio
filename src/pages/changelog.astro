@@ -5,20 +5,36 @@ import Footer from '../components/Footer.astro';
 
 const versions = [
   {
-    version: 'v1.5',
-    date: 'March 18, 2026',
+    version: 'v1.6',
+    date: 'March 19, 2026',
     tag: 'latest',
     changes: [
-      'Expandable music player with 20 tracks, search, and shuffle',
-      'Smooth crossfade between tracks',
-      'Case study pages for all 3 projects',
-      'Interactive resume page',
-      'Keyboard shortcuts overlay (press ?)',
-      'Copy email on click with toast notification',
-      'Time-based greeting in hero',
+      'Rewrote all content for consistency and natural tone',
+      'Added case study links to project cards',
+      'Project card hover overlay with "View Case Study" prompt',
+      'Added sitemap.xml for search engines',
+      'Article structured data on writing and case study pages',
+      'Fixed project dates across all pages',
+      'Cleaned up dependencies (removed unused packages)',
+      'LinkedIn added to footer',
       'Reading progress bar on articles',
-      'Liquid glass effect on all cards',
-      'Improved page transitions',
+    ],
+  },
+  {
+    version: 'v1.5',
+    date: 'March 18, 2026',
+    tag: null,
+    changes: [
+      'Music player with 60 generative tracks across 5 genres',
+      'Genre filtering and track search',
+      'Crossfade between tracks',
+      'Case study pages for all 3 projects',
+      'Interactive resume page with timeline',
+      'Keyboard shortcuts overlay',
+      'Copy email on click with toast notification',
+      'Time-based greeting in hero section',
+      'Liquid glass card effects',
+      'Improved page transitions with skeleton loaders',
     ],
   },
   {
@@ -28,10 +44,20 @@ const versions = [
     changes: [
       'Added 13 interactive easter eggs',
       'Command palette (Ctrl+K)',
-      'Writing section with project deep-dives',
+      'Writing section with 3 posts',
       'Custom 404 page',
       'PWA support',
       'Changelog page',
+    ],
+  },
+  {
+    version: 'v1.3',
+    date: 'March 16, 2026',
+    tag: null,
+    changes: [
+      'Professional SVG icons in skills section',
+      'Themed gradient text highlights',
+      'Contact sidebar with WhatsApp, Email, GitHub, and LinkedIn',
     ],
   },
   {
@@ -40,9 +66,7 @@ const versions = [
     tag: null,
     changes: [
       'Rewrote all content for natural tone',
-      'Removed AI-defensive language',
-      'Cleaned up factory-specific jargon',
-      'Updated experience to 3+ years',
+      'Cleaned up project descriptions',
     ],
   },
   {
@@ -50,11 +74,10 @@ const versions = [
     date: 'March 15, 2026',
     tag: null,
     changes: [
-      'Removed all WebGL for performance',
-      'Single unified rAF loop',
+      'Removed WebGL for performance on low-spec hardware',
+      'Single unified animation loop',
       'Removed section snapping',
-      'Removed backdrop-filter on cards',
-      'Optimized for low-spec hardware',
+      'Optimized card rendering',
     ],
   },
   {
@@ -63,7 +86,7 @@ const versions = [
     tag: null,
     changes: [
       'Initial portfolio launch',
-      'Theme system with 6 color presets',
+      'Theme system with 12 color presets',
       'Interactive terminal with 15+ commands',
       'Magnetic buttons and laser glow effects',
       'Draggable snapshot card',
@@ -75,7 +98,7 @@ const versions = [
 ];
 ---
 
-<Layout title="Changelog — Hamza Ali">
+<Layout title="Changelog — Hamza Ali" description="Version history of my portfolio site. What's new, what's fixed, what's changed.">
   <Header />
 
   <main
