@@ -31,7 +31,6 @@ const navItems = [
 
     <!-- Desktop Controls -->
     <div class="header-controls">
-      <!-- Sound Toggle -->
       <button
         data-sound-toggle
         class="header-icon-btn"
@@ -48,7 +47,6 @@ const navItems = [
 
       <ThemeSwitcher />
 
-      <!-- CTA -->
       <a
         href="https://wa.me/923329555786"
         target="_blank"
@@ -66,7 +64,13 @@ const navItems = [
     </div>
 
     <!-- Mobile Hamburger -->
-    <button data-menu-toggle class="header-hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <button
+      data-menu-toggle
+      class="header-hamburger"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
       <div class="hamburger-lines">
         <span class="hamburger-line line-1"></span>
         <span class="hamburger-line line-2"></span>
@@ -74,43 +78,70 @@ const navItems = [
       </div>
     </button>
   </div>
+</header>
 
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" data-mobile-menu class="mobile-menu-overlay" aria-hidden="true">
-    <nav class="mobile-menu-nav">
+<!-- Mobile Menu — OUTSIDE header to avoid stacking context issues -->
+<div
+  id="mobile-menu"
+  data-mobile-menu
+  class="mobile-menu-overlay"
+  aria-hidden="true"
+>
+  <!-- Backdrop (tap to close) -->
+  <div class="mobile-menu-backdrop" data-menu-backdrop></div>
+
+<!-- Menu Content -->
+<div class="mobile-menu-content">
+  <!-- Close Button -->
+  <button
+    data-menu-close
+    class="mobile-menu-close"
+    aria-label="Close menu"
+  >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+    </svg>
+  </button>
+  <nav class="mobile-menu-nav" aria-label="Mobile navigation">
       {navItems.map((item, i) => (
-        <a href={item.href} data-nav-link class="mobile-nav-link" style={`--delay: ${i * 0.08}s`}>
+        <a
+          href={item.href}
+          data-nav-link
+          class="mobile-nav-link"
+          style={`--delay: ${i * 0.06}s`}
+        >
           <span class="mobile-nav-num">0{i + 1}</span>
           <span class="mobile-nav-text">
             <span class="text-accent-primary">.</span>{item.label}<span class="text-text-dim">()</span>
           </span>
         </a>
       ))}
-      <a href="/writing" class="mobile-nav-link" style="--delay: 0.32s">
+      <a href="/writing" class="mobile-nav-link" style="--delay: 0.24s">
         <span class="mobile-nav-num">05</span>
         <span class="mobile-nav-text">
           <span class="text-accent-primary">.</span>writing<span class="text-text-dim">()</span>
         </span>
       </a>
-      <div class="mobile-nav-link" style="--delay: 0.4s">
-        <div class="mobile-nav-actions">
-          <a href="/resume.pdf" download="Hamza_Ali_Resume.pdf" class="btn-secondary btn-sm">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            <span>resume</span>
-          </a>
-          <a href="https://wa.me/923329555786" target="_blank" rel="noopener noreferrer" class="btn-primary btn-sm">
-            <span>contact me</span>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
-            </svg>
-          </a>
-        </div>
-      </div>
     </nav>
+
+    <div class="mobile-menu-footer">
+      <div class="mobile-nav-actions">
+        <a href="/resume.pdf" download="Hamza_Ali_Resume.pdf" class="btn-secondary btn-sm">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>resume</span>
+        </a>
+        <a href="https://wa.me/923329555786" target="_blank" rel="noopener noreferrer" class="btn-primary btn-sm">
+          <span>contact me</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
+          </svg>
+        </a>
+      </div>
+    </div>
   </div>
-</header>
+</div>
 
 <style>
   /* ── Inner layout ── */
@@ -131,6 +162,7 @@ const navItems = [
     flex-shrink: 0;
     user-select: none;
   }
+
   .terminal-trigger {
     background: none;
     border: none;
@@ -145,6 +177,7 @@ const navItems = [
     transition: color 0.3s ease;
     position: relative;
   }
+
   .terminal-trigger::after {
     content: '';
     position: absolute;
@@ -158,6 +191,7 @@ const navItems = [
     transition: transform 0.3s ease;
     opacity: 0.5;
   }
+
   .terminal-trigger:hover { color: var(--accent-hover); }
   .terminal-trigger:hover::after { transform: scaleX(1); }
 
@@ -169,6 +203,7 @@ const navItems = [
     color: var(--text-muted);
     transition: color 0.3s ease;
   }
+
   .logo-text:hover { color: var(--text-primary); }
   .logo-name { color: var(--text-primary); }
 
@@ -178,12 +213,10 @@ const navItems = [
     align-items: center;
     gap: 1.25rem;
   }
+
   @media (min-width: 1024px) {
     .header-nav { display: flex; }
   }
-
-  .code-nav-page::before { content: ''; }
-  .code-nav-page::after { content: ''; }
 
   /* ── Controls (desktop) ── */
   .header-controls {
@@ -191,6 +224,7 @@ const navItems = [
     align-items: center;
     gap: 0.5rem;
   }
+
   @media (min-width: 1024px) {
     .header-controls { display: flex; }
   }
@@ -209,9 +243,8 @@ const navItems = [
     border-radius: 8px;
     flex-shrink: 0;
   }
-  .header-icon-btn:hover {
-    color: var(--accent);
-  }
+
+  .header-icon-btn:hover { color: var(--accent); }
 
   .header-cta {
     display: inline-flex;
@@ -228,15 +261,14 @@ const navItems = [
     flex-shrink: 0;
     margin-left: 0.25rem;
   }
-  .header-cta:hover {
-    background: var(--accent-hover);
-  }
+
+  .header-cta:hover { background: var(--accent-hover); }
 
   /* ── Mobile Hamburger ── */
   .header-hamburger {
     display: flex;
     position: relative;
-    z-index: 100;
+    z-index: 200;
     width: 36px;
     height: 36px;
     align-items: center;
@@ -245,6 +277,7 @@ const navItems = [
     border: none;
     padding: 0;
   }
+
   @media (min-width: 1024px) {
     .header-hamburger { display: none; }
   }
@@ -257,6 +290,7 @@ const navItems = [
     flex-direction: column;
     justify-content: space-between;
   }
+
   .hamburger-line {
     display: block;
     width: 100%;
@@ -266,6 +300,7 @@ const navItems = [
     transition: transform 0.4s var(--ease-out-expo), opacity 0.3s ease, width 0.3s var(--ease-out-expo);
     transform-origin: center;
   }
+
   .line-2 { width: 60%; margin-left: auto; }
 
   [data-menu-toggle].open .line-1 { transform: translateY(5px) rotate(45deg); }
@@ -276,35 +311,122 @@ const navItems = [
   .mobile-menu-overlay {
     position: fixed;
     inset: 0;
-    z-index: 90;
-    background: var(--void, rgba(9, 9, 11, 0.97));
-    opacity: 0;
+    z-index: 95;
+    pointer-events: none;
     visibility: hidden;
-    transition: opacity 0.5s var(--ease-out-expo), visibility 0.5s;
   }
-  .mobile-menu-overlay.open { opacity: 1; visibility: visible; }
 
-.mobile-menu-nav {
-  position: relative;
-  z-index: 10;
+  .mobile-menu-overlay.open {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-menu-overlay {
+      display: none !important;
+    }
+  }
+
+  /* ── Backdrop ── */
+  .mobile-menu-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .mobile-menu-overlay.open .mobile-menu-backdrop {
+    opacity: 1;
+  }
+
+  /* ── Menu Content Panel ── */
+  .mobile-menu-content {
+    position: absolute;
+    inset: 0;
+    background: var(--void, #09090b);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-menu-overlay.open .mobile-menu-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+/* ── Close Button ── */
+.mobile-menu-close {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 1.25rem);
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  gap: 1rem;
-  padding: 4rem 2rem 2rem;
-  overflow-y: auto;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  z-index: 10;
+  cursor: pointer;
 }
+
+.mobile-menu-close:hover,
+.mobile-menu-close:active {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html:not(.dark) .mobile-menu-close {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+html:not(.dark) .mobile-menu-close:hover,
+html:not(.dark) .mobile-menu-close:active {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+  /* ── Nav Links ── */
+  .mobile-menu-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 0.5rem;
+    padding: calc(env(safe-area-inset-top, 0px) + 5rem) 2rem 1rem;
+    min-height: 0;
+  }
 
   .mobile-nav-link {
     display: flex;
     align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+    transform: translateY(16px);
+    transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo), background 0.2s ease;
     transition-delay: var(--delay, 0s);
+    width: 100%;
+    max-width: 280px;
   }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link:active {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
   .mobile-menu-overlay.open .mobile-nav-link {
     opacity: 1;
     transform: translateY(0);
@@ -312,11 +434,13 @@ const navItems = [
 
   .mobile-nav-num {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: var(--text-dim);
     margin-right: 0.75rem;
     min-width: 1.5rem;
+    text-align: right;
   }
+
   .mobile-nav-text {
     font-family: 'JetBrains Mono', monospace;
     font-size: clamp(1.5rem, 5vw, 2rem);
@@ -324,64 +448,176 @@ const navItems = [
     color: var(--text-primary);
     transition: color 0.3s ease;
   }
+
   .mobile-nav-link:hover .mobile-nav-text,
   .mobile-nav-link:active .mobile-nav-text {
     color: var(--accent);
   }
 
+  /* ── Footer Actions ── */
+  .mobile-menu-footer {
+    padding: 1.5rem 2rem calc(env(safe-area-inset-bottom, 0px) + 2rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+  }
+
   .mobile-nav-actions {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
-    margin-top: 0.5rem;
+  }
+
+  /* ── Light theme ── */
+  html:not(.dark) .mobile-menu-content {
+    background: var(--void, #ffffff);
+  }
+
+  html:not(.dark) .mobile-menu-backdrop {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  html:not(.dark) .mobile-nav-link:hover,
+  html:not(.dark) .mobile-nav-link:active {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  html:not(.dark) .mobile-menu-footer {
+    border-top-color: rgba(0, 0, 0, 0.06);
+  }
+
+  /* ── Short screens ── */
+  @media (max-height: 640px) {
+    .mobile-nav-text {
+      font-size: 1.25rem;
+    }
+    .mobile-menu-nav {
+      gap: 0.25rem;
+      padding-top: calc(env(safe-area-inset-top, 0px) + 4rem);
+    }
+    .mobile-nav-link {
+      padding: 0.5rem 1rem;
+    }
   }
 </style>
 
 <script is:inline>
-  (function() {
-    /* Terminal trigger */
-    var trigger = document.querySelector('[data-terminal-trigger]');
-    if (trigger) {
-      trigger.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        document.dispatchEvent(new CustomEvent('terminal:toggle'));
-      });
-    }
-
-/* Logo click — scroll to top on homepage, navigate on other pages */
-var logoHome = document.querySelector('[data-logo-home]');
-if (logoHome) {
-  logoHome.addEventListener('click', function(e) {
-    if (window.location.pathname === '/') {
+(function() {
+  /* ── Terminal trigger ── */
+  var trigger = document.querySelector('[data-terminal-trigger]');
+  if (trigger) {
+    trigger.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      e.stopImmediatePropagation();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      if (window.location.hash) {
-        history.replaceState(null, '', '/');
+      document.dispatchEvent(new CustomEvent('terminal:toggle'));
+    });
+  }
+
+  /* ── Logo click — scroll to top on homepage, navigate on other pages ── */
+  var logoHome = document.querySelector('[data-logo-home]');
+  if (logoHome) {
+    logoHome.addEventListener('click', function(e) {
+      if (window.location.pathname === '/') {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (window.location.hash) {
+          history.replaceState(null, '', '/');
+        }
       }
-    }
-    /* On other pages — do nothing here, let page-fade handle navigation to / */
-  }, true);
+    }, true);
+  }
+
+  /* ── Mobile Menu — single source of truth ── */
+  var toggle = document.querySelector('[data-menu-toggle]');
+  var menu = document.querySelector('[data-mobile-menu]');
+  var backdrop = document.querySelector('[data-menu-backdrop]');
+  var isOpen = false;
+
+  function getLenis() {
+    if (typeof window !== 'undefined' && window.__lenis) return window.__lenis;
+    return null;
+  }
+
+function openMenu() {
+  if (isOpen || !menu || !toggle) return;
+  isOpen = true;
+
+  menu.classList.add('open');
+  toggle.classList.add('open');
+  toggle.setAttribute('aria-expanded', 'true');
+  menu.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  document.body.classList.add('mobile-menu-open');
+
+  var lenis = getLenis();
+  if (lenis) lenis.stop();
 }
 
-    /* Mobile menu — close on nav link click */
-    var mobileLinks = document.querySelectorAll('[data-mobile-menu] a[data-nav-link]');
-    mobileLinks.forEach(function(link) {
+function closeMenu() {
+  if (!isOpen || !menu || !toggle) return;
+  isOpen = false;
+
+  menu.classList.remove('open');
+  toggle.classList.remove('open');
+  toggle.setAttribute('aria-expanded', 'false');
+  menu.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  document.body.classList.remove('mobile-menu-open');
+
+  var lenis = getLenis();
+  if (lenis) lenis.start();
+}
+
+  /* Toggle button */
+  if (toggle) {
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (isOpen) closeMenu();
+      else openMenu();
+    });
+  }
+
+  /* Backdrop tap to close */
+  if (backdrop) {
+    backdrop.addEventListener('click', closeMenu);
+  }
+
+/* Close button */
+var closeBtn = document.querySelector('[data-menu-close]');
+if (closeBtn) {
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeMenu();
+  });
+}
+
+  /* Close on nav link click */
+  if (menu) {
+    menu.querySelectorAll('a').forEach(function(link) {
       link.addEventListener('click', function() {
-        var menu = document.querySelector('[data-mobile-menu]');
-        var toggle = document.querySelector('[data-menu-toggle]');
-        if (menu && menu.classList.contains('open')) {
-          menu.classList.remove('open');
-          if (toggle) {
-            toggle.classList.remove('open');
-            toggle.setAttribute('aria-expanded', 'false');
-          }
-          menu.setAttribute('aria-hidden', 'true');
-          document.body.style.overflow = '';
-        }
+        /* Small delay so the click registers before menu closes */
+        setTimeout(closeMenu, 50);
       });
     });
-  })();
+  }
+
+  /* Close on Escape */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && isOpen) closeMenu();
+  });
+
+  /* Close on resize to desktop */
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      if (window.innerWidth >= 1024 && isOpen) closeMenu();
+    }, 100);
+  });
+
+  /* Expose for animations.js Lenis integration */
+  window.__mobileMenuClose = closeMenu;
+})();
 </script>

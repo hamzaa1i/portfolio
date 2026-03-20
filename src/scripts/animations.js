@@ -862,31 +862,14 @@ function initStoryReveal() {
 
 /* ============================================================
    MODULE 16: MOBILE MENU
+   Handled entirely by Header.astro inline script.
+   This module only exposes the Lenis instance for the header.
    ============================================================ */
 function initMobileMenu() {
-  const toggle = document.querySelector("[data-menu-toggle]");
-  const menu = document.querySelector("[data-mobile-menu]");
-  if (!toggle || !menu) return;
-
-  toggle.addEventListener("click", () => {
-    const isOpen = menu.classList.contains("open");
-
-    if (isOpen) {
-      menu.classList.remove("open");
-      toggle.classList.remove("open");
-      toggle.setAttribute("aria-expanded", "false");
-      menu.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-      if (lenisInstance) lenisInstance.start();
-    } else {
-      menu.classList.add("open");
-      toggle.classList.add("open");
-      toggle.setAttribute("aria-expanded", "true");
-      menu.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-      if (lenisInstance) lenisInstance.stop();
-    }
-  });
+  /* Expose Lenis instance globally so header script can access it */
+  if (lenisInstance) {
+    window.__lenis = lenisInstance;
+  }
 }
 
 /* ============================================================

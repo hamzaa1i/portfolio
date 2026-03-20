@@ -775,7 +775,7 @@ input[type="submit"] {
   align-items: center;
   justify-content: center;
   border-radius: 0.75rem;
-  z-index: 89;
+  z-index: 40;
   opacity: 0;
   visibility: hidden;
   transform: translateY(16px);
@@ -2018,4 +2018,13 @@ html:not(.dark) .skel-bone {
 }
 .skel-bone-line-short {
   width: 35%;
+}
+
+/* ── Hide floating UI when mobile menu is open ── */
+body.mobile-menu-open [data-scroll-top],
+body.mobile-menu-open .scroll-to-top,
+body.mobile-menu-open .music-player {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }
