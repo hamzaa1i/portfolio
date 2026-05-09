@@ -1,9 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#09090B"/>
-  <!-- Custom drawn ~ -->
-  <path d="M 5 16.5 Q 7 14 9 16.5 T 13 16.5" fill="none" stroke="#C8A24E" stroke-width="2.1" stroke-linecap="round"/>
-  <!-- Custom drawn / -->
-  <path d="M 14 23 L 18 9" fill="none" stroke="#7e7e86" stroke-width="1.7" stroke-linecap="round"/>
-  <!-- Custom drawn h -->
-  <path d="M 21 8 V 23 M 21 15.5 C 21 12 27 12 27 15.5 V 23" fill="none" stroke="#FAFAFA" stroke-width="2.5" stroke-linecap="round"/>
+  <defs>
+    <style>
+      @font-face{
+        font-family:"JB";
+        font-style:normal;
+        font-weight:700;
+        src:url("https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPVmUsaaDhw.woff2") format("woff2");
+      }
+      .jb{font-family:"JB","JetBrains Mono",ui-monospace,monospace;font-weight:700;font-size:22px}
+      .jbSlash{font-family:"JB","JetBrains Mono",ui-monospace,monospace;font-weight:500;font-size:22px;opacity:.7}
+    </style>
+  </defs>
+  <g>
+    <text class="jb" x="1.5" y="24" fill="#C8A24E">~</text>
+    <text class="jbSlash" x="9.5" y="24" fill="#848484">/</text>
+    <text class="jb" x="19.5" y="24" fill="#FAFAFA">h</text>
+  </g>
 </svg>
