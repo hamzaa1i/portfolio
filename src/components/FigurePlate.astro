@@ -19,19 +19,34 @@ interface Props {
 }
 
 const { number, image, alt, caption, context, eager = false, class: className } = Astro.props;
+
+const isSvg = image.format === 'svg';
 ---
 
 <figure class:list={['border border-border bg-midnight rounded-image', className]}>
   <div class="overflow-hidden rounded-t-image border-b border-border">
-    <Picture
-      src={image}
-      alt={alt}
-      widths={[720, 1024, 1440, 1920]}
-      sizes="(min-width: 1200px) 1088px, (min-width: 768px) 90vw, 100vw"
-      formats={['avif', 'webp']}
-      loading={eager ? 'eager' : 'lazy'}
-      class="block w-full h-auto"
-    />
+    {
+      isSvg ? (
+        <img
+          src={image.src}
+          alt={alt}
+          width={image.width}
+          height={image.height}
+          loading={eager ? 'eager' : 'lazy'}
+          class="block w-full h-auto"
+        />
+      ) : (
+        <Picture
+          src={image}
+          alt={alt}
+          widths={[720, 1024, 1440, 1920]}
+          sizes="(min-width: 1200px) 1088px, (min-width: 768px) 90vw, 100vw"
+          formats={['avif', 'webp']}
+          loading={eager ? 'eager' : 'lazy'}
+          class="block w-full h-auto"
+        />
+      )
+    }
   </div>
   <figcaption class="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
     <p class="text-sm text-text-secondary">

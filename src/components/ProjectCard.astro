@@ -11,6 +11,7 @@ interface Props {
 const { project, featured = false } = Astro.props;
 const { data } = project;
 const href = `/work/${project.id}`;
+const isSvg = data.thumbnail?.format === 'svg';
 ---
 
 <article
@@ -23,15 +24,26 @@ const href = `/work/${project.id}`;
     {
       data.thumbnail ? (
         <div class="overflow-hidden border-b border-border">
-          <Picture
-            src={data.thumbnail}
-            alt={`${data.title} — ${data.subtitle}`}
-            widths={featured ? [960, 1280, 1920] : [640, 960, 1280]}
-            sizes={featured ? '(min-width: 1200px) 1088px, 100vw' : '(min-width: 768px) 50vw, 100vw'}
-            formats={['avif', 'webp']}
-            loading={featured ? 'eager' : 'lazy'}
-            class="block aspect-[16/10] w-full h-auto object-cover object-top transition-transform duration-300 ease-out group-hover:scale-[1.01]"
-          />
+          {isSvg ? (
+            <img
+              src={data.thumbnail.src}
+              alt={`${data.title} — ${data.subtitle}`}
+              width={data.thumbnail.width}
+              height={data.thumbnail.height}
+              loading={featured ? 'eager' : 'lazy'}
+              class="block aspect-[16/10] w-full h-auto object-cover object-top transition-transform duration-300 ease-out group-hover:scale-[1.01]"
+            />
+          ) : (
+            <Picture
+              src={data.thumbnail}
+              alt={`${data.title} — ${data.subtitle}`}
+              widths={featured ? [960, 1280, 1920] : [640, 960, 1280]}
+              sizes={featured ? '(min-width: 1200px) 1088px, 100vw' : '(min-width: 768px) 50vw, 100vw'}
+              formats={['avif', 'webp']}
+              loading={featured ? 'eager' : 'lazy'}
+              class="block aspect-[16/10] w-full h-auto object-cover object-top transition-transform duration-300 ease-out group-hover:scale-[1.01]"
+            />
+          )}
         </div>
       ) : (
         <div class="flex aspect-[16/10] items-center justify-center border-b border-border bg-midnight">

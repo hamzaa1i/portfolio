@@ -11,6 +11,7 @@ role: "IT & Digital Systems Lead"
 clientPublic: Reve Stitching
 privacy: private
 summary: "An internal ERPNext implementation shaped around real factory workflows: material movement, batch traceability, gate passes and operational reporting for a garment manufacturer."
+thumbnail: ../../assets/projects/reve-erp/material-flow.svg
 stack:
   - ERPNext
   - Frappe
@@ -21,6 +22,10 @@ results: []
 seoTitle: Reve Manufacturing ERP
 seoDescription: "Customizing ERPNext for a garment factory: stock entry workflows, batch and LOT tracking, dyeing gate passes, custom reports and operational dashboards in daily production use."
 ---
+
+import Figure from '../../components/FigurePlate.astro';
+import Flow from '../../components/FlowDiagram.astro';
+import materialFlow from '../../assets/projects/reve-erp/material-flow.svg';
 
 ## Overview
 
@@ -43,6 +48,8 @@ The choice was practical. Proprietary enterprise ERP was far beyond budget, and 
 ## What was customized
 
 For readers who have not used ERPNext: the system is built around DocTypes, developer-defined record types, and Stock Entries, the records that move material between locations. Standard ERPNext assumes a generic factory. A garment factory in Faisalabad has specific material flows, and that is where the customization lives.
+
+<Flow title="Material flow through the factory, as the system models it" footer="Internal system · ERPNext / Frappe · diagram, not a screenshot" nodes={[{ label: 'Material receipt', note: 'Stock Entry · inward' }, { label: 'Batch / LOT tracking', note: 'roll-level identity' }, { label: 'Gate pass', note: 'dyeing · external processing', kind: 'external' }, { label: 'Transfer / issue / return', note: 'store → cutting → stitching' }, { label: 'Production workflow', note: 'Critical Path · order tracking' }, { label: 'Stock reporting & dashboards', note: 'live fabric stock · custom reports', kind: 'data' }]} />
 
 **Material movement.** Stock Entry workflows for material receipt, transfer, issue and return, shaped so the system's records match the physical movement of fabric and trims through the factory.
 
@@ -67,6 +74,8 @@ The workflows above are in production use today. Planned work exists as well: a 
 ## Results
 
 Material movement, batch traceability and order progress now live in one system used daily across the factory. Reports that took manual compilation are generated from live data. The ERP runs alongside the customer-facing platform, and the two connect: website enquiries become ERP leads.
+
+<Figure number="01" image={materialFlow} alt="Diagram of the factory's material flow as the ERP models it: receipt, batch and LOT tracking, gate passes to external dyeing, transfer and issue, production, and live stock reporting." caption="The material flow the system enforces, from inward gate to operational visibility." context="workflow diagram · not a screenshot" />
 
 This is ongoing work. A factory keeps moving, and the system keeps adapting to it.
 

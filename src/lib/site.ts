@@ -23,10 +23,11 @@ export const IDENTITY = {
   email: 'hamzaali.dev@proton.me',
   github: 'https://github.com/hamzaa1i',
   /**
-   * LinkedIn is rendered only where a verified profile URL exists in the
-   * current repository. Unverified means omitted — never invented.
+   * Retained from the current repository (README, V1 footer, V1 homepage),
+   * which shipped this URL as a live social link. External verification is
+   * blocked by LinkedIn's authwall; it is not invented here.
    */
-  linkedin: null as string | null,
+  linkedin: 'https://linkedin.com/in/hamzaalidev' as string | null,
 } as const;
 
 export const NAV = [

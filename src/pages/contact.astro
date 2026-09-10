@@ -53,6 +53,20 @@ import { IDENTITY, SITE } from '../lib/site';
               GitHub · github.com/hamzaa1i
             </a>
           </li>
+          {
+            IDENTITY.linkedin && (
+              <li>
+                <a
+                  href={IDENTITY.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-sm text-text-secondary transition-colors hover:text-text-primary"
+                >
+                  LinkedIn · linkedin.com/in/hamzaalidev
+                </a>
+              </li>
+            )
+          }
         </ul>
 
         <p class="mt-10 text-sm text-text-muted">
