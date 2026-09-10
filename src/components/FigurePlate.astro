@@ -27,14 +27,16 @@ const isSvg = image.format === 'svg';
   <div class="overflow-hidden rounded-t-image border-b border-border">
     {
       isSvg ? (
-        <img
-          src={image.src}
-          alt={alt}
-          width={image.width}
-          height={image.height}
-          loading={eager ? 'eager' : 'lazy'}
-          class="block w-full h-auto"
-        />
+        <div class="overflow-x-auto">
+          <img
+            src={image.src}
+            alt={alt}
+            width={image.width}
+            height={image.height}
+            loading={eager ? 'eager' : 'lazy'}
+            class="block h-auto w-full min-w-[640px]"
+          />
+        </div>
       ) : (
         <Picture
           src={image}
