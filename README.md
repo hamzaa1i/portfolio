@@ -1,4 +1,4 @@
-# 🌌 Hamza Ali — Digital Solutions Architect Portfolio
+# Hamza Ali — Software & Systems Engineer Portfolio
 
 <p align="center">
   <a href="https://astro.build">
@@ -7,10 +7,6 @@
 
   <a href="https://tailwindcss.com/">
     <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="TailwindCSS Badge">
-  </a>
-
-  <a href="https://threejs.org/">
-    <img src="https://img.shields.io/badge/Three.js-000000?style=flat-square&logo=three.js&logoColor=white" alt="Three.js Badge">
   </a>
 
   <a href="https://greensock.com/gsap/">
@@ -23,8 +19,8 @@
 </p>
 
 <p align="center">
-  An immersive, story-driven developer portfolio featuring WebGL interactive backgrounds,
-  scroll-driven GSAP animations, cinematic transitions, and premium UI interactions.
+  A professional portfolio for production web platforms, ERP workflows,
+  e-commerce systems, and product development.
 </p>
 
 <p align="center">
@@ -36,20 +32,19 @@
 
 ## 🚀 About
 
-At 17, I built production systems for an international garment export business with zero prior coding experience.
-
-This portfolio documents that transformation — from digitizing a **300K+ monthly garment manufacturing operation** to designing premium digital systems and brand experiences for international exporters.
+This portfolio documents current work across the Reve Stitching digital platform,
+an ERPNext/Frappe manufacturing implementation, Haus Couture's Shopify rebuild,
+and the Aurelia automation platform.
 
 ### ✨ What Makes This Portfolio Different
 
-- Interactive Three.js particle system that reacts to cursor movement
 - Full-viewport section snapping powered by Lenis smooth scrolling
 - GSAP magnetic buttons with radial glow interactions
-- Horizontal scrolling project showcase on desktop
+- Responsive project showcase with verified project media
 - Custom cursor with contextual interaction states
 - Animated typing effect with rotating developer roles
 - Liquid glassmorphism interface with ambient floating gradients
-- Mobile-optimized architecture with graceful WebGL fallback
+- Mobile-optimized architecture with graceful CSS fallbacks
 - Cinematic storytelling-focused section transitions
 - Performance-first animations with accessibility support
 
@@ -317,12 +312,6 @@ src/pages/index.astro
 <a href="https://github.com/YOUR_USERNAME">
 ```
 
-#### WhatsApp
-
-```astro
-<a href="https://wa.me/YOUR_PHONE_NUMBER">
-```
-
 Also update:
 
 ```text
@@ -515,17 +504,12 @@ Attribution appreciated but not required.
 
 <p align="center">
   <strong>Hamza Ali</strong><br>
-  Digital Solutions Architect
+  Software &amp; Systems Engineer
 </p>
 
 <p align="center">
   📧 Email:
   <a href="mailto:hamzaali.dev@proton.me">hamzaali.dev@proton.me</a>
-</p>
-
-<p align="center">
-  💬 WhatsApp:
-  <a href="https://wa.me/923329555786">+92 332 9555786</a>
 </p>
 
 <p align="center">
