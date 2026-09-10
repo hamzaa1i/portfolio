@@ -1,4 +1,6 @@
 ---
+import SiteHeader from '../components/SiteHeader.astro';
+import Footer from '../components/Footer.astro';
 import { SITE } from '../lib/site';
 import '../styles/global.css';
 
@@ -7,7 +9,7 @@ interface Props {
   title: string;
   /** Page-specific description. Falls back to the site description. */
   description?: string;
-  /** Absolute or root-relative canonical path, e.g. "/work/reve-platform". */
+  /** Root-relative canonical path, e.g. "/work/reve-platform". */
   path?: string;
 }
 
@@ -41,6 +43,11 @@ const fullTitle = path === '/' ? `${SITE.title} â€” ${SITE.role}` : `${title} â€
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
+
+    <script is:inline>
+      // Gate reveal animations on JS availability, before first paint.
+      document.documentElement.classList.add('js-reveal');
+    </script>
   </head>
   <body>
     <a
@@ -49,8 +56,26 @@ const fullTitle = path === '/' ? `${SITE.title} â€” ${SITE.role}` : `${title} â€
     >
       Skip to content
     </a>
-    <main id="main">
+
+    <SiteHeader />
+
+    <main id="main" class="pt-16">
       <slot />
     </main>
+
+    <Footer />
+
+    <script>
+      import '../scripts/reveal';
+    </script>
+
+    <script is:inline>
+      // The one quiet signature. No phone numbers.
+      console.log(
+        '%cPortfolio V2%c\nDesigned & built by Hamza Ali\ngithub.com/hamzaa1i/portfolio',
+        'color: #c8a24e; font-weight: 600;',
+        'color: #a1a1aa;',
+      );
+    </script>
   </body>
 </html>

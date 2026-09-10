@@ -71,7 +71,10 @@
   /* Typography */
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* Display face for page H1s only. Evaluated against real hero and card
+     compositions: kept for editorial contrast; section headings and UI
+     remain Inter to hold the technical-journal register. */
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
 
   /* Radii — subtle, not bubbly */
   --radius-card: 6px;
@@ -243,14 +246,13 @@
   }
 }
 
-/* ---------- Section reveal — quiet, fast, optional ---------- */
-
-.reveal {
-  opacity: 1;
-}
+/* ---------- Section reveal — quiet, fast, optional ----------
+   Progressive enhancement only: content ships visible. The inline
+   script in Layout adds .js-reveal to <html>; without JS, or with
+   reduced motion, nothing is ever hidden. */
 
 @media (prefers-reduced-motion: no-preference) {
-  .reveal {
+  html.js-reveal .reveal {
     opacity: 0;
     transform: translateY(10px);
     transition:
@@ -258,14 +260,8 @@
       transform 0.4s var(--ease-out-quiet);
   }
 
-  .reveal[data-revealed="true"] {
+  html.js-reveal .reveal[data-revealed='true'] {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Content must never depend on JS to be visible */
-.no-js .reveal {
-  opacity: 1;
-  transform: none;
 }
