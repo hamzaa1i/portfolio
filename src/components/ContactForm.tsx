@@ -1,10 +1,24 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error';
 
-export default function ContactForm() {
+interface Props {
+  turnstileSiteKey?: string;
+}
+
+export default function ContactForm({ turnstileSiteKey = '' }: Props) {
   const [state, setState] = useState<FormState>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    if (!turnstileSiteKey || document.querySelector('script[data-turnstile-script]')) return;
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.async = true;
+    script.defer = true;
+    script.dataset.turnstileScript = 'true';
+    document.head.appendChild(script);
+  }, [turnstileSiteKey]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -12,16 +26,18 @@ export default function ContactForm() {
     setErrorMsg('');
     const form = e.currentTarget;
     const data = new FormData(form);
+    const payload = Object.fromEntries(data.entries());
+    payload.turnstileToken = String(data.get('cf-turnstile-response') || '');
     try {
-      const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        body: data,
-        headers: { Accept: 'application/json' },
+        body: JSON.stringify(payload),
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
       });
       if (res.ok) { setState('success'); form.reset(); }
       else {
         const json = await res.json();
-        setErrorMsg(json?.errors?.[0]?.message || 'Something went wrong.');
+        setErrorMsg(json?.message || 'Something went wrong. Please email hamzaali.dev@proton.me.');
         setState('error');
       }
     } catch { setErrorMsg('Network error.'); setState('error'); }
@@ -46,6 +62,10 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="contact-form">
+      <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>
+        <label htmlFor="companyWebsite">Company website</label>
+        <input id="companyWebsite" name="companyWebsite" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="name" className="form-label">name</label>
@@ -64,7 +84,7 @@ export default function ContactForm() {
             <option value="freelance">Freelance Project</option>
             <option value="website">Website Development</option>
             <option value="erp">ERP Implementation</option>
-            <option value="branding">Brand Identity</option>
+            <option value="ecommerce">E-commerce Development</option>
             <option value="other">Other</option>
           </select>
         </div>
@@ -85,6 +105,8 @@ export default function ContactForm() {
         <textarea id="message" name="message" className="form-textarea" placeholder="Tell me about your project, timeline, and goals..." required disabled={state === 'submitting'} />
       </div>
 
+      {turnstileSiteKey && <div className="cf-turnstile" data-sitekey={turnstileSiteKey}></div>}
+
       {state === 'error' && <p className="text-sm font-mono" style={{ color: '#EF4444' }}>{errorMsg}</p>}
 
       <button type="submit" disabled={state === 'submitting'} className="btn-primary w-full justify-center mt-1" style={{ opacity: state === 'submitting' ? 0.6 : 1 }}>
@@ -94,7 +116,9 @@ export default function ContactForm() {
           <><span>send message</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></>
         )}
       </button>
-      <p className="text-center text-xs font-mono mt-2" style={{ color: '#3F3F46' }}>usually replies within 24-48 hours</p>
+      <p className="text-center text-xs font-mono mt-2" style={{ color: '#3F3F46' }}>
+        usually replies within 24-48 hours · <a href="mailto:hamzaali.dev@proton.me" style={{ color: '#71717A' }}>email directly</a>
+      </p>
     </form>
   );
 }
