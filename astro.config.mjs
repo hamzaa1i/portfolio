@@ -1,22 +1,26 @@
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
+import vercel from '@astrojs/vercel';
+import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
+
+// Canonical host. Controlled from one place so a future domain move
+// (e.g. hamzaalikhurram.com) is a single config change.
+const SITE_URL = process.env.SITE_URL ?? 'https://hamzaalidev.vercel.app';
 
 export default defineConfig({
-  site: 'https://hamzaalidev.vercel.app',
+  site: SITE_URL,
   output: 'static',
 
   integrations: [
-    react(),
-    tailwind({ applyBaseStyles: false }),
+    mdx(),
     sitemap(),
   ],
 
+  adapter: vercel({ imagemodel: false }),
+
   vite: {
-    ssr: {
-      noExternal: ['gsap', 'lenis'],
-    },
+    plugins: [tailwindcss()],
   },
 
   prefetch: {
