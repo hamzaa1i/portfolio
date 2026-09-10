@@ -1,0 +1,75 @@
+---
+title: Reve Manufacturing ERP
+shortTitle: Reve ERP
+subtitle: ERPNext customized to how a garment factory actually moves material
+category: "ERP & Operations"
+timeline: Ongoing
+status: internal
+featured: true
+featuredOrder: 2
+role: "IT & Digital Systems Lead"
+clientPublic: Reve Stitching
+privacy: private
+summary: "An internal ERPNext implementation shaped around real factory workflows: material movement, batch traceability, gate passes and operational reporting for a garment manufacturer."
+stack:
+  - ERPNext
+  - Frappe
+  - Python
+  - PostgreSQL
+  - JavaScript
+results: []
+seoTitle: Reve Manufacturing ERP
+seoDescription: "Customizing ERPNext for a garment factory: stock entry workflows, batch and LOT tracking, dyeing gate passes, custom reports and operational dashboards in daily production use."
+---
+
+## Overview
+
+Reve Stitching runs its internal operations on an ERPNext system I implement and maintain. This is not a story about building an ERP from scratch; ERPNext and its Frappe framework provide the platform. The work is customization and implementation: adapting a general-purpose manufacturing ERP to how a specific garment factory actually receives, moves and consumes material.
+
+The system is in daily production use and continues to evolve.
+
+## Context
+
+A garment factory is a flow of material. Fabric and yarn arrive, get inspected, move to dyeing or processing, sometimes through external units, then to cutting, stitching and finishing before shipping. For years that flow ran on paper registers and Excel: inward gate passes written by hand, stock movement tracked in notebooks, reports compiled by adding up entries at the end of the day.
+
+The predictable failures followed. Records went missing, stock figures drifted from reality, and answering "where is this order" meant walking to a department and asking.
+
+## Why ERPNext
+
+ERPNext is an open-source manufacturing ERP built on the Frappe framework, written in Python with a PostgreSQL database. It ships with stock, manufacturing and accounting modules and a browser-based desk that works for non-technical staff.
+
+The choice was practical. Proprietary enterprise ERP was far beyond budget, and a fully custom system would have meant rebuilding decades of manufacturing logic for a team of one. ERPNext offered a mature core to customize around the factory's actual workflows.
+
+## What was customized
+
+For readers who have not used ERPNext: the system is built around DocTypes, developer-defined record types, and Stock Entries, the records that move material between locations. Standard ERPNext assumes a generic factory. A garment factory in Faisalabad has specific material flows, and that is where the customization lives.
+
+**Material movement.** Stock Entry workflows for material receipt, transfer, issue and return, shaped so the system's records match the physical movement of fabric and trims through the factory.
+
+**Batch and LOT tracking.** Fabric is tracked by batch and LOT identity, so a roll can be followed from receipt through processing to consumption. When a question surfaces months later, the trail exists.
+
+**Gate pass workflows.** The inward and dyeing gate passes that were once handwritten are digital records, including movements to and from external processing units.
+
+**Order visibility.** A Critical Path view tracks where each order stands across its stages, replacing the walk-to-the-department answer to "where is this order".
+
+**Custom reporting.** Fabric stock reports and operational reports generated from live data instead of compiled by hand, plus operational dashboards for day-to-day visibility.
+
+**Store workflows.** Barcode-supported store operations, custom DocTypes and fields, client-side scripts, server-side methods, and a customized Frappe desk workspace so staff see the workflows they actually use.
+
+## Working with the floor
+
+An ERP is only real if the people on the factory floor use it. Implementation here meant sitting with store and production staff, walking through their actual workflow, and simplifying screens until the digital path was easier than the paper one. Adoption came from usefulness, not mandate.
+
+## Shipped versus planned
+
+The workflows above are in production use today. Planned work exists as well: a broader store and accessories system, OCR-assisted issue handling and production WIP tracking are on the roadmap. They are documented as plans, not presented as shipped.
+
+## Results
+
+Material movement, batch traceability and order progress now live in one system used daily across the factory. Reports that took manual compilation are generated from live data. The ERP runs alongside the customer-facing platform, and the two connect: website enquiries become ERP leads.
+
+This is ongoing work. A factory keeps moving, and the system keeps adapting to it.
+
+## Why this matters
+
+The interesting engineering in an ERP implementation is rarely algorithms. It is modeling: translating how material physically moves through a building into records, workflows and constraints a computer can enforce, then earning the trust of the people who use it. That is the work.

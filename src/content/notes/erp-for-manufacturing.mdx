@@ -1,0 +1,42 @@
+---
+title: Implementing ERPNext for a Real Factory
+description: What customizing an open-source ERP for a garment manufacturer actually involves, from paper registers to daily production use.
+pubDate: 2026-03-08
+tags:
+  - ERPNext
+  - Python
+  - Operations
+featured: false
+---
+
+The factory had been running on paper for years. Every fabric roll that arrived got logged in a register. Every dyeing batch got a handwritten gate pass. Material issued to the cutting floor was tracked in a notebook. The failures were predictable: lost records, stock figures that drifted from reality, and reports compiled by hand at the end of each day.
+
+This is the story of moving that factory onto ERPNext, and what the work actually involved.
+
+## Why ERPNext
+
+I evaluated the options before choosing. Proprietary enterprise ERP was priced for corporations, not a Pakistani garment manufacturer. A fully custom system would have meant rebuilding stock ledgers, manufacturing logic and reporting from scratch, alone. ERPNext sits in between: open source, built on Python and the Frappe framework, with a PostgreSQL database and mature manufacturing modules.
+
+The bet was that customizing a proven core would beat rebuilding one. That bet held.
+
+## What "customization" means
+
+Out of the box, ERPNext describes a generic factory. Our factory moves fabric: it arrives, gets inspected, travels to dyeing, sometimes through external processing units, and finally reaches cutting and stitching. None of that is exotic, but none of it matches the default workflows exactly either.
+
+So the customization work was translation. Stock Entry workflows, the records that move material between locations, were shaped to follow the physical path of fabric and trims. Fabric is tracked by batch and LOT identity, so a roll can be followed from receipt to consumption. The handwritten gate passes became digital records with timestamps and attribution. Reports that someone used to compile by hand now generate from live data.
+
+The work is mostly Python: custom DocTypes, which are developer-defined record types, client scripts for the screens staff interact with, and server-side methods for the logic that must not depend on the browser.
+
+## The adoption problem
+
+Building the system was the smaller task. The larger one was getting a factory team, most of whom had never used anything beyond a phone, to trust software with their daily work.
+
+There was no clever solution. I sat with each person, watched their actual workflow, and simplified the screens until the digital path was easier than the paper one. The system earned adoption by being useful, not by mandate. Within weeks, the paper registers had stopped being the source of truth.
+
+## What I learned
+
+An ERP implementation is a modeling problem before it is a programming problem. The hard question is not "how do I write this feature" but "how does material actually move through this building, and what record structure would make that movement enforceable". Get the model wrong and every screen built on top of it fights the user.
+
+The second lesson is about trust. Software that replaces a paper process has to be visibly more reliable than paper, from day one, for the person using it. Not for the manager reviewing reports. For the store assistant who has to live inside it.
+
+The system runs in production today and keeps evolving as the factory's needs sharpen. That ongoing relationship, between how the building works and what the system enforces, is the actual job.

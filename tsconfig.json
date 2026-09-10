@@ -11,6 +11,6 @@
     "strictNullChecks": true,
     "moduleResolution": "bundler"
   },
-  "include": ["src/**/*", "env.d.ts"],
+  "include": [".astro/types.d.ts", "src/**/*", "env.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
