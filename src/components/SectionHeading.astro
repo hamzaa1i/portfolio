@@ -1,0 +1,15 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  id?: string;
+}
+
+const { eyebrow, title, id } = Astro.props;
+---
+
+<div class="flex items-baseline gap-4" id={id}>
+  <p class="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-accent">{eyebrow}</p>
+  <div class="h-px flex-1 bg-border" aria-hidden="true"></div>
+</div>
+<h2 class="mt-3 text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">{title}</h2>

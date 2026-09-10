@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { render } from 'astro:content';
+import { getNotes, type Note } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const notes = await getNotes();
+  return notes.map((note) => ({
+    params: { slug: note.id },
+    props: { note },
+  }));
+}
+
+interface Props {
+  note: Note;
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const { data } = note;
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Notes', item: new URL('/notes', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: data.title },
+  ],
+};
+
+const date = data.pubDate.toLocaleDateString('en-GB', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Layout title={data.title} description={data.description} path={`/notes/${note.id}`}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+  </Fragment>
+  <article>
+    <header class="border-b border-border">
+      <div class="container-site pt-14 pb-10 sm:pt-20 sm:pb-12">
+        <Breadcrumbs
+          items={[{ label: 'Home', href: '/' }, { label: 'Notes', href: '/notes' }, { label: data.title }]}
+        />
+        <div class="mt-8 flex flex-wrap items-baseline justify-between gap-3">
+          <p class="font-mono text-xs text-text-muted">{date}</p>
+          {
+            data.tags.length > 0 && (
+              <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-accent">
+                {data.tags.join(' · ')}
+              </p>
+            )
+          }
+        </div>
+        <h1 class="mt-4 max-w-2xl font-display text-3xl font-normal leading-tight tracking-[-0.01em] text-text-primary sm:text-4xl">
+          {data.title}
+        </h1>
+        <p class="mt-4 max-w-xl text-text-secondary">{data.description}</p>
+      </div>
+    </header>
+
+    <div class="container-site py-12 sm:py-16">
+      <div class="prose-case">
+        <Content />
+      </div>
+    </div>
+
+    <footer class="border-t border-border bg-midnight">
+      <div class="container-site py-10">
+        <a
+          href="/notes"
+          class="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-text-secondary transition-colors hover:text-accent-hover"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5" />
+            <path d="m12 19-7-7 7-7" />
+          </svg>
+          All notes
+        </a>
+      </div>
+    </footer>
+  </article>
+</Layout>

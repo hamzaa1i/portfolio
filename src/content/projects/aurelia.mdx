@@ -1,0 +1,96 @@
+---
+title: Aurelia
+shortTitle: Aurelia
+subtitle: A community management platform for Discord, from bot to dashboard
+category: "Product & Automation"
+timeline: 2024–Present
+status: live
+featured: true
+featuredOrder: 4
+role: "Creator & Developer"
+clientPublic: Personal product
+privacy: public
+summary: A Discord community platform with a web dashboard, OAuth configuration, documentation, live stats and an AI layer with multi-provider failover. Designed, built and maintained as an independent product.
+thumbnail: ../../assets/projects/aurelia/landing.png
+hero: ../../assets/projects/aurelia/landing.png
+stack:
+  - Python
+  - discord.py
+  - Next.js
+  - Postgres
+  - Gemini / Groq / Mistral / OpenRouter
+liveUrl: "https://veloura-aurelia.vercel.app"
+sourceUrl: "https://github.com/hamzaa1i/miles-discord-bot"
+results:
+  - value: "173"
+    label: "Invokable command paths"
+  - value: "47"
+    label: "Cog modules"
+  - value: "4"
+    label: "AI providers with routed failover"
+seoTitle: Aurelia — a Discord community management platform
+seoDescription: "Building Aurelia: a Discord community platform with moderation, engagement systems, a Next.js dashboard, OAuth configuration, public stats and multi-provider AI routing."
+---
+
+import Figure from '../../components/FigurePlate.astro';
+import Flow from '../../components/FlowDiagram.astro';
+import landing from '../../assets/projects/aurelia/landing.png';
+import dashboard from '../../assets/projects/aurelia/dashboard.png';
+import stats from '../../assets/projects/aurelia/stats.png';
+import chat from '../../assets/projects/aurelia/chat.png';
+import moderation from '../../assets/projects/aurelia/moderation.png';
+
+## Overview
+
+Aurelia is a community management platform for Discord. It is usually described as "a bot", and the bot is what members see, but the product is larger: a Python service with modular command architecture, a web dashboard for configuration, public documentation, live statistics and a changelog.
+
+I created it, built it and maintain it. It runs as an independent product with a live public dashboard.
+
+<Figure number="01" image={landing} alt="Aurelia's product landing page: the wordmark, tagline, live server and member counts, and the add-to-Discord call to action." caption="The product's public face, with live counters from the running system." context="1440 × 900 · September 2026" />
+
+## What it does
+
+For community operators, Aurelia covers the recurring work of running a server:
+
+- **moderation** with warnings tracked as numbered cases, escalating thresholds and a full audit log
+- **onboarding** with configurable welcome cards in several formats and live preview
+- **engagement** systems: leveling with role rewards, daily streaks, question of the day, giveaways with live entries, starboard and achievements
+- **privacy controls**, including per-user data export and deletion commands
+
+Every feature is configurable from the dashboard rather than requiring config file edits, which is the difference between a tool the owner can operate and one only its author can.
+
+<Figure number="02" image={chat} alt="A conversation with Aurelia in Discord: the bot answers conversationally and remembers a durable preference." caption="Conversational memory in action, from the project's own product captures." context="repository asset" />
+
+## System design
+
+The bot is Python on discord.py, organized as cogs: focused modules that each own one concern, 47 of them at the current count. Commands resolve through 173 invokable paths, a number the project tracks and publishes rather than a marketing figure.
+
+<Figure number="03" image={moderation} alt="Moderation surfaces: a numbered warning case, an AI automod nudge and audit log cards." caption="Moderation as numbered cases with a full audit trail." context="repository asset" />
+
+The dashboard is a Next.js application with Discord OAuth, so server owners sign in with their Discord identity and only see servers they administrate. Configuration written in the dashboard reaches the bot through a shared data layer, and public surfaces like the stats page and documentation render from the same source of truth. Live statistics refresh continuously.
+
+<Figure number="04" image={dashboard} alt="The Aurelia web dashboard: server configuration modules with live Discord pickers and realtime updates." caption="The dashboard server owners configure everything from." context="repository asset" />
+
+## AI architecture
+
+Aurelia's conversational features run on a multi-provider design. Four providers, Gemini, Groq, Mistral and OpenRouter, sit behind a router that owns failover: adapters translate requests, and the router decides which provider answers and what happens when one is unavailable. Each adapter degrades cleanly when its key is missing, so a partial deployment boots without the unconfigured providers.
+
+The design principle: no provider is special. Adding or removing one is a configuration change, not a rewrite, and no single outage takes the feature down.
+
+<Flow title="Aurelia system shape" footer="Discord ↔ cogs ↔ data layer ↔ dashboard · AI routed through four providers with failover" nodes={[{ label: 'Discord', note: 'members · events · interactions', kind: 'external' }, { label: 'Bot service', note: '47 cogs · 173 invokable paths' }, { label: 'AI router', note: 'Gemini · Groq · Mistral · OpenRouter · failover' }, { label: 'Data layer', note: 'Postgres · per-server config' }, { label: 'Web dashboard', note: 'Next.js · Discord OAuth · live config' }, { label: 'Public surfaces', note: 'docs · live stats · changelog' }]} />
+
+## Product surface
+
+Beyond the bot and dashboard, the project maintains what a real product needs: public documentation, a live stats page, a changelog, and curated screenshots of the actual product. The marketing assets in the repository are genuine captures of the running system.
+
+<Figure number="05" image={stats} alt="Aurelia's public live stats page: aggregate server and member counts refreshing from the running system." caption="The public stats page, aggregate numbers straight from the running system." context="1440 × 900 · September 2026" />
+
+## Lessons
+
+Building a platform alone forces clarity about boundaries: the bot never reaches into dashboard concerns, providers never implement fallback logic, and every module can fail without taking the process down. The result is a codebase where features are added by writing a new cog, not by negotiating with existing ones.
+
+## Links
+
+- Dashboard and product site: [veloura-aurelia.vercel.app](https://veloura-aurelia.vercel.app)
+- Live stats: [veloura-aurelia.vercel.app/stats](https://veloura-aurelia.vercel.app/stats)
+- Source: [github.com/hamzaa1i/miles-discord-bot](https://github.com/hamzaa1i/miles-discord-bot)

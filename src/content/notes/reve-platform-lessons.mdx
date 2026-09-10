@@ -1,0 +1,42 @@
+---
+title: What I Learned Building My First Production Website
+description: Lessons from taking a real business website from zero to production, and from maintaining it afterwards.
+pubDate: 2026-03-12
+tags:
+  - Astro
+  - Supabase
+  - Web
+featured: true
+---
+
+The first production website I built was for the garment manufacturing business I worked inside of. Not a demo, not a portfolio piece: a real company site that buyers would judge a factory by, with forms that had to work and an admin team depending on it. This is what that first build taught me.
+
+## Plan the content before the code
+
+My biggest early mistake was starting with the framework. I spent the first weeks excited about rendering strategy and component architecture, and the content structure, what pages existed, what each one said, who it was for, kept shifting underneath the build. Sections got rearranged late because nobody had agreed on the sitemap.
+
+Now I plan content first: every page, its purpose, its audience, before a line of code. The build after that is faster and calmer.
+
+## Static where possible, dynamic where necessary
+
+The site was content-heavy with islands of interactivity: quote forms, sample requests, an admin area. Astro's model fit that shape well, rendering most pages statically and shipping JavaScript only where interaction demanded it. Loading speed on a buyer's phone in another country is part of credibility, and the fastest request is the one you never make.
+
+The lesson generalizes: choose the rendering strategy that matches where the interactivity actually lives, not the one that is fashionable.
+
+## Forms are a trust surface
+
+A quote request on a manufacturer's site is a buyer extending a hand. Every failure mode, validation errors, lost submissions, silent failures, damages that trust. I learned to treat intake as the most critical path on the site: validate at the boundary with typed schemas, protect it against abuse with Turnstile and honeypots, and make sure a downstream failure, an email service hiccup, an integration being unreachable, never loses the submission itself.
+
+Fail-safe ordering matters: save the record first, sync everything else after.
+
+## The launch is the middle
+
+The site going live felt like the finish line. It was the start of maintenance: dependency updates, error monitoring, workflows the admin team found awkward and asked to improve, new requirements surfacing as the business used the platform in anger. A production website is not an artifact you hand over; it is a system you keep honest.
+
+That shift in mindset, from "building a site" to "operating a service", changed how I write everything since.
+
+## Working where the software runs
+
+The advantage I had was proximity. I could watch how enquiries arrived, what the admin team actually needed, and which reports mattered to management. Most software is built at a distance from its users. When you can close that distance, even partially, the requirements stop being guesses.
+
+That first website has since grown into a broader platform: structured intake, admin tooling, ERP integration, a client portal. The lessons above are why it survived being grown instead of being rewritten.

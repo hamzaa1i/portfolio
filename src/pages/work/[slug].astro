@@ -1,0 +1,180 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import StatBlock from '../../components/StatBlock.astro';
+import { render } from 'astro:content';
+import { getProjects, getNextProject, type Project } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const allProjects = await getProjects();
+const next = getNextProject(project, allProjects);
+const { Content } = await render(project);
+const { data } = project;
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Work', item: new URL('/work', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: data.shortTitle },
+  ],
+};
+
+const statusLabel =
+  data.status === 'live' ? 'Live in production' : data.status === 'ongoing' ? 'Ongoing' : 'Internal system';
+---
+
+<Layout
+  title={data.seoTitle ?? data.title}
+  description={data.seoDescription ?? data.summary}
+  path={`/work/${project.id}`}
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+  </Fragment>
+  <article>
+    <!-- ============ HERO ============ -->
+    <header class="border-b border-border">
+      <div class="container-site pt-14 pb-12 sm:pt-20 sm:pb-16">
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Work', href: '/work' },
+            { label: data.shortTitle },
+          ]}
+        />
+
+        <div class="mt-8 grid gap-8 lg:grid-cols-[3fr_2fr] lg:gap-16">
+          <div>
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-accent">
+              {data.category}{data.timeline && ` · ${data.timeline}`}
+            </p>
+            <h1
+              class="mt-4 max-w-2xl font-display text-4xl font-normal leading-[1.08] tracking-[-0.01em] text-text-primary sm:text-5xl"
+            >
+              {data.title}
+            </h1>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-text-secondary">
+              {data.subtitle}
+            </p>
+          </div>
+
+          <dl class="grid grid-cols-1 gap-4 self-start rounded-card border border-border bg-surface p-5 sm:grid-cols-2 lg:grid-cols-1">
+            <div>
+              <dt class="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-text-muted">Role</dt>
+              <dd class="mt-1 text-sm text-text-primary">{data.role}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-text-muted">Client</dt>
+              <dd class="mt-1 text-sm text-text-primary">{data.clientPublic}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-text-muted">Status</dt>
+              <dd class="mt-1 text-sm text-text-primary">{statusLabel}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-text-muted">Stack</dt>
+              <dd class="mt-1 text-sm leading-relaxed text-text-primary">{data.stack.join(' · ')}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-4">
+          {
+            data.liveUrl && (
+              <a
+                href={data.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-11 items-center gap-2 rounded-card border border-accent-dim bg-accent/10 px-5 py-2.5 text-sm font-medium text-accent-hover transition-colors duration-200 hover:border-accent hover:bg-accent/15"
+              >
+                Visit live site
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 17 17 7" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </a>
+            )
+          }
+          {
+            data.sourceUrl && (
+              <a
+                href={data.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-11 items-center gap-2 rounded-card border border-border px-5 py-2.5 text-sm font-medium text-text-secondary transition-colors duration-200 hover:border-border-strong hover:text-text-primary"
+              >
+                View source
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 17 17 7" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ BODY ============ -->
+    <div class="container-site py-14 sm:py-20">
+      {
+        data.results.length > 0 && (
+          <section aria-label="Verified figures" class="mb-14 border-b border-border pb-12">
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-accent">
+              Verified at build
+            </p>
+            <div class="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-3">
+              {data.results.map((stat) => (
+                <StatBlock value={stat.value} label={stat.label} />
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <div class="prose-case">
+        <Content />
+      </div>
+    </div>
+
+    <!-- ============ NEXT PROJECT ============ -->
+    <footer class="border-t border-border bg-midnight">
+      <div class="container-site py-12 sm:py-16">
+        <div class="reveal flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-text-muted">
+              Next case study
+            </p>
+            <p class="mt-2 text-xl font-semibold tracking-tight text-text-primary">
+              {next.data.title}
+            </p>
+            <p class="mt-1 text-sm text-text-secondary">{next.data.subtitle}</p>
+          </div>
+          <a
+            href={`/work/${next.id}`}
+            class="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-card border border-border px-5 py-2.5 text-sm font-medium text-text-secondary transition-colors duration-200 hover:border-border-strong hover:text-text-primary"
+          >
+            Continue
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </article>
+</Layout>

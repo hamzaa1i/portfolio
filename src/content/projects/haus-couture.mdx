@@ -1,0 +1,97 @@
+---
+title: Haus Couture
+shortTitle: Haus Couture
+subtitle: From a custom Astro storefront to a production Shopify commerce platform
+category: Ecommerce
+status: live
+featured: true
+featuredOrder: 3
+role: "Design & build, custom storefront; setup & launch, production store"
+clientPublic: Haus Couture
+privacy: public
+summary: A UK streetwear label that started on a custom Astro storefront and moved to Shopify when the commercial requirements outgrew a bespoke build. I built both phases and took the store to production.
+thumbnail: ../../assets/projects/haus-couture/home-desktop.png
+hero: ../../assets/projects/haus-couture/home-desktop.png
+stack:
+  - Shopify
+  - Astro
+  - Tailwind CSS
+  - Vercel
+liveUrl: "https://hauscouture.co.uk"
+results:
+  - value: "29"
+    label: "Product listings"
+  - value: "11"
+    label: "Style families"
+  - value: "6"
+    label: "Collections"
+seoTitle: Haus Couture — custom storefront to Shopify production
+seoDescription: "Building Haus Couture twice: a custom Astro storefront, then a production Shopify commerce platform with a full catalogue, GBP storefront and responsive product experience."
+---
+
+import Figure from '../../components/FigurePlate.astro';
+import homeDesktop from '../../assets/projects/haus-couture/home-desktop.png';
+import productPage from '../../assets/projects/haus-couture/product-page.png';
+import collection from '../../assets/projects/haus-couture/collection.png';
+import homeMobile from '../../assets/projects/haus-couture/home-mobile.png';
+import archived from '../../assets/projects/haus-couture/archived-custom.png';
+
+## Overview
+
+Haus Couture is a UK-based premium streetwear label. I designed and built its first custom storefront, and later carried the brand onto Shopify, where the store now runs in production at hauscouture.co.uk with a full catalogue and GBP checkout.
+
+<Figure number="01" image={homeDesktop} alt="Haus Couture production storefront homepage: premium British streetwear positioning with the signature hood range front and centre." caption="The production storefront today, running on Shopify." context="1440 × 900 · September 2026" />
+
+This is one project with two technical phases, and the interesting part is the judgement in between: recognizing when a bespoke build stops being the right commerce architecture.
+
+## Phase A: the custom storefront
+
+The label started with a custom Astro website. I designed and built it: information architecture, typography, layout, and responsive implementation, deployed on Vercel.
+
+A bespoke build gives full control over presentation, and for a launch-phase brand that control is worth its maintenance cost. The custom storefront established the visual direction, the product narrative and the catalogue structure while the brand was still finding its shape.
+
+The archived deployment still runs at haus-couture.vercel.app as a record of that first direction.
+
+<Figure number="02" image={archived} alt="Archived custom implementation: the original Astro storefront with serif typography and a muted editorial palette." caption="Archived custom implementation, the original Astro storefront." context="1440 × 900 · archived deployment" />
+
+## The decision
+
+As the commercial requirements became concrete, the picture changed. A production store needs battle-tested checkout, payment handling, tax and policy machinery, fraud tooling and an operational backend a small team can run. Rebuilding and maintaining all of that bespoke, for a catalogue of this size, was engineering effort spent below the waterline: necessary, invisible, and never as trustworthy as a platform that solves commerce for a living.
+
+So the architecture changed. The brand moved to Shopify, and the work moved from building storefront infrastructure to building the store itself.
+
+## Phase B: the production store
+
+On Shopify I own the storefront as a product:
+
+- catalogue architecture: product and variant structure, with four size variants per product across the range
+- collection structure: six collections organizing the catalogue
+
+<Figure number="04" image={collection} alt="The hoodies collection page: a grid of products in the style family with consistent dark presentation." caption="A collection view, one of six organizing the catalogue." context="1440 × 900 · September 2026" />
+- theme customization and configuration carrying the dark premium visual direction from the custom phase
+- responsive product experience, from catalogue to product page to checkout
+
+<Figure number="03" image={productPage} alt="Signature Hood product page: dark premium presentation with ghost-mannequin photography, size selector and GBP pricing." caption="A product page in the production store, GBP pricing and variant selection." context="1440 × 900 · September 2026" />
+- policies and content setup
+- domain integration and launch
+
+The store runs in GBP with production policies live. The first custom phase was not wasted work: the visual direction, catalogue thinking and product narrative carried straight into the production store.
+
+## What I credit
+
+To be precise about the division of labour: Shopify provides the commerce platform, checkout and payment infrastructure. My work is the storefront and store itself: the original custom implementation, the visual direction, the catalogue and collection architecture, the theme customization, and the launch.
+
+## Results
+
+The store is in production with a responsive catalogue of style families across six collections, GBP checkout, and live commerce policies. The archived custom storefront remains online as a record of the first technical direction.
+
+<Figure number="05" image={homeMobile} alt="The mobile storefront: full navigation, hero range and product grid on a phone viewport." caption="The storefront on mobile, where the catalogue reads first." context="390 × 844 · September 2026" />
+
+## Lessons
+
+Building the same store twice taught me to separate two questions early: what makes this brand distinctive, and what is undifferentiated infrastructure. The first deserves custom work. The second usually deserves a platform. Getting that split right is the difference between a launch that scales and one that has to be rebuilt.
+
+## Links
+
+- Production store: [hauscouture.co.uk](https://hauscouture.co.uk)
+- Archived custom storefront: [haus-couture.vercel.app](https://haus-couture.vercel.app)

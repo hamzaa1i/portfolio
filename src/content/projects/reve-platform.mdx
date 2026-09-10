@@ -1,0 +1,111 @@
+---
+title: Reve Stitching Digital Platform
+shortTitle: Reve Platform
+subtitle: A garment manufacturer's commercial website, grown into a digital operations layer
+category: Digital Platform
+timeline: 2024–Present
+status: live
+featured: true
+featuredOrder: 1
+role: "IT & Digital Systems Lead"
+clientPublic: Reve Stitching
+privacy: public
+summary: "A public marketing site that evolved into a working operations layer: structured quote and sample intake, admin tools, ERPNext integration and a client portal, maintained in daily production."
+thumbnail: ../../assets/projects/reve-platform/home-desktop.png
+hero: ../../assets/projects/reve-platform/home-desktop.png
+stack:
+  - Astro
+  - TypeScript
+  - Supabase
+  - Turso / Drizzle
+  - Resend
+  - ERPNext
+liveUrl: "https://www.revestitching.com"
+sourceUrl: "https://github.com/hamzaa1i/reve-stitching"
+results:
+  - value: "38"
+    label: "API routes"
+  - value: "13"
+    label: "Admin operations pages"
+  - value: "13"
+    label: "Client portal pages"
+seoTitle: Reve Stitching Digital Platform
+seoDescription: "How a garment manufacturer's website became a digital operations layer: quote intake, admin tools, ERPNext integration and a client portal, built and maintained in production."
+---
+
+import Figure from '../../components/FigurePlate.astro';
+import Flow from '../../components/FlowDiagram.astro';
+import homeDesktop from '../../assets/projects/reve-platform/home-desktop.png';
+import quoteIntake from '../../assets/projects/reve-platform/quote-intake.png';
+import quoteWizard from '../../assets/projects/reve-platform/quote-wizard.png';
+import products from '../../assets/projects/reve-platform/products.png';
+import homeMobile from '../../assets/projects/reve-platform/home-mobile.png';
+
+## Overview
+
+Reve Stitching is a knitted-garment manufacturer in Faisalabad that produces for UK fashion retailers and other international buyers. What began as a request for a company website grew into the business's primary digital operations layer: a public product experience, structured quote and sample intake, internal admin tooling, an ERPNext connection, and a portal where clients follow their own orders.
+
+I build and maintain the platform end to end, working directly with the factory workflows it supports. It runs in production today and is still being extended.
+
+## Context
+
+International buyers evaluate garment manufacturers constantly. Before this platform existed, Reve had no website, no digital brand presence, and no structured way to receive an enquiry. Buyer questions arrived through informal channels, quotes were assembled by hand, and nothing fed into the systems the factory actually ran on.
+
+The commercial requirement was broader than a marketing site. The business needed buyer-facing credibility and operational intake in one place: a public site that presents capability professionally, and a pipeline that turns enquiries into structured, tracked records instead of scattered messages.
+
+## Role
+
+My role covers the platform as a product: architecture, implementation, operations and iteration. I work alongside the people who use it, from the admin team processing quotes to the floor staff whose material movements the ERP side reflects. That closeness to real operations shapes most of the design decisions in this case study.
+
+## What was built
+
+**Public experience.** A fast marketing and catalogue site presenting capabilities, certifications and product ranges to international buyers, with production photography and copy written for a B2B audience.
+
+<Figure number="01" image={homeDesktop} alt="Reve Stitching public homepage: premium garment manufacturing positioning above the fold, with primary navigation and a quote call to action." caption="The public homepage, positioning the manufacturer for international buyers." context="1440 × 900 · September 2026" />
+
+**Structured intake.** Quote requests and sample requests are multi-step forms with validation, Cloudflare Turnstile protection and honeypot fields. Each submission lands as a typed record, not a loose email.
+
+<Figure number="02" image={quoteIntake} alt="The quote request landing: trust signals, a stepwise request flow, and product category selection." caption="The quote request experience: a guided wizard rather than a bare contact form." context="1440 × 900 · September 2026" />
+
+<Figure number="03" image={quoteWizard} alt="Step two of the quote wizard showing product selection with specifications, minimum order quantities and pricing ranges." caption="Inside the wizard: product selection with MOQ and price banding." context="1440 × 900 · September 2026" />
+
+**Admin operations.** An authenticated admin area with thirteen pages covering quote processing, sample tracking, contact enquiries and live-chat administration, including follow-up workflows that remind the team when an enquiry ages without a response.
+
+<Figure number="04" image={products} alt="The product catalogue experience: knitted garment categories with an integrated cost calculator." caption="The catalogue experience buyers browse before requesting quotes." context="1440 × 900 · September 2026" />
+
+**Client portal.** A portal where registered clients track their orders, quotes and documents, with session-based auth and per-client data separation.
+
+**Transactional email.** Confirmation and status-update emails to buyers, and internal reminders, delivered through Resend with maintained HTML templates.
+
+**AI-assisted processing.** Where it earns its place: an AI summary that drafts a sales brief and FOB price estimate for incoming quote requests, and a tech-pack analyzer that reads attached reference images. Both produce drafts for a human to confirm, never unreviewed automated decisions.
+
+## System design
+
+The platform is Astro with TypeScript. Public pages render statically; operational routes run on demand. Supabase and a Turso/libSQL database accessed through Drizzle hold intake records and portal data. Resend handles transactional email. Sentry captures errors in production.
+
+The ERPNext integration is deliberately fail-safe. When a quote is submitted, the platform creates a Lead record in the factory's ERPNext instance. The integration runs after the quote is saved, so if ERPNext is unreachable the quote still succeeds and the Lead is reconciled later. Operational systems fail softly; the intake path never breaks because a downstream system blinked.
+
+<Flow title="Reve Platform request flow" footer="Public experience → intake API → persistence → AI drafts → ERPNext lead → admin → client portal" nodes={[{ label: 'Public experience', note: 'marketing · catalogue · quote & sample forms' }, { label: 'Intake API', note: 'Zod validation · Turnstile · honeypot' }, { label: 'Persistence', note: 'Supabase + Turso/libSQL via Drizzle' }, { label: 'AI-assisted processing', note: 'sales brief · tech-pack analysis · drafts only' }, { label: 'ERPNext integration', note: 'Lead creation · fail-safe', kind: 'external' }, { label: 'Admin operations', note: 'quotes · samples · chat · follow-ups' }, { label: 'Client portal', note: 'orders · quotes · documents' }]} />
+
+## Engineering decisions
+
+**Fail-safe over strict consistency.** Every external dependency in the intake path, from email delivery to ERPNext, is wrapped so the buyer's submission succeeds first and back-office sync settles afterwards. For a manufacturer whose enquiries arrive across time zones, the record must never be lost to a transient failure.
+
+**Structured intake at the boundary.** Validation happens with Zod at the API boundary, so everything downstream, admin views, portal displays, ERP records, works against typed, normalized data instead of parsing free text.
+
+**Drafts, not verdicts, for AI.** The AI layers write drafts into the admin view. A person reviews, edits and confirms. This keeps the speed benefit without letting a model make commercial commitments.
+
+## Results
+
+The platform carries live production traffic today. Buyers submit structured quote and sample requests that flow into admin tooling and the ERP. The client portal gives order visibility without ad-hoc status calls. I continue to maintain and extend it as the factory's needs sharpen.
+
+<Figure number="05" image={homeMobile} alt="The mobile homepage: full navigation, positioning statement and quote call to action on a phone viewport." caption="The same experience on mobile, where many buyers first land." context="390 × 844 · September 2026" />
+
+## Maintenance
+
+Running software in a real business is ongoing work: dependency updates, error triage through Sentry, refining workflows the team finds awkward, and extending the platform as requirements surface. The platform is not a delivered artifact; it is infrastructure in daily use.
+
+## Links
+
+- Live site: [revestitching.com](https://www.revestitching.com)
+- Source: [github.com/hamzaa1i/reve-stitching](https://github.com/hamzaa1i/reve-stitching)

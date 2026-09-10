@@ -1,0 +1,86 @@
+---
+/**
+ * Architecture / workflow diagram — semantic HTML + CSS.
+ * Clearly a diagram, never a fake UI: mono labels, hairline boxes,
+ * explicit connector arrows, no chrome mimicry.
+ */
+
+interface Node {
+  label: string;
+  note?: string;
+  /** external = dashed (outside the system boundary) */
+  kind?: 'process' | 'external' | 'data';
+}
+
+interface Props {
+  /** Diagram caption, rendered above the flow. */
+  title: string;
+  nodes: Node[];
+  /** Optional annotation under the flow. */
+  footer?: string;
+}
+
+const { title, nodes, footer } = Astro.props;
+---
+
+<figure class="flow-diagram border border-border bg-midnight rounded-image" role="figure" aria-label={title}>
+  <figcaption class="border-b border-border px-4 py-3">
+    <p class="text-sm text-text-secondary">
+      <span class="font-mono text-[0.65rem] font-medium uppercase tracking-[0.18em] text-accent">
+        Diagram
+      </span>
+      <span class="mx-2 text-border-strong" aria-hidden="true">/</span>{title}
+    </p>
+  </figcaption>
+
+  <ol class="grid gap-0 px-5 py-6 sm:px-8" role="list">
+    {
+      nodes.map((node, i) => (
+        <>
+          {i > 0 && (
+            <li class="flex justify-center py-1.5" aria-hidden="true">
+              <svg width="14" height="22" viewBox="0 0 14 22" fill="none" stroke="currentColor" stroke-width="1.5" class="text-accent-dim">
+                <path d="M7 0v18" stroke-linecap="round" />
+                <path d="m2.5 15.5 4.5 4.5 4.5-4.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </li>
+          )}
+          <li
+            class:list={[
+              'rounded-card border px-4 py-3 text-center',
+              node.kind === 'external'
+                ? 'border-dashed border-border-strong bg-transparent'
+                : node.kind === 'data'
+                  ? 'border-border bg-surface'
+                  : 'border-border bg-surface',
+            ]}
+          >
+            <p class="font-mono text-[0.72rem] font-medium text-text-primary">{node.label}</p>
+            {node.note && <p class="mt-1 text-xs text-text-muted">{node.note}</p>}
+          </li>
+        </>
+      ))
+    }
+  </ol>
+
+  {
+    footer && (
+      <p class="border-t border-border px-4 py-3 font-mono text-[0.65rem] text-text-muted">
+        {footer}
+      </p>
+    )
+  }
+</figure>
+
+<style>
+  .flow-diagram ol {
+    list-style: none;
+    margin: 0;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .flow-diagram ol {
+      padding-inline: 2rem;
+    }
+  }
+</style>

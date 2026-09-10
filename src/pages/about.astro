@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { SITE, IDENTITY } from '../lib/site';
+
+const capabilities = [
+  {
+    title: 'Product & Web Platforms',
+    body: 'Marketing sites, portals, dashboards and operational web applications built as coherent systems.',
+    tech: 'Astro · TypeScript · Supabase · Vercel',
+  },
+  {
+    title: 'ERP & Operations',
+    body: 'Internal systems that model real factory workflows, stock movement, traceability and order progress.',
+    tech: 'ERPNext · Frappe · Python · PostgreSQL',
+  },
+  {
+    title: 'AI & Automation',
+    body: 'AI-assisted workflows, integrations, provider routing, document analysis and operational automation where they provide practical value.',
+    tech: 'Provider routing · Vision analysis · Zod',
+  },
+  {
+    title: 'Ecommerce & Digital Experience',
+    body: 'Production storefronts, catalogue architecture, responsive product experience and commerce implementation.',
+    tech: 'Shopify · Catalogue design · Responsive',
+  },
+];
+---
+
+<Layout
+  title="About"
+  description="Hamza Ali builds software from inside the operations it supports: web platforms, manufacturing ERP and production storefronts for real businesses."
+  path="/about"
+>
+  <section class="border-b border-border">
+    <div class="container-site pt-14 pb-12 sm:pt-20 sm:pb-16">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
+      <p class="mt-8 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-accent">
+        {SITE.author} · {SITE.role}
+      </p>
+      <h1 class="mt-4 max-w-2xl font-display text-4xl font-normal tracking-[-0.01em] text-text-primary sm:text-5xl">
+        I build software where the work happens
+      </h1>
+    </div>
+  </section>
+
+  <section class="container-site py-14 sm:py-20">
+    <div class="prose-case">
+      <p class="text-lg leading-relaxed text-text-secondary">
+        Working inside a garment manufacturing business gave me direct exposure to the problems
+        software is supposed to solve: quote intake, stock movement, order tracking, client
+        communication and production visibility.
+      </p>
+      <p>
+        That shaped how I build. I prefer systems that survive real workflows over prototypes
+        designed only to look impressive. When a quote form can fail quietly, or a stock record
+        disagrees with the shelf, you learn quickly which engineering decisions actually matter.
+      </p>
+
+      <h2>What I do now</h2>
+      <p>
+        I lead IT and digital systems at Reve Stitching, a knitted-garment manufacturer in
+        Faisalabad. That means two connected bodies of work: the customer-facing digital
+        platform, covering the website, quote and sample intake, admin operations and a client
+        portal, and the internal side, an ERPNext implementation customized to how the factory
+        actually moves material, from batch tracking to gate passes and operational reporting.
+      </p>
+      <p>
+        Alongside that I build products of my own. Aurelia, a community management platform for
+        Discord, is the largest: a Python service with a web dashboard, public documentation and
+        a multi-provider AI layer. I also carried Haus Couture, a UK streetwear label, from a
+        custom storefront onto its production Shopify store.
+      </p>
+
+      <h2>How I got here</h2>
+      <p>
+        I'm self-taught. The path ran through real work rather than coursework: a business that
+        needed a website, then needed it to do more, then needed its operations digitized, then
+        needed the two sides to talk to each other. Each step demanded more than the last, and
+        the option was always to learn it or to stop. I learned it.
+      </p>
+      <p>
+        That origin shows in how I work. I default to proximity: watch the real workflow before
+        designing the system, sit with the person who will use the screen, and treat maintenance
+        as part of the job rather than an afterthought. Software I build is running in
+        production today because it was built with the people who run it.
+      </p>
+
+      <h2>How I work</h2>
+      <ul>
+        <li>
+          <strong>Systems over screens.</strong> A page is easy; the pipeline behind it, intake,
+          validation, storage, reporting, integration, is the actual product.
+        </li>
+        <li>
+          <strong>Fail-safe ordering.</strong> Record the submission first, sync everything else
+          after. A downstream outage should degrade a system, not break it.
+        </li>
+        <li>
+          <strong>Drafts, not verdicts.</strong> Where AI participates, it prepares work for a
+          human to confirm. It never makes the commercial decision.
+        </li>
+        <li>
+          <strong>Plain-language engineering.</strong> The system should be explainable to the
+          person using it, in terms they already understand from their own workflow.
+        </li>
+      </ul>
+
+      <h2>Contact</h2>
+      <p>
+        The fastest way to reach me is email at
+        <a href={`mailto:${IDENTITY.email}`}>{IDENTITY.email}</a>, or through the
+        <a href="/contact">contact page</a>. I'm based in {SITE.location} and currently
+        {SITE.availability.toLowerCase()}.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-t border-border bg-midnight">
+    <div class="container-site py-14 sm:py-20">
+      <SectionHeading eyebrow="Capabilities" title="What I build" />
+      <div class="mt-8 grid gap-px overflow-hidden rounded-card border border-border bg-border sm:grid-cols-2">
+        {
+          capabilities.map((cap) => (
+            <div class="bg-midnight p-6 sm:p-8">
+              <h3 class="text-base font-semibold tracking-tight text-text-primary">{cap.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-text-secondary">{cap.body}</p>
+              <p class="mt-4 font-mono text-[0.68rem] text-text-muted">{cap.tech}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>

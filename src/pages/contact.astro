@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { IDENTITY, SITE } from '../lib/site';
+import ContactForm from '../components/ContactForm.astro';
+---
+
+<Layout
+  title="Contact"
+  description="Contact Hamza Ali, Software & Systems Engineer in Faisalabad, Pakistan. Email or contact form for project enquiries."
+  path="/contact"
+>
+  <section class="border-b border-border">
+    <div class="container-site pt-14 pb-10 sm:pt-20 sm:pb-14">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
+      <p class="mt-8 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-accent">Contact</p>
+      <h1 class="mt-4 font-display text-4xl font-normal tracking-[-0.01em] text-text-primary sm:text-5xl">
+        Start a conversation
+      </h1>
+      <p class="mt-5 max-w-xl text-text-secondary">
+        I build web platforms, operational systems and storefronts for real businesses.
+        {SITE.availability}. Tell me what you are working on.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-site py-14 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[2fr_3fr] lg:gap-16">
+      <div>
+        <h2 class="font-mono text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
+          Direct
+        </h2>
+        <a
+          href={`mailto:${IDENTITY.email}`}
+          class="mt-3 inline-block font-mono text-sm text-accent-hover transition-colors hover:text-accent"
+        >
+          {IDENTITY.email}
+        </a>
+        <p class="mt-3 text-sm text-text-secondary">
+          Fastest route. I read everything and reply to serious enquiries within a few days.
+        </p>
+
+        <h2 class="mt-10 font-mono text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
+          Elsewhere
+        </h2>
+        <ul class="mt-3 grid gap-2">
+          <li>
+            <a
+              href={IDENTITY.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm text-text-secondary transition-colors hover:text-text-primary"
+            >
+              GitHub · github.com/hamzaa1i
+            </a>
+          </li>
+          {
+            IDENTITY.linkedin && (
+              <li>
+                <a
+                  href={IDENTITY.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-sm text-text-secondary transition-colors hover:text-text-primary"
+                >
+                  LinkedIn · linkedin.com/in/hamzaalidev
+                </a>
+              </li>
+            )
+          }
+        </ul>
+
+        <p class="mt-10 text-sm text-text-muted">
+          Based in {SITE.location}. Working remotely across UK and European time zones.
+        </p>
+      </div>
+
+      <div class="rounded-card border border-border bg-surface p-6 sm:p-8">
+        <h2 class="font-mono text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
+          Enquiry
+        </h2>
+        <p class="mt-3 text-sm text-text-secondary">
+          The essentials are enough: what the project is, what state it is in, and what you need
+          built.
+        </p>
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</Layout>

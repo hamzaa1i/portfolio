@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NotesCard from '../../components/NotesCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getNotes } from '../../lib/content';
+
+const notes = await getNotes();
+---
+
+<Layout
+  title="Notes"
+  description="Occasional writing on building real systems: ERP implementation, production websites, and design process, from direct experience."
+  path="/notes"
+>
+  <section class="border-b border-border">
+    <div class="container-site pt-14 pb-10 sm:pt-20 sm:pb-14">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Notes' }]} />
+      <p class="mt-8 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-accent">Notes</p>
+      <h1 class="mt-4 font-display text-4xl font-normal tracking-[-0.01em] text-text-primary sm:text-5xl">
+        Writing from the work
+      </h1>
+      <p class="mt-5 max-w-xl text-text-secondary">
+        Lessons that only show up when software meets a real business: adoption, trust,
+        maintenance, and the decisions in between.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-site py-14 sm:py-20">
+    <div class="grid gap-6 md:grid-cols-2">
+      {notes.map((note) => <NotesCard note={note} />)}
+    </div>
+  </section>
+</Layout>

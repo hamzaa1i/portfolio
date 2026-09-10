@@ -1,95 +1,125 @@
 ---
+import { Picture } from 'astro:assets';
+import type { Project } from '../lib/content';
+
 interface Props {
-  title: string;
-  description: string;
-  type: string;
-  role: string;
-  stack: string[];
-  liveUrl?: string;
-  githubUrl?: string;
-  caseStudyUrl?: string;
-  placeholderClass?: string;
+  project: Project;
+  /** Featured treatment for the lead project. */
+  featured?: boolean;
 }
 
-const { title, description, type, role, stack, liveUrl, githubUrl, caseStudyUrl, placeholderClass = 'project-placeholder-1' } = Astro.props;
-const hasLive = !!liveUrl;
-const hasGithub = !!githubUrl;
-const hasCaseStudy = !!caseStudyUrl;
+const { project, featured = false } = Astro.props;
+const { data } = project;
+const href = `/work/${project.id}`;
+const isSvg = data.thumbnail?.format === 'svg';
 ---
 
-<article class="project-card glass flex flex-col" data-animate="fade-up">
-  <!-- Image area with case study overlay -->
-  <div class="project-image-hover relative">
-    <div class={`project-placeholder ${placeholderClass}`}>
-      <div class="absolute inset-0 flex items-center justify-center">
-        <span class="font-mono text-[0.6rem] text-text-dim tracking-[0.15em] uppercase">{type}</span>
+<article
+  class:list={[
+    'group relative rounded-card border bg-surface transition-colors duration-200 hover:border-border-strong',
+    featured ? 'overflow-hidden' : 'overflow-hidden',
+  ]}
+>
+  <a href={href} class="block focus-visible:outline-offset-4" aria-label={`Case study: ${data.title}`}>
+    {
+      data.thumbnail ? (
+        <div class="overflow-hidden border-b border-border">
+          {isSvg ? (
+            <img
+              src={data.thumbnail.src}
+              alt={`${data.title} — ${data.subtitle}`}
+              width={data.thumbnail.width}
+              height={data.thumbnail.height}
+              loading={featured ? 'eager' : 'lazy'}
+              class="block aspect-[16/10] w-full h-auto object-cover object-top transition-transform duration-300 ease-out group-hover:scale-[1.01]"
+            />
+          ) : (
+            <Picture
+              src={data.thumbnail}
+              alt={`${data.title} — ${data.subtitle}`}
+              widths={featured ? [960, 1280, 1920] : [640, 960, 1280]}
+              sizes={featured ? '(min-width: 1200px) 1088px, 100vw' : '(min-width: 768px) 50vw, 100vw'}
+              formats={['avif', 'webp']}
+              loading={featured ? 'eager' : 'lazy'}
+              class="block aspect-[16/10] w-full h-auto object-cover object-top transition-transform duration-300 ease-out group-hover:scale-[1.01]"
+            />
+          )}
+        </div>
+      ) : (
+        <div class="flex aspect-[16/10] items-center justify-center border-b border-border bg-midnight">
+          <span class="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-text-muted">
+            {data.category}
+          </span>
+        </div>
+      )
+    }
+
+    <div class="p-5 sm:p-6">
+      <div class="flex items-baseline justify-between gap-4">
+        <p class="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-accent">
+          {data.category}
+        </p>
+        {
+          data.timeline && (
+            <p class="font-mono text-[0.65rem] text-text-muted whitespace-nowrap">{data.timeline}</p>
+          )
+        }
+      </div>
+
+      <h3
+        class:list={[
+          'mt-2 font-semibold tracking-tight text-text-primary',
+          featured ? 'text-xl sm:text-2xl' : 'text-lg',
+        ]}
+      >
+        {data.shortTitle}
+      </h3>
+      <p class="mt-1.5 text-sm text-text-secondary">{data.subtitle}</p>
+
+      <div class="mt-4 flex flex-wrap gap-x-3 gap-y-1.5">
+        {
+          data.stack.slice(0, 5).map((tech) => (
+            <span class="font-mono text-[0.68rem] text-text-muted">{tech}</span>
+          ))
+        }
+      </div>
+
+      <div class="mt-5 flex items-center gap-2 text-sm font-medium text-text-primary">
+        <span class="transition-colors group-hover:text-accent-hover">Read case study</span>
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="translate-x-0 transition-transform duration-200 group-hover:translate-x-0.5"
+          aria-hidden="true"
+        >
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </svg>
       </div>
     </div>
-  </div>
+  </a>
 
-  <!-- Content -->
-  <div class="flex flex-col flex-1 p-5 sm:p-6 pt-4">
-    <div class="flex items-center gap-2 mb-2">
-      <span class="font-mono text-[0.6rem] tracking-wider uppercase text-accent-primary/70">{type}</span>
-      <span class="w-1 h-1 rounded-full bg-text-dim"></span>
-      <span class="font-mono text-[0.6rem] tracking-wider uppercase text-text-dim">{role}</span>
-    </div>
-
-    <h3 class="font-heading text-base sm:text-lg font-semibold text-text-primary mb-2 leading-tight">{title}</h3>
-    <p class="text-sm text-text-secondary leading-relaxed mb-4 flex-1">{description}</p>
-
-    <div class="flex flex-wrap gap-1.5 mb-5">
-      {stack.map((tech) => <span class="tech-tag">{tech}</span>)}
-    </div>
-
-    <div class="flex items-center gap-3 mt-auto">
-      {hasCaseStudy && (
-        <a href={caseStudyUrl} class="btn-primary btn-sm flex-1 justify-center">
-          <span>Case Study</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-        </a>
-      )}
-
-      {hasLive && (
-        <a href={liveUrl} target="_blank" rel="noopener noreferrer" class="btn-secondary btn-sm flex-1 justify-center">
-          <span>Live Site</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-        </a>
-      )}
-
-      {hasGithub && (
-        <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="btn-secondary btn-sm flex-1 justify-center">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          <span>Source</span>
-        </a>
-      )}
-
-      {!hasLive && !hasGithub && !hasCaseStudy && (
-        <div class="tooltip-wrapper flex-1">
-          <span class="btn-secondary btn-sm btn-disabled flex-1 justify-center inline-flex">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-            <span>Private</span>
-          </span>
-          <span class="tooltip">Internal system, not publicly accessible</span>
-        </div>
-      )}
-    </div>
-  </div>
+  {
+    data.liveUrl && (
+      <a
+        href={data.liveUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-void/80 px-3 py-1.5 font-mono text-[0.65rem] text-text-secondary backdrop-blur transition-colors hover:text-accent-hover hover:border-accent-dim"
+        aria-label={`Visit live site: ${data.title}`}
+      >
+        Live site
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7 17 17 7" />
+          <path d="M7 7h10v10" />
+        </svg>
+      </a>
+    )
+  }
 </article>
-
-<style>
-  .project-card {
-    position: relative;
-    transition: transform 0.4s var(--ease-out-quart), box-shadow 0.4s var(--ease-out-quart);
-  }
-
-  .project-card:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18), 0 6px 16px rgba(0, 0, 0, 0.12) !important;
-    border-color: rgba(255, 255, 255, 0.12) !important;
-  }
-
-  .project-card .flex.items-center.gap-3.mt-auto {
-    flex-wrap: wrap;
-  }
-</style>
