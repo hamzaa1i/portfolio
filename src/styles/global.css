@@ -55,7 +55,7 @@
   /* Text ramp */
   --color-text-primary: #fafafa;
   --color-text-secondary: #a1a1aa;
-  --color-text-muted: #71717a;
+  --color-text-muted: #82828a; /* bumped from #71717a: AA (4.5:1+) on all surfaces */
 
   /* Accent — restrained gold */
   --color-accent: #c8a24e;

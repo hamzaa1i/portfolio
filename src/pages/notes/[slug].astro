@@ -20,6 +20,15 @@ const { note } = Astro.props;
 const { Content } = await render(note);
 const { data } = note;
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Notes', item: new URL('/notes', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: data.title },
+  ],
+};
+
 const date = data.pubDate.toLocaleDateString('en-GB', {
   year: 'numeric',
   month: 'long',
@@ -28,6 +37,9 @@ const date = data.pubDate.toLocaleDateString('en-GB', {
 ---
 
 <Layout title={data.title} description={data.description} path={`/notes/${note.id}`}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+  </Fragment>
   <article>
     <header class="border-b border-border">
       <div class="container-site pt-14 pb-10 sm:pt-20 sm:pb-12">

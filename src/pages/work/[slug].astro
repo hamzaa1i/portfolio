@@ -23,6 +23,15 @@ const next = getNextProject(project, allProjects);
 const { Content } = await render(project);
 const { data } = project;
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Work', item: new URL('/work', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: data.shortTitle },
+  ],
+};
+
 const statusLabel =
   data.status === 'live' ? 'Live in production' : data.status === 'ongoing' ? 'Ongoing' : 'Internal system';
 ---
@@ -32,6 +41,9 @@ const statusLabel =
   description={data.seoDescription ?? data.summary}
   path={`/work/${project.id}`}
 >
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+  </Fragment>
   <article>
     <!-- ============ HERO ============ -->
     <header class="border-b border-border">
