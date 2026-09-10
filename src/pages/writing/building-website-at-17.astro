@@ -3,29 +3,29 @@ import PostLayout from '../../layouts/PostLayout.astro';
 ---
 
 <PostLayout
-  title="How I Built a Production Website at 17"
+  title="What I Learned Building My First Production Platform"
   date="March 12, 2026"
   readingTime="5 min read"
   tags={['Astro', 'Tailwind', 'GSAP', 'Supabase']}
-  description="The story of how I went from zero coding experience to shipping a full production website for a UK garment exporter."
+  description="Lessons from evolving a company website into a production platform with intake, operations, and client-facing workflows."
 >
 
-<h2>The Starting Point</h2>
+<h2>The Brief Grew with the Business</h2>
 
-<p>My uncle Vasim runs a garment factory in Faisalabad. They export over 300,000 garments every month to brands in the UK and Europe. When I started working there as a store assistant, I noticed something strange: a business of that scale had no website, no digital systems, and no brand identity. Everything ran on paper and Excel.</p>
+<p>Reve Stitching needed a credible digital presence, but the work quickly became more than a marketing site. Quote requests, sample requests, product information, internal follow-up, and client communication all touched the same customer journey.</p>
 
-<p>I had no coding experience. But I had seen enough websites to know what a good one looked like, and I was curious enough to try building one myself.</p>
+<p>The important shift was treating the website as operational software: every public form needed a clear destination, every status needed ownership, and every useful interface needed to keep working when an optional integration failed.</p>
 
 <h2>Picking the Stack</h2>
 
 <p>After researching for about a week, I landed on a stack that made sense for a content-heavy B2B website:</p>
 
 <ul>
-  <li><strong>Astro 5</strong> for the framework. Static site generation meant fast loading with zero JavaScript by default.</li>
+  <li><strong>Astro</strong> for fast content delivery and selective interactivity.</li>
   <li><strong>Tailwind CSS</strong> for styling. Utility classes let me move fast without fighting CSS specificity.</li>
-  <li><strong>GSAP + ScrollTrigger</strong> for animations. I wanted premium scroll interactions, not just fade-ins.</li>
-  <li><strong>Supabase</strong> for the backend. Quote requests, sample forms, and an admin dashboard all needed a database.</li>
-  <li><strong>Vercel</strong> for hosting. Free tier, automatic deploys from GitHub, fast CDN.</li>
+  <li><strong>GSAP + ScrollTrigger</strong> for deliberate, performance-aware motion.</li>
+  <li><strong>Supabase and libSQL/Drizzle</strong> for data-backed workflows.</li>
+  <li><strong>Vercel</strong> for deployment and server-side routes.</li>
 </ul>
 
 <h2>What I Actually Built</h2>
@@ -33,37 +33,36 @@ import PostLayout from '../../layouts/PostLayout.astro';
 <p>The website ended up being much bigger than a simple corporate page. Here's what shipped:</p>
 
 <ul>
-  <li>Custom scroll animations on every section using GSAP and ScrollTrigger</li>
-  <li>A real-time quote calculator where buyers can get instant pricing</li>
-  <li>A sample request system connected to Supabase</li>
-  <li>An admin dashboard for the factory team to manage incoming requests</li>
-  <li>Full dark mode with smooth transitions</li>
-  <li>An AI chat widget for quick visitor questions</li>
-  <li>Mobile responsive down to 320px</li>
+  <li>Quote, sample, and contact intake flows</li>
+  <li>Admin operations for requests, chat, email templates, and follow-ups</li>
+  <li>A client portal for project-facing updates</li>
+  <li>ERPNext integration points for operational continuity</li>
+  <li>Turnstile, validation, transactional email, and error monitoring</li>
+  <li>Responsive public experiences with motion that respects reduced-motion preferences</li>
 </ul>
 
 <p>The site is live at <a href="https://revestitching.com" target="_blank" rel="noopener">revestitching.com</a> if you want to see it.</p>
 
 <h2>The Hard Parts</h2>
 
-<p>The animations were the trickiest. Getting scroll-triggered reveals to feel smooth without janking on slower devices took a lot of trial and error. I learned that fewer, well-timed animations always beat more, flashier ones.</p>
+<p>Motion was one of the visible challenges. Scroll-triggered reveals had to feel intentional without making slower devices pay an unnecessary cost. The durable lesson was that fewer, better-timed movements create more confidence than constant animation.</p>
 
-<p>The admin dashboard was another challenge. I had to learn Supabase Row Level Security to make sure only authorized users could view and manage form submissions. That was my first real taste of backend security.</p>
+<p>The harder work was behind the interface: validating input, keeping privileged tools separate, connecting notifications, and designing failure states so an unavailable service did not take down the rest of the journey.</p>
 
-<h2>What a Software House Quoted</h2>
+<h2>Architecture Is Also Product Work</h2>
 
-<p>Before I volunteered to build everything, the factory got quotes from local software houses. The range was <strong>₨500,000 to ₨2,000,000</strong> for the scope I ended up delivering. I did it solo, at 17.</p>
+<p>The current codebase contains 38 API route files, 13 admin pages, and 13 portal pages. Those numbers matter only because they expose the real shape of the product: the system has multiple audiences, permissions, and operational handoffs.</p>
 
-<p>I'm not saying this to brag. I'm saying it because the gap between "what agencies charge" and "what a motivated builder can deliver" is massive right now. The tools are accessible. The knowledge is free. You just have to actually do the work.</p>
+<p>Counting pages is not a substitute for outcomes. It is a reminder to design navigation, data ownership, and error handling before small implementation decisions harden into constraints.</p>
 
 <h2>What I'd Do Differently</h2>
 
-<p>If I started this project today, I'd plan the content structure before writing any code. I spent too many hours rearranging sections because I didn't have a clear sitemap upfront. I'd also set up analytics from day one instead of adding it later.</p>
+<p>If I started again, I would map public intake, internal ownership, and client-visible status before writing interface code. That model is more useful than a sitemap alone because it catches operational gaps early.</p>
 
 <p>But honestly? Shipping something imperfect taught me more than any tutorial ever could.</p>
 
 <blockquote>
-  <p>The best way to learn is to build something real for someone who actually needs it.</p>
+  <p>A production platform succeeds when the interface and the operation behind it tell the same story.</p>
 </blockquote>
 
 </PostLayout>

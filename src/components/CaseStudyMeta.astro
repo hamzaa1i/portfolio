@@ -1,0 +1,136 @@
+---
+interface Metric {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  role: string;
+  timeline: string;
+  status: string;
+  metrics?: Metric[];
+  liveUrl?: string;
+  sourceUrl?: string;
+}
+
+const { role, timeline, status, metrics = [], liveUrl, sourceUrl } = Astro.props;
+---
+
+<aside class="case-meta glass" aria-label="Project summary" data-animate="fade-up">
+  <div class="case-meta-grid">
+    <div>
+      <span>role</span>
+      <strong>{role}</strong>
+    </div>
+    <div>
+      <span>timeline</span>
+      <strong>{timeline}</strong>
+    </div>
+    <div>
+      <span>status</span>
+      <strong>{status}</strong>
+    </div>
+  </div>
+
+  {metrics.length > 0 && (
+    <div class="case-metrics">
+      {metrics.map((metric) => (
+        <div>
+          <strong>{metric.value}</strong>
+          <span>{metric.label}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {(liveUrl || sourceUrl) && (
+    <div class="case-links">
+      {liveUrl && <a href={liveUrl} target="_blank" rel="noopener noreferrer">live project ↗</a>}
+      {sourceUrl && <a href={sourceUrl} target="_blank" rel="noopener noreferrer">source ↗</a>}
+    </div>
+  )}
+</aside>
+
+<style>
+  .case-meta { margin: 1.75rem 0 2.25rem; overflow: hidden; }
+
+  .case-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .case-meta-grid > div {
+    min-width: 0;
+    padding: 0.9rem 1rem;
+  }
+
+  .case-meta-grid > div + div { border-left: 1px solid var(--glass-border); }
+
+  .case-meta span {
+    display: block;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .case-meta-grid strong {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .case-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 0.9rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .case-metrics > div { text-align: center; }
+  .case-metrics strong {
+    display: block;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.15rem;
+  }
+
+  .case-metrics span { margin-top: 0.2rem; line-height: 1.4; }
+
+  .case-links {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0 1rem 1rem;
+  }
+
+  .case-links a {
+    padding: 0.45rem 0.65rem;
+    border: 1px solid var(--glass-border);
+    border-radius: 0.45rem;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .case-links a:hover {
+    border-color: var(--accent-dim);
+    background: var(--accent-subtle);
+  }
+
+  @media (max-width: 639px) {
+    .case-meta-grid { grid-template-columns: 1fr; }
+    .case-meta-grid > div + div {
+      border-top: 1px solid var(--glass-border);
+      border-left: 0;
+    }
+    .case-metrics { grid-template-columns: 1fr; }
+    .case-metrics > div { text-align: left; }
+  }
+</style>

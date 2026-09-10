@@ -1,86 +1,76 @@
 ---
 import PostLayout from '../../layouts/PostLayout.astro';
+import CaseStudyMeta from '../../components/CaseStudyMeta.astro';
+import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
 ---
 
 <PostLayout
-  title="Factory ERP System — Case Study"
-  date="December 2025"
-  readingTime="5 min read"
-  tags={['ERPNext', 'Python', 'PostgreSQL', 'Custom Scripts']}
-  description="How I replaced paper-based processes with a digital ERP system for a garment factory."
+  title="Reve Manufacturing ERP"
+  date="Ongoing"
+  readingTime="6 min read"
+  tags={['ERPNext', 'Frappe', 'Python', 'JavaScript']}
+  description="Implementing and customizing ERPNext around the material, order and reporting workflows of a working garment factory."
   backUrl="/work"
   backLabel="back to case studies"
 >
 
-<h2>Background</h2>
+<CaseStudyMeta
+  role="IT & Digital Systems Lead"
+  timeline="2025–Present"
+  status="Internal production system"
+/>
 
-<p>The factory handles a high volume of garment production every month. Every fabric roll, every dyeing batch, every cut piece, every finished garment was tracked on paper. The store department alone generated dozens of handwritten gatepasses daily.</p>
+<h2>Context</h2>
 
-<p>The problems were systemic:</p>
+<p>A garment factory is a flow of material. Fabric and yarn arrive, move through inspection and external processing, enter cutting and stitching, and eventually become finished goods. When that flow is split across paper registers and spreadsheets, the central question, “where is this order?”, becomes slow and unreliable.</p>
 
-<ul>
-  <li><strong>Lost records.</strong> Paper gatepasses got misplaced, making inventory reconciliation impossible.</li>
-  <li><strong>Slow reporting.</strong> End-of-day reports required hours of manual compilation.</li>
-  <li><strong>No real-time visibility.</strong> Management couldn't check stock levels without physically walking to the store.</li>
-  <li><strong>Duplicate entries.</strong> Same data written in multiple registers, leading to inconsistencies.</li>
-  <li><strong>No audit trail.</strong> When discrepancies came up, tracing the source was nearly impossible.</li>
-</ul>
+<p>Reve Stitching uses ERPNext as the core platform. I did not build ERPNext itself. My work is implementation and customization: translating the factory’s real workflows into records, constraints, scripts, reports and screens that staff can use every day.</p>
 
 <h2>Why ERPNext</h2>
 
-<p>I looked at several options before choosing ERPNext.</p>
+<p>ERPNext provides a mature open-source base for stock and manufacturing, with the Frappe framework available for customization. That made it more practical than licensing a large enterprise suite or rebuilding common ERP foundations from scratch.</p>
 
-<p><strong>SAP and Oracle</strong> were way beyond budget. License costs alone would exceed the entire project budget.</p>
+<p>The standard system is deliberately general. The engineering work begins where a garment factory’s physical process stops matching the generic workflow.</p>
 
-<p><strong>Custom-built system</strong> would take months and require ongoing maintenance. Not feasible as a solo developer.</p>
+<WorkflowDiagram
+  title="Material flow modeled in ERPNext"
+  footer="Internal workflow visualization. No buyer, supplier, price or order data is exposed."
+  nodes={[
+    { label: 'Material receipt', detail: 'inward stock entry' },
+    { label: 'Batch / LOT', detail: 'roll identity and attributes', kind: 'data' },
+    { label: 'Gate pass', detail: 'dyeing and external processing', kind: 'external' },
+    { label: 'Transfer / issue', detail: 'store to production' },
+    { label: 'Critical Path', detail: 'order-stage visibility' },
+    { label: 'Reporting', detail: 'live stock and operations', kind: 'data' },
+  ]}
+/>
 
-<p><strong>ERPNext</strong> was the right fit. Open-source, Python-based, with built-in manufacturing modules. I could customize it heavily while still building on a mature, battle-tested core.</p>
+<h2>What was customized</h2>
 
-<h2>Implementation</h2>
+<p><strong>Stock movement.</strong> Material Receipt, Transfer, Issue and Return flows were configured so the digital record follows the physical movement of goods through the factory.</p>
 
-<p><strong>Phase 1: Fabric Inventory.</strong> Digitized the fabric store. Every roll now has a digital record with weight, color, lot number, and supplier information. Stock levels update in real time as fabric moves through the factory.</p>
+<p><strong>Batch and LOT traceability.</strong> Custom batch fields capture the operational details needed to identify and locate fabric, including party, order, pantone, received quantity, rolls, stock status and days in stock.</p>
 
-<p><strong>Phase 2: Digital Gatepasses.</strong> Replaced handwritten gatepasses with digital forms. Workers enter gatepass numbers on tablets. Each gatepass is timestamped, attributed to a specific user, and linked to the relevant production order.</p>
+<p><strong>Gate passes.</strong> Dyeing and inward movement use digital gate-pass workflows instead of isolated handwritten records. This connects external processing to the same traceability model.</p>
 
-<p><strong>Phase 3: Issuance Tracking.</strong> Fabric issuance from store to cutting floor to stitching floor is now tracked digitally. Each issuance creates a record that links back to the original fabric roll, creating a complete chain of custody.</p>
+<p><strong>Critical Path and order visibility.</strong> Production stages are tracked in one place so status can be read from the system rather than reconstructed from separate department updates.</p>
 
-<p><strong>Phase 4: Automated Reporting.</strong> Daily, weekly, and monthly reports generate automatically. Management gets real-time dashboards showing inventory levels, production throughput, and bottlenecks.</p>
+<p><strong>Reports and workspaces.</strong> Custom reports such as the Fabric Stock Register expose live operational data. Frappe desk and workspace customization keeps the relevant tasks visible without forcing staff through unrelated ERP modules.</p>
 
-<h2>Technical Details</h2>
+<p><strong>Automation.</strong> Client scripts set safe defaults and validate common Stock Entry paths. Server methods create and recalculate batches, maintain status through cancellation and enforce item-level constraints. Barcode-supported store workflows reduce manual lookup during receipts and returns.</p>
 
-<p>The customization was extensive. ERPNext's standard manufacturing module assumes a different workflow than Pakistani garment factories. I wrote custom doctypes in Python using the Frappe framework:</p>
+<h2>Implementation constraints</h2>
 
-<ul>
-  <li><strong>Fabric Roll Doctype.</strong> Tracks individual rolls with roll-level attributes, not just SKU-level.</li>
-  <li><strong>Dyeing Gatepass Doctype.</strong> Custom workflow for sending fabric to external dyeing units and receiving it back.</li>
-  <li><strong>Issuance Doctype.</strong> Links fabric rolls to cutting orders to finished garments.</li>
-  <li><strong>Custom Reports.</strong> Python scripts that aggregate data across all custom doctypes.</li>
-</ul>
+<p>The main constraint is adoption. A technically correct workflow fails if it adds friction on the factory floor. Screens and defaults are tested against the real task, then simplified until the digital path is at least as direct as the paper path it replaces.</p>
 
-<p>The database runs on PostgreSQL for reliability and performance at scale.</p>
+<p>Privacy is another constraint. Buyer names, suppliers, prices, internal orders and staff identities belong inside the system, not in a public case study. The workflow diagram describes the architecture without exposing operational records.</p>
 
-<h2>Adoption</h2>
+<h2>Result</h2>
 
-<p>The hardest part wasn't building the system. It was getting the team to use it.</p>
+<p>Material movement, batch traceability, gate passes, order progress and stock reporting now share one operational system. The work continues as production needs change. Planned ideas remain separate from shipped functionality.</p>
 
-<p>Most factory floor workers had never used anything beyond WhatsApp. I handled adoption by sitting with each person individually for their specific workflow, keeping the interface as simple as possible with large buttons and minimal fields, running paper and digital systems in parallel for two weeks, and showing the team how much faster reporting became.</p>
+<h2>Lesson</h2>
 
-<p>Within a few weeks, everyone was using the digital system exclusively.</p>
-
-<h2>Impact</h2>
-
-<ul>
-  <li>Dozens of daily paper processes replaced with digital workflows</li>
-  <li>Inventory discrepancies reduced significantly</li>
-  <li>Reporting time went from hours to seconds</li>
-  <li>Management has real-time visibility into all operations</li>
-  <li>Complete audit trail for every fabric movement</li>
-</ul>
-
-<p>The system is internal and not publicly accessible, but it has been running in production for months.</p>
-
-<blockquote>
-  <p>The hardest part of an ERP implementation is never the code. It's getting people to trust the new system.</p>
-</blockquote>
+<blockquote><p>ERP implementation is modeling work: understand how material moves, encode it clearly, then make the resulting workflow easier to follow than the old one.</p></blockquote>
 
 </PostLayout>

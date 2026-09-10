@@ -370,20 +370,20 @@ const themesJSON = JSON.stringify(themes);
     addLine('<span class="t-accent t-bold">cat about.txt</span>');
     addLine('<span class="t-muted">─────────────────────────────────────</span>');
     addEmpty();
-    addLine('<span class="t-primary">At 17, I walked into a garment factory</span>');
-    addLine('<span class="t-primary">exporting 300K+ garments/month to brands</span>');
-    addLine('<span class="t-primary">like Boohoo and Pull&amp;Bear.</span>');
+    addLine('<span class="t-primary">I build software close to the operations</span>');
+    addLine('<span class="t-primary">it supports: production web platforms,</span>');
+    addLine('<span class="t-primary">ERP workflows and commerce systems.</span>');
     addEmpty();
-    addLine('<span class="t-secondary">Zero coding experience. No budget.</span>');
-    addLine('<span class="t-secondary">A software house quoted ₨2,000,000.</span>');
+    addLine('<span class="t-secondary">Working inside manufacturing exposed me</span>');
+    addLine('<span class="t-secondary">to stock, quoting and order-tracking problems.</span>');
     addEmpty();
-    addLine('<span class="t-accent">I delivered it solo, using AI.</span>');
-    addLine('<span class="t-primary">→ Production website with scroll animations</span>');
-    addLine('<span class="t-primary">→ ERP system (50 daily gatepasses digitized)</span>');
-    addLine('<span class="t-primary">→ Complete brand identity</span>');
+    addLine('<span class="t-accent">The operation comes before the stack.</span>');
+    addLine('<span class="t-primary">→ Reve digital platform + client portal</span>');
+    addLine('<span class="t-primary">→ ERPNext factory workflows</span>');
+    addLine('<span class="t-primary">→ Haus Couture + Aurelia</span>');
     addEmpty();
-    addLine('<span class="t-dim">"The thinking behind giving correct prompts</span>');
-    addLine('<span class="t-dim"> to AI was me."</span>');
+    addLine('<span class="t-dim">"The interface matters. The workflow</span>');
+    addLine('<span class="t-dim"> behind it matters more."</span>');
     addEmpty();
   }
 
@@ -393,11 +393,11 @@ const themesJSON = JSON.stringify(themes);
     addLine('<span class="t-muted">─────────────────────────────────────</span>');
     addEmpty();
     var groups = [
-      { name: 'Frontend',   items: 'Astro · React · Tailwind · JavaScript · HTML/CSS' },
-      { name: 'Animation',  items: 'GSAP · Three.js · ScrollTrigger · Lenis' },
-      { name: 'Backend',    items: 'ERPNext · Python · Supabase · PostgreSQL' },
-      { name: 'Design',     items: 'Brand Identity · UI/UX · Figma' },
-      { name: 'Tools',      items: 'Git · Vercel · VS Code · AI (Claude/GPT)' },
+      { name: 'Web',      items: 'Astro · TypeScript · React · Tailwind CSS' },
+      { name: 'Motion',   items: 'GSAP · ScrollTrigger · Lenis' },
+      { name: 'Data',     items: 'Python · Supabase · PostgreSQL · Turso/Drizzle' },
+      { name: 'Systems',  items: 'ERPNext · Frappe · Shopify' },
+      { name: 'Tools',    items: 'Git · GitHub · Vercel · Figma · VS Code' },
     ];
     groups.forEach(function(g) {
       addLine('  <span class="t-accent">' + g.name + '</span>');
@@ -413,22 +413,28 @@ const themesJSON = JSON.stringify(themes);
     addEmpty();
     var projects = [
       {
-        name: 'Reve Stitching — Corporate Website',
-        desc: 'B2B manufacturing site with scroll animations, AI chat, quote system',
-        stack: 'Astro 5 · Tailwind · GSAP · Supabase',
-        url: 'https://revestitching.com'
+        name: 'Reve Stitching Digital Platform',
+        desc: 'Public platform, structured intake, admin tools, portal and ERP integration',
+        stack: 'Astro · TypeScript · Supabase · Turso/Drizzle · ERPNext',
+        url: 'https://www.revestitching.com'
       },
       {
-        name: 'Factory ERP System',
-        desc: 'Digitized 50+ daily paper gatepasses to real-time tracking',
-        stack: 'ERPNext · Python · PostgreSQL',
+        name: 'Reve Manufacturing ERP',
+        desc: 'Material movement, batch traceability, gate passes and reporting',
+        stack: 'ERPNext · Frappe · Python · PostgreSQL',
         url: null
       },
       {
-        name: 'Brand Identity Design',
-        desc: 'Logo system, colors, typography, business cards, guidelines',
-        stack: 'AI-Assisted Design · Brand Strategy',
-        url: 'https://revestitching.com'
+        name: 'Haus Couture',
+        desc: 'Custom storefront evolved into a production Shopify store',
+        stack: 'Shopify · Astro · Tailwind CSS',
+        url: 'https://hauscouture.co.uk'
+      },
+      {
+        name: 'Aurelia',
+        desc: 'Discord community platform with dashboard and routed AI',
+        stack: 'Python · discord.py · Next.js · PostgreSQL',
+        url: 'https://veloura-aurelia.vercel.app'
       },
     ];
     projects.forEach(function(p, i) {
@@ -446,15 +452,14 @@ const themesJSON = JSON.stringify(themes);
     addLine('<span class="t-muted">─────────────────────────────────────</span>');
     addEmpty();
     addLine('  <span class="t-primary">Email     </span><a href="mailto:hamzaali.dev@proton.me">hamzaali.dev@proton.me</a>');
-    addLine('  <span class="t-primary">WhatsApp  </span><a href="https://wa.me/923329555786" target="_blank" rel="noopener">+92 332 955 5786</a>');
     addLine('  <span class="t-primary">GitHub    </span><a href="https://github.com/hamzaa1i" target="_blank" rel="noopener">@hamzaa1i</a>');
     addEmpty();
-    addLine('  <span class="t-success">● Currently available for new projects</span>');
+    addLine('  <span class="t-success">● Available for selected projects</span>');
     addEmpty();
   }
 
   function cmdWhoami() {
-    addLine('<span class="t-accent">hamza</span> <span class="t-muted">— digital solutions architect, 17</span>');
+    addLine('<span class="t-accent">hamza</span> <span class="t-muted">— software &amp; systems engineer</span>');
   }
 
   function cmdNeofetch() {
@@ -465,7 +470,7 @@ const themesJSON = JSON.stringify(themes);
     addLine('<span class="t-accent t-bold"> ╱  ╱╲  ╲</span>    <span class="t-primary">Shell:</span>  <span class="t-secondary">JetBrains Mono</span>');
     addLine('<span class="t-accent t-bold">╱  ╱  ╲  ╲</span>   <span class="t-primary">WM:</span>     <span class="t-secondary">GSAP + Lenis</span>');
     addLine('<span class="t-accent t-bold">‾‾‾    ‾‾‾</span>   <span class="t-primary">Theme:</span>  <span class="t-secondary">' + (allThemes[currentTheme] ? allThemes[currentTheme].name : currentTheme) + '</span>');
-    addLine('               <span class="t-primary">Uptime:</span> <span class="t-secondary">17 years</span>');
+    addLine('               <span class="t-primary">Base:</span>   <span class="t-secondary">Faisalabad, PK</span>');
     addLine('               <span class="t-primary">WPM:</span>    <span class="t-secondary">95</span>');
     addEmpty();
   }
@@ -487,14 +492,12 @@ function cmdStats() {
   addLine('<span class="t-accent t-bold">~/hamza — dev stats</span>');
   addLine('<span class="t-muted">─────────────────────────────────────</span>');
   addEmpty();
-  addLine('  <span class="t-secondary">lines of code</span>     <span class="t-primary t-bold">12,847</span>');
-  addLine('  <span class="t-secondary">cups of chai</span>      <span class="t-primary t-bold">2,341</span>');
-  addLine('  <span class="t-secondary">bugs squashed</span>     <span class="t-primary t-bold">847</span>');
-  addLine('  <span class="t-secondary">git commits</span>       <span class="t-primary t-bold">394</span>');
-  addLine('  <span class="t-secondary">mass prayers</span>      <span class="t-primary t-bold">1</span>');
-  addLine('  <span class="t-secondary">sleep lost</span>        <span class="t-accent t-bold">∞ hrs</span>');
+  addLine('  <span class="t-secondary">flagship builds</span>   <span class="t-primary t-bold">4</span>');
+  addLine('  <span class="t-secondary">Reve API routes</span>   <span class="t-primary t-bold">38</span>');
+  addLine('  <span class="t-secondary">Aurelia commands</span>  <span class="t-primary t-bold">173</span>');
+  addLine('  <span class="t-secondary">Aurelia cogs</span>      <span class="t-primary t-bold">47</span>');
   addEmpty();
-  addLine('  <span class="t-dim">powered by chai & dua</span>');
+  addLine('  <span class="t-dim">counts verified against current project source</span>');
   addEmpty();
 }
 

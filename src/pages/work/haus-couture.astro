@@ -1,0 +1,87 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import CaseStudyMedia from '../../components/CaseStudyMedia.astro';
+import CaseStudyMeta from '../../components/CaseStudyMeta.astro';
+import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
+
+import archived from '../../assets/projects/haus-couture/archived-custom.png';
+import collection from '../../assets/projects/haus-couture/collection.png';
+import homeDesktop from '../../assets/projects/haus-couture/home-desktop.png';
+import homeMobile from '../../assets/projects/haus-couture/home-mobile.png';
+import productPage from '../../assets/projects/haus-couture/product-page.png';
+---
+
+<PostLayout
+  title="Haus Couture"
+  date="2026"
+  readingTime="6 min read"
+  tags={['Shopify', 'Astro', 'Tailwind CSS', 'Vercel']}
+  description="One streetwear project in two phases: a custom Astro storefront, then a Shopify production rebuild when the commercial requirements became clear."
+  backUrl="/work"
+  backLabel="back to case studies"
+>
+
+<CaseStudyMeta
+  role="Design, Build & Launch"
+  timeline="2026"
+  status="Live storefront"
+  metrics={[
+    { value: '2', label: 'technical phases' },
+    { value: '29', label: 'product listings' },
+    { value: '6', label: 'collections' },
+  ]}
+  liveUrl="https://hauscouture.co.uk"
+/>
+
+<h2>Context</h2>
+
+<p>Haus Couture is a UK premium streetwear label. I designed and built its first custom storefront, then moved the same project to Shopify when production commerce requirements outgrew the bespoke implementation.</p>
+
+<p>The important decision was not choosing one platform over another. It was recognizing that the right technical approach had changed.</p>
+
+<CaseStudyMedia image={homeDesktop} alt="Haus Couture production storefront homepage with a dark streetwear campaign hero" caption="01 / The production Shopify storefront today." />
+
+<h2>Phase one: custom storefront</h2>
+
+<p>The project began as a custom Astro site. I owned the visual direction, information architecture, responsive layout and Vercel deployment. This phase established the brand’s dark, direct storefront language while the product range was still being organized.</p>
+
+<CaseStudyMedia image={archived} alt="Archived custom Haus Couture Astro storefront with a restrained editorial layout" caption="02 / The archived Astro implementation that established the first visual direction." label="archived custom build" />
+
+<h2>The decision</h2>
+
+<p>Once the commercial requirements were concrete, the project needed mature checkout, payments, policy handling, catalogue administration and an operational backend the client could manage. Rebuilding that infrastructure would have consumed engineering time without making the brand more distinctive.</p>
+
+<WorkflowDiagram
+  title="Architecture changed with the requirement"
+  footer="The design work carried forward. The commerce infrastructure moved to the platform built to own it."
+  nodes={[
+    { label: 'Custom Astro build', detail: 'brand direction · responsive UI' },
+    { label: 'Requirements sharpen', detail: 'checkout · payments · operations' },
+    { label: 'Platform decision', detail: 'separate brand from infrastructure', kind: 'data' },
+    { label: 'Shopify rebuild', detail: 'theme · catalogue · collections' },
+    { label: 'Domain integration', detail: 'production DNS and launch', kind: 'external' },
+    { label: 'Live storefront', detail: 'client-manageable commerce' },
+  ]}
+/>
+
+<h2>Phase two: Shopify production</h2>
+
+<p>On Shopify, my work covers the storefront and store configuration: theme customization, product and variant structure, collections, navigation, policy content, responsive presentation, domain integration and launch.</p>
+
+<CaseStudyMedia image={collection} alt="Haus Couture hoodies collection showing the dark product catalogue" caption="03 / One of six collection views organizing the catalogue." />
+
+<CaseStudyMedia image={productPage} alt="Haus Couture product page with garment photography, size selection and GBP pricing" caption="04 / A production product page with variants, pricing and checkout path." />
+
+<p>Shopify supplies the commerce platform, checkout and payment infrastructure. I do not present those platform capabilities as custom engineering. My contribution is the custom first phase, the product and visual direction, the Shopify storefront configuration, and taking the store to production.</p>
+
+<h2>Result</h2>
+
+<p>The live store has 29 product listings across 11 style families and six collections, with a responsive GBP storefront and working commerce policies. The original custom deployment remains useful evidence of how the product direction evolved.</p>
+
+<CaseStudyMedia image={homeMobile} alt="Haus Couture production storefront displayed on a mobile viewport" caption="05 / The live storefront on mobile." />
+
+<h2>Lesson</h2>
+
+<blockquote><p>Custom work should carry the brand. Mature infrastructure should carry the undifferentiated risk.</p></blockquote>
+
+</PostLayout>

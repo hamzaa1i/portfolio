@@ -5,26 +5,26 @@ import Footer from '../components/Footer.astro';
 
 const experience = [
   {
-    title: 'Freelance Developer & Designer',
+    title: 'Software & Systems Engineer',
     company: 'Reve Stitching',
     period: 'October 2024 — Present',
     current: true,
     points: [
-      'Built production website (revestitching.com) with Astro 5, GSAP, and Supabase',
-      'Implemented ERPNext for inventory tracking and workflow automation',
-      'Designed complete brand identity from logo to company profile',
-      'All projects scoped, built, and delivered independently',
+      'Built and maintain the Reve Stitching platform across public, admin, and client-facing workflows',
+      'Adapted ERPNext/Frappe for stock movement, batch references, gate passes, and reporting',
+      'Delivered a two-phase Haus Couture e-commerce project, including a Shopify production rebuild',
+      'Built Aurelia, a modular Discord automation platform with dashboard, privacy, and AI routing systems',
     ],
   },
   {
     title: 'Store Assistant',
     company: 'Reve Stitching',
     period: 'October 2025 — Present',
-    current: true,
+    current: false,
     points: [
-      'Managing fabric inventory and daily store operations',
-      'Supporting factory floor with ERP system rollout and adoption',
-      'Testing and improving systems using real production data',
+      'Worked directly with fabric inventory and daily store operations',
+      'Supported ERP rollout with operational context and user feedback',
+      'Tested workflows against real production constraints',
     ],
   },
 ];
@@ -34,31 +34,24 @@ const education = [
     degree: 'ICS (Intermediate in Computer Science)',
     school: 'Punjab Board',
     period: '2024 — 2026',
-    current: true,
-    detail: 'Part 1: 80.36%',
-  },
-  {
-    degree: 'BSCS (Planned)',
-    school: 'FAST NUCES, Faisalabad',
-    period: '2026 — 2030',
     current: false,
-    detail: 'Admission test: July 2026',
+    detail: 'Computer science, mathematics, and statistics.',
   },
 ];
 
 const skillGroups = [
-  { name: 'Frontend', skills: ['Astro', 'React', 'Tailwind CSS', 'JavaScript', 'HTML/CSS'] },
+  { name: 'Frontend', skills: ['Astro', 'React', 'TypeScript', 'Tailwind CSS', 'JavaScript'] },
   { name: 'Animation', skills: ['GSAP', 'ScrollTrigger', 'Lenis'] },
-  { name: 'Backend', skills: ['ERPNext', 'Python', 'Supabase', 'PostgreSQL'] },
-  { name: 'Design', skills: ['Brand Identity', 'UI/UX', 'Figma'] },
-  { name: 'Tools', skills: ['Git', 'Vercel', 'VS Code', 'Claude/GPT'] },
+  { name: 'Systems', skills: ['ERPNext', 'Frappe', 'Python', 'Supabase', 'PostgreSQL', 'Turso/Drizzle'] },
+  { name: 'Commerce', skills: ['Shopify', 'Product Information', 'Collection Architecture'] },
+  { name: 'Tools', skills: ['Git/GitHub', 'Vercel', 'Figma', 'VS Code'] },
 ];
 ---
 
 <Layout title="Resume — Hamza Ali">
   <Header />
 
-  <main class="min-h-screen px-6" style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);">
+  <div class="min-h-screen px-6" style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);">
     <div class="max-w-2xl mx-auto">
       <!-- Header -->
       <div class="mb-10">
@@ -70,13 +63,13 @@ const skillGroups = [
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-2">
           <div>
             <h1 class="text-heading-1 font-heading font-bold text-text-primary">Hamza Ali</h1>
-            <p class="text-body text-text-secondary mt-1">Web Developer · ERP Specialist · Brand Designer</p>
+            <p class="text-body text-text-secondary mt-1">Software & Systems Engineer · Full-Stack Developer · Product Builder</p>
           </div>
-          <a href="/resume.pdf" download="Hamza_Ali_Resume.pdf" class="btn-primary btn-sm flex-shrink-0 self-start sm:self-auto">
+          <a href="/work" class="btn-primary btn-sm flex-shrink-0 self-start sm:self-auto">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            <span>download pdf</span>
+            <span>view case studies</span>
           </a>
         </div>
 
@@ -163,7 +156,7 @@ const skillGroups = [
         </div>
       </section>
     </div>
-  </main>
+  </div>
 
   <div class="py-10"></div>
   <Footer />

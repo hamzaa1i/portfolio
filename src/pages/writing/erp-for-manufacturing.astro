@@ -6,15 +6,15 @@ import PostLayout from '../../layouts/PostLayout.astro';
   title="Implementing ERPNext for a Real Factory"
   date="March 8, 2026"
   readingTime="4 min read"
-  tags={['ERPNext', 'Python', 'PostgreSQL']}
-  description="How I replaced 50+ daily paper processes with a digital ERP system for a garment manufacturing business."
+  tags={['ERPNext', 'Frappe', 'Python']}
+  description="How I adapted ERPNext and Frappe to the constraints of day-to-day garment manufacturing operations."
 >
 
 <h2>The Paper Problem</h2>
 
-<p>The factory had been running for years on paper. Every fabric roll that came in got logged in a register. Every dyeing batch got a handwritten gatepass. Every issuance to the cutting floor was tracked in a notebook. Over 50 daily processes, all manual.</p>
+<p>Fabric receipt, batch tracking, outside processing, gate passes, and issuance all create records that have to agree. When those records live across paper registers and separate files, finding the current state becomes slow and error-prone.</p>
 
-<p>The problems were predictable: lost records, miscounted inventory, delayed reporting, and hours spent compiling data that should have taken minutes.</p>
+<p>The goal was not to replace every human decision. It was to create a reliable path from a physical stock movement to a searchable operational record.</p>
 
 <h2>Why ERPNext</h2>
 
@@ -23,35 +23,35 @@ import PostLayout from '../../layouts/PostLayout.astro';
 <ul>
   <li><strong>Open source</strong> with no license fees</li>
   <li><strong>Python-based</strong> so I could write custom scripts</li>
-  <li><strong>PostgreSQL</strong> backend that could handle the volume</li>
   <li><strong>Built-in modules</strong> for inventory, stock, and manufacturing</li>
   <li><strong>Web-based</strong> so anyone on the factory floor could access it from a browser</li>
 </ul>
 
 <h2>What I Customized</h2>
 
-<p>Out-of-the-box ERPNext covers general manufacturing. A garment factory has specific workflows that needed custom doctypes and scripts:</p>
+<p>ERPNext supplied the platform; my work was adapting it to the way this operation moves material. That distinction matters: this is an ERPNext/Frappe implementation and customization, not a claim that I wrote an ERP from scratch.</p>
 
 <ul>
-  <li><strong>Fabric inventory tracking</strong> with roll-level granularity (not just weight)</li>
-  <li><strong>Digital gatepasses</strong> replacing the handwritten ones for dyeing and processing</li>
-  <li><strong>Issuance management</strong> tracking fabric flow from store to cutting to stitching</li>
-  <li><strong>Automated reports</strong> that previously required hours of manual compilation</li>
+  <li><strong>Stock movement</strong> aligned with receipt, transfer, and issuance events</li>
+  <li><strong>Batch and LOT references</strong> that follow material through processing</li>
+  <li><strong>Gate passes</strong> for controlled movement outside the facility</li>
+  <li><strong>Critical Path fields and reports</strong> for production visibility</li>
+  <li><strong>Scripts and barcode-assisted steps</strong> where they reduce repeated entry</li>
 </ul>
 
-<p>Each custom module was built in Python with ERPNext's Frappe framework, tested on real data, and deployed incrementally.</p>
+<p>Changes were introduced incrementally so each workflow could be checked against the physical process before expanding the rollout.</p>
 
 <h2>The Adoption Challenge</h2>
 
 <p>Building the system was one thing. Getting a team of factory workers to actually use it was another. Most of them had never used anything beyond WhatsApp on their phones.</p>
 
-<p>I handled this by sitting with each person individually, walking them through their specific workflow, and making the interface as simple as possible. Within two weeks, everyone was using it daily.</p>
+<p>I handled this by walking through each role's specific workflow, reducing unnecessary decisions in the interface, and treating operator feedback as part of the implementation.</p>
 
-<h2>Results</h2>
+<h2>What the System Improves</h2>
 
-<p>Processes that used to take hours now happen in seconds. Inventory discrepancies dropped significantly. Management can pull real-time reports instead of waiting for end-of-day summaries.</p>
+<p>The system creates a consistent operational trail between stock events, batch references, gate passes, and reports. It gives the team one structure for investigating discrepancies and reviewing work in progress.</p>
 
-<p>The system is internal so I can't share a live link, but it's been running in production for months without issues.</p>
+<p>Because the system is internal, this portfolio uses an architecture diagram rather than exposing production records or employee data.</p>
 
 <blockquote>
   <p>The hardest part of an ERP implementation isn't the code. It's getting people to trust the new system.</p>

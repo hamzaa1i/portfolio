@@ -2,39 +2,13 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-
-const projects = [
-  {
-    slug: 'reve-stitching',
-    title: 'Reve Stitching',
-    type: 'Production Website',
-    year: '2025',
-    description: 'Full production website for a garment exporter shipping to the UK. Custom animations, quote system, and admin dashboard.',
-    tags: ['Astro', 'Tailwind', 'GSAP', 'Supabase'],
-  },
-  {
-    slug: 'erp-system',
-    title: 'Factory ERP System',
-    type: 'Enterprise ERP',
-    year: '2025',
-    description: 'ERP system replacing dozens of daily paper processes with digital inventory tracking and automated reporting.',
-    tags: ['ERPNext', 'Python', 'PostgreSQL'],
-  },
-  {
-    slug: 'brand-identity',
-    title: 'Brand Identity Design',
-    type: 'Brand Identity',
-    year: '2025',
-    description: 'Complete visual identity for a garment exporter. Logo system, stationery, company profile, and brand guidelines.',
-    tags: ['Figma', 'Brand Strategy', 'Visual Identity'],
-  },
-];
+import { projects } from '../../data/projects';
 ---
 
-<Layout title="Work — Hamza Ali" description="Case studies of real projects shipped solo. Websites, ERP systems, and brand identity.">
+<Layout title="Work — Hamza Ali" description="Case studies covering production web platforms, ERP workflows, e-commerce and product engineering.">
   <Header />
 
-  <main class="min-h-screen px-6" style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);">
+  <div class="min-h-screen px-6" style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);">
     <div class="max-w-3xl mx-auto">
       <div class="mb-10">
         <a href="/" class="inline-flex items-center gap-1.5 text-text-dim font-mono text-xs hover:text-accent-primary transition-colors mb-6">
@@ -42,7 +16,7 @@ const projects = [
           back to home
         </a>
         <h1 class="text-heading-1 font-heading font-bold text-text-primary mb-2">Case Studies</h1>
-        <p class="text-body text-text-secondary">Detailed breakdowns of real projects I shipped solo.</p>
+        <p class="text-body text-text-secondary">Verified work across web platforms, ERP, e-commerce and product systems.</p>
       </div>
 
       <div class="space-y-4">
@@ -50,13 +24,13 @@ const projects = [
           <a href={`/work/${p.slug}`} class="block glass p-6 group hover:border-white/[0.1] transition-all duration-300">
             <div class="flex items-center justify-between mb-3">
               <span class="font-mono text-[0.6rem] tracking-wider uppercase text-accent-primary">{p.type}</span>
-              <span class="font-mono text-[0.6rem] text-text-dim">{p.year}</span>
+              <span class="font-mono text-[0.6rem] text-text-dim">{p.timeline}</span>
             </div>
             <h2 class="text-xl font-heading font-bold text-text-primary mb-2 group-hover:text-accent-primary transition-colors">{p.title}</h2>
             <p class="text-body-sm text-text-secondary leading-relaxed mb-4">{p.description}</p>
             <div class="flex items-center justify-between">
               <div class="flex flex-wrap gap-1.5">
-                {p.tags.map((tag) => (
+                {p.stack.map((tag) => (
                   <span class="font-mono text-[0.55rem] tracking-wider uppercase px-2 py-0.5 rounded-full border border-white/[0.06] text-text-dim">{tag}</span>
                 ))}
               </div>
@@ -66,7 +40,7 @@ const projects = [
         ))}
       </div>
     </div>
-  </main>
+  </div>
 
   <div class="py-10"></div>
   <Footer />
