@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { IDENTITY, SITE } from '../lib/site';
+import ContactForm from '../components/ContactForm.astro';
 ---
 
 <Layout
@@ -76,26 +77,13 @@ import { IDENTITY, SITE } from '../lib/site';
 
       <div class="rounded-card border border-border bg-surface p-6 sm:p-8">
         <h2 class="font-mono text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-          What to include
+          Enquiry
         </h2>
-        <p class="mt-3 text-sm leading-relaxed text-text-secondary">
-          A short note works best: what the project is, what state it is in, and what you need
-          built. Rough timelines and budget ranges help me respond usefully.
+        <p class="mt-3 text-sm text-text-secondary">
+          The essentials are enough: what the project is, what state it is in, and what you need
+          built.
         </p>
-        <ul class="mt-4 grid gap-2 text-sm text-text-secondary">
-          <li class="flex gap-3">
-            <span class="mt-[0.55em] h-1 w-1 flex-shrink-0 rounded-full bg-accent-dim" aria-hidden="true"></span>
-            Web platforms and operational tooling
-          </li>
-          <li class="flex gap-3">
-            <span class="mt-[0.55em] h-1 w-1 flex-shrink-0 rounded-full bg-accent-dim" aria-hidden="true"></span>
-            ERPNext implementation and customization
-          </li>
-          <li class="flex gap-3">
-            <span class="mt-[0.55em] h-1 w-1 flex-shrink-0 rounded-full bg-accent-dim" aria-hidden="true"></span>
-            Storefronts and commerce systems
-          </li>
-        </ul>
+        <ContactForm />
       </div>
     </div>
   </section>
