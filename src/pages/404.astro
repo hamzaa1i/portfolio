@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Page not found" description="This page does not exist." path="/404">
+  <section class="container-site flex min-h-[70vh] flex-col justify-center py-20">
+    <p class="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-accent">404</p>
+    <h1 class="mt-4 font-display text-4xl font-normal tracking-[-0.01em] text-text-primary sm:text-5xl">
+      This page does not exist
+    </h1>
+    <p class="mt-5 max-w-md text-text-secondary">
+      The address may have changed, or the page was never here. Nothing is broken on your end.
+    </p>
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a
+        href="/"
+        class="inline-flex min-h-11 items-center gap-2 rounded-card border border-accent-dim bg-accent/10 px-5 py-2.5 text-sm font-medium text-accent-hover transition-colors duration-200 hover:border-accent hover:bg-accent/15"
+      >
+        Back to the homepage
+      </a>
+      <a
+        href="/work"
+        class="inline-flex min-h-11 items-center rounded-card border border-border px-5 py-2.5 text-sm font-medium text-text-secondary transition-colors duration-200 hover:border-border-strong hover:text-text-primary"
+      >
+        View selected work
+      </a>
+    </div>
+  </section>
+</Layout>

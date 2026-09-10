@@ -1,0 +1,163 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { RESUME } from '../lib/resume';
+import { SITE } from '../lib/site';
+---
+
+<Layout
+  title="Resume"
+  description="Resume of Hamza Ali, Software & Systems Engineer: production platforms, ERP implementation, community products and commerce systems."
+  path="/resume"
+>
+  <article class="resume">
+    <section class="border-b border-border">
+      <div class="container-site pt-14 pb-10 sm:pt-20 sm:pb-12">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Resume' }]} />
+        <div class="mt-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h1 class="font-display text-4xl font-normal tracking-[-0.01em] text-text-primary sm:text-5xl">
+              {SITE.author}
+            </h1>
+            <p class="mt-2 text-text-secondary">{SITE.role}</p>
+            <p class="mt-1 font-mono text-xs text-text-muted">
+              {SITE.location} · {SITE.availability}
+            </p>
+          </div>
+          <button
+            type="button"
+            class="inline-flex min-h-11 items-center gap-2 self-start rounded-card border border-border px-5 py-2.5 text-sm font-medium text-text-secondary transition-colors duration-200 hover:border-border-strong hover:text-text-primary print:hidden"
+            onclick="window.print()"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 9V2h12v7" />
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" rx="1" />
+            </svg>
+            Print / save as PDF
+          </button>
+        </div>
+
+        <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs">
+          {
+            RESUME.links.map((link) => (
+              <li>
+                <a href={link.href} class="text-accent-hover transition-colors hover:text-accent">
+                  {link.value}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <div class="container-site py-12 sm:py-16">
+      <div class="max-w-3xl">
+        <section aria-labelledby="resume-summary">
+          <h2 id="resume-summary" class="resume-h2">Summary</h2>
+          <p class="mt-3 leading-relaxed text-text-secondary">{RESUME.summary}</p>
+        </section>
+
+        <section aria-labelledby="resume-experience" class="mt-12">
+          <h2 id="resume-experience" class="resume-h2">Experience</h2>
+          <div class="mt-6 grid gap-10">
+            {
+              RESUME.experience.map((job) => (
+                <div>
+                  <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+                    <h3 class="text-base font-semibold text-text-primary">{job.role}</h3>
+                    <p class="font-mono text-[0.68rem] text-text-muted whitespace-nowrap">{job.meta}</p>
+                  </div>
+                  <p class="mt-1 text-sm font-medium text-accent-hover">{job.org}</p>
+                  <ul class="mt-4 grid gap-2.5">
+                    {job.points.map((point) => (
+                      <li class="flex gap-3 text-sm leading-relaxed text-text-secondary">
+                        <span class="mt-[0.55em] h-1 w-1 flex-shrink-0 rounded-full bg-accent-dim" aria-hidden="true" />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+
+        <section aria-labelledby="resume-capabilities" class="mt-12">
+          <h2 id="resume-capabilities" class="resume-h2">Selected capabilities</h2>
+          <div class="mt-6 grid gap-6 sm:grid-cols-2">
+            {
+              RESUME.capabilities.map((group) => (
+                <div>
+                  <h3 class="text-sm font-semibold text-text-primary">{group.title}</h3>
+                  <p class="mt-2 font-mono text-[0.68rem] leading-relaxed text-text-muted">
+                    {group.items.join(' · ')}
+                  </p>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+
+        <section aria-labelledby="resume-education" class="mt-12">
+          <h2 id="resume-education" class="resume-h2">Education</h2>
+          <div class="mt-6">
+            {
+              RESUME.education.map((edu) => (
+                <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+                  <h3 class="text-base font-semibold text-text-primary">{edu.program}</h3>
+                  <p class="font-mono text-[0.68rem] text-text-muted">{edu.meta}</p>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style is:global>
+  .resume-h2 {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+  }
+
+  @media print {
+    html,
+    body {
+      background: #fff !important;
+      color: #111 !important;
+      overflow: visible;
+    }
+
+    .resume * {
+      color: #111 !important;
+      border-color: #ddd !important;
+    }
+
+    .resume .bg-midnight,
+    .resume .bg-surface {
+      background: transparent !important;
+    }
+
+    #site-header,
+    footer,
+    .print\:hidden {
+      display: none !important;
+    }
+
+    main {
+      padding-top: 0 !important;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  }
+</style>

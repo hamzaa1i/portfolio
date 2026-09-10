@@ -1,0 +1,39 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getProjects } from '../../lib/content';
+
+const projects = await getProjects();
+const [featured, ...rest] = projects;
+---
+
+<Layout
+  title="Work"
+  description="Selected case studies: production systems in daily use, built on verified evidence. Digital platforms, ecommerce, community tooling and manufacturing ERP."
+  path="/work"
+>
+  <section class="border-b border-border">
+    <div class="container-site pt-14 pb-10 sm:pt-20 sm:pb-14">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Work' }]} />
+      <p class="mt-8 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-accent">
+        Selected Work
+      </p>
+      <h1 class="mt-4 font-display text-4xl font-normal tracking-[-0.01em] text-text-primary sm:text-5xl">
+        Four systems, built for real operations
+      </h1>
+      <p class="mt-5 max-w-xl text-text-secondary">
+        Each case study rests on live systems and verified architecture rather than projections:
+        a manufacturer's digital platform, a production storefront, a community product, and an
+        ERP implementation in daily factory use.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-site py-14 sm:py-20">
+    {featured && <ProjectCard project={featured} featured />}
+    <div class="mt-6 grid gap-6 md:grid-cols-2">
+      {rest.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+</Layout>
