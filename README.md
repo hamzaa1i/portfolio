@@ -38,7 +38,7 @@ and the Aurelia automation platform.
 
 ### ✨ What Makes This Portfolio Different
 
-- Full-viewport section snapping powered by Lenis smooth scrolling
+- Full-viewport sections with Lenis smooth scrolling
 - GSAP magnetic buttons with radial glow interactions
 - Responsive project showcase with verified project media
 - Custom cursor with contextual interaction states
@@ -64,10 +64,9 @@ and the Aurelia automation platform.
 
 | Technology                                                                                                                  | Purpose                                      |
 | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| [GSAP 3.12](https://greensock.com/gsap/)                                                                                    | Scroll animations, magnetic effects, reveals |
-| [ScrollTrigger](https://greensock.com/scrolltrigger/)                                                                       | Scroll-driven timelines & section pinning    |
-| [Lenis 1.2](https://lenis.darkroom.engineering/)                                                                            | Smooth scrolling engine                      |
-| [Three.js](https://threejs.org/) + [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction) | WebGL particle rendering                     |
+| [GSAP 3](https://greensock.com/gsap/)                  | Scroll animations, magnetic effects, reveals |
+| [ScrollTrigger](https://greensock.com/scrolltrigger/) | Scroll-driven animations                     |
+| [Lenis 1](https://lenis.darkroom.engineering/)        | Smooth scrolling engine                      |
 
 ### 🚀 Deployment & Tooling
 
@@ -93,14 +92,14 @@ portfolio/
 │   ├── components/
 │   │   ├── Header.astro
 │   │   ├── Footer.astro
-│   │   ├── InteractiveBackground.tsx
-│   │   ├── MagneticButton.astro
+│   │   ├── CommandPalette.astro
+│   │   ├── ContactForm.tsx
 │   │   ├── ProjectCard.astro
 │   │   ├── SkillOrb.astro
 │   │   ├── TypeWriter.astro
-│   │   ├── CustomCursor.astro
-│   │   ├── ScrollProgress.astro
-│   │   ├── Lightbox.astro
+│   │   ├── MusicPlayer.astro
+│   │   ├── Preloader.astro
+│   │   ├── Terminal.astro
 │   │   ├── ScrollIndicator.astro
 │   │   └── DarkModeScript.astro
 │   │
@@ -169,7 +168,7 @@ portfolio/
 
 ### 📋 Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - npm
 - Git
 
@@ -219,15 +218,15 @@ npm run preview
 
 ### 🖥️ Desktop Experience (>1024px)
 
-- Full WebGL particle background
-- Section snapping enabled
+- Full animated ambient background
+- Full-viewport section layout
 - Custom cursor interactions
 - Magnetic hover effects
-- Horizontal project scrolling
+- Project-card hover interactions
 
 ### 📱 Mobile Experience (<1024px)
 
-- Static CSS gradient fallback
+- Motion-aware CSS fallbacks
 - Free scrolling with Lenis smoothing
 - Touch-optimized interactions
 - No magnetic hover effects
@@ -246,19 +245,18 @@ npm run preview
 
 ## 🎬 Key Interactive Features
 
-### 1️⃣ WebGL Particle Background
+### 1️⃣ Ambient Background
 
-- Mouse-reactive fluid particles
-- Cyan/purple gradient rendering
-- Adaptive particle count based on hardware tier
-- Mobile CSS fallback system
+- Layered gradients and floating ambient elements
+- Black-and-gold visual system
+- Mobile and reduced-motion fallbacks
 
-### 2️⃣ Section Snapping
+### 2️⃣ Smooth Section Scrolling
 
-- Full-screen immersive sections
+- Full-screen immersive sections on desktop
 - Lenis-powered smooth scrolling
-- GSAP ScrollTrigger snapping
-- Disabled on mobile for natural scroll
+- GSAP ScrollTrigger reveals
+- Natural document flow on mobile
 
 ### 3️⃣ Magnetic Glow Buttons
 
@@ -274,12 +272,12 @@ npm run preview
 - GSAP-powered typing animation
 - Configurable typing/deleting speeds
 
-### 5️⃣ Horizontal Project Scroll
+### 5️⃣ Project Showcase
 
-- Scroll-scrubbed horizontal track
-- Pinned section heading
-- Desktop cinematic interaction
-- Mobile vertical conversion fallback
+- Responsive project-card layout
+- Verified project media and case-study links
+- Desktop hover interactions
+- Mobile vertical layout
 
 ### 6️⃣ Custom Cursor
 
@@ -464,7 +462,7 @@ Every push to the `main` branch automatically triggers deployment.
 | ----------------- | --------------- |
 | Build Command     | `npm run build` |
 | Publish Directory | `dist`          |
-| Node Version      | `18+`           |
+| Node Version      | `20+`           |
 
 ---
 
@@ -539,7 +537,6 @@ Attribution appreciated but not required.
 
 - [Astro](https://astro.build) — Framework
 - [GSAP](https://greensock.com/gsap/) — Animation engine
-- [Three.js](https://threejs.org/) — WebGL rendering
 - [Tailwind CSS](https://tailwindcss.com/) — Styling system
 - [Lenis](https://lenis.darkroom.engineering/) — Smooth scrolling
 
@@ -554,9 +551,7 @@ Attribution appreciated but not required.
 
 ## 🐛 Known Issues
 
-- WebGL particle performance on low-end devices
 - Safari <15 may show backdrop-filter rendering inconsistencies
-- Horizontal scroll requires GSAP ScrollTrigger horizontal support
 
 ### 🐞 Report Bugs
 
