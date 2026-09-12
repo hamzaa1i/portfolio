@@ -47,7 +47,7 @@ const articleSchema = JSON.stringify({
 
   <div class="reading-progress" id="reading-progress"></div>
 
-  <main
+  <div
     class="min-h-screen px-6"
     style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);"
   >
@@ -88,8 +88,8 @@ const articleSchema = JSON.stringify({
       <div class="border-t border-white/[0.06] mt-14 pt-8 pb-4">
         <div class="glass p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div class="flex-1">
-            <p class="text-sm font-heading font-semibold text-text-primary mb-1">Enjoyed this post?</p>
-            <p class="text-xs text-text-secondary">Got a project in mind? I'd love to hear about it.</p>
+            <p class="text-sm font-heading font-semibold text-text-primary mb-1">Continue the conversation</p>
+            <p class="text-xs text-text-secondary">Have a system or product to build? Send the context.</p>
           </div>
           <a href="/#contact" class="btn-primary btn-sm flex-shrink-0">
             <span>get in touch</span>
@@ -98,7 +98,7 @@ const articleSchema = JSON.stringify({
         </div>
       </div>
     </article>
-  </main>
+  </div>
 
   <div class="py-10"></div>
   <Footer />
@@ -107,10 +107,11 @@ const articleSchema = JSON.stringify({
 
   <script>
     (function() {
-      var bar = document.getElementById('reading-progress');
+      var bar = document.getElementById('reading-progress') as HTMLElement | null;
       if (!bar) return;
 
       function update() {
+        if (!bar) return;
         var scrollTop = window.scrollY;
         var docHeight = document.documentElement.scrollHeight - window.innerHeight;
         if (docHeight <= 0) return;

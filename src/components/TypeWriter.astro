@@ -9,7 +9,7 @@ const { roles, class: className = '', textClass = 'text-heading-3 sm:text-headin
 ---
 
 <div class:list={['typewriter-container', className]} data-typewriter data-roles={JSON.stringify(roles)}>
-  <span data-typewriter-text class:list={['typewriter-text', textClass]} aria-label={roles[0]} role="text"></span>
+  <span data-typewriter-text class:list={['typewriter-text', textClass]} aria-hidden="true"></span>
   <span class="typewriter-caret" aria-hidden="true"></span>
 </div>
 <span class="sr-only">{roles[0]}</span>

@@ -18,10 +18,11 @@ interface Props {
 
 const {
   title = 'Hamza Ali — Portfolio',
-  description = '17-year-old developer who builds production websites, ERP systems, and brand identities for international businesses.',
+  description = 'Software and systems engineer building production web platforms, operational software, ERP workflows, and e-commerce experiences.',
 } = Astro.props;
 
 const siteURL = 'https://hamzaalidev.vercel.app';
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const themeStyle = [
   `background-color:${t.void}`,
@@ -119,6 +120,7 @@ h.classList.add('light');
 <meta name="description" content={description} />
 <meta name="author" content="Hamza Ali" />
 <meta name="robots" content="index, follow" />
+<link rel="canonical" href={canonicalURL} />
 
 <meta name="theme-color" content={t.void} />
 
@@ -129,18 +131,22 @@ h.classList.add('light');
 
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={siteURL} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content="Hamza Ali — Portfolio" />
+<meta property="og:locale" content="en_US" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={`${siteURL}/og-image.png`} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Hamza Ali — Software & Systems Engineer" />
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={`${siteURL}/og-image.png`} />
+<meta name="twitter:image:alt" content="Hamza Ali — Software & Systems Engineer" />
 
 <DynamicFavicon />
 
@@ -158,14 +164,14 @@ set:html={JSON.stringify({
 "@context": "https://schema.org",
 "@type": "Person",
 "name": "Hamza Ali",
-"jobTitle": "Digital Solutions Architect",
+"jobTitle": "Software and Systems Engineer",
 "url": siteURL,
 "sameAs": ["https://github.com/hamzaa1i"],
 "knowsAbout": [
-"Web Development",
-"ERP Systems",
-"UI/UX Design",
-"Brand Identity"
+"Full-stack Web Development",
+"Operational Software",
+"ERPNext and Frappe",
+"E-commerce Development"
 ],
 "address": {
 "@type": "PostalAddress",
@@ -180,6 +186,8 @@ set:html={JSON.stringify({
 
 <body class="bg-void text-text-primary font-body antialiased overflow-x-hidden">
 
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
 <Preloader />
 
 <div class="css-bg-fallback" aria-hidden="true"></div>
@@ -190,7 +198,7 @@ set:html={JSON.stringify({
 
 <div class="page-blur-overlay" aria-hidden="true"></div>
 
-<main class="content-layer relative z-content">
+<main id="main-content" class="content-layer relative z-content">
 <slot />
 </main>
 

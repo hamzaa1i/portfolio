@@ -1,0 +1,93 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import CaseStudyMedia from '../../components/CaseStudyMedia.astro';
+import CaseStudyMeta from '../../components/CaseStudyMeta.astro';
+import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
+
+import dashboard from '../../assets/projects/aurelia/dashboard.png';
+import docs from '../../assets/projects/aurelia/docs.png';
+import landing from '../../assets/projects/aurelia/landing.png';
+import stats from '../../assets/projects/aurelia/stats.png';
+---
+
+<PostLayout
+  title="Aurelia"
+  date="2024–Present"
+  readingTime="7 min read"
+  tags={['Python', 'discord.py', 'Next.js', 'PostgreSQL', 'Multi-provider AI']}
+  description="A Discord community management platform spanning a modular bot, dashboard, moderation, engagement, privacy and resilient AI routing."
+  backUrl="/work"
+  backLabel="back to case studies"
+>
+
+<CaseStudyMeta
+  role="Creator & Developer"
+  timeline="2024–Present"
+  status="Live product"
+  metrics={[
+    { value: '173', label: 'command paths' },
+    { value: '47', label: 'cog modules' },
+    { value: '4', label: 'AI providers' },
+  ]}
+  liveUrl="https://veloura-aurelia.vercel.app"
+  sourceUrl="https://github.com/hamzaa1i/miles-discord-bot"
+/>
+
+<h2>Overview</h2>
+
+<p>Aurelia is usually described as a Discord bot, but the product is broader: a Python service with modular command architecture, a web dashboard, OAuth-based configuration, public documentation, live statistics and a multi-provider AI layer.</p>
+
+<p>I created it and maintain it as an independent product. The current source exposes 173 invokable command paths across 47 cogs, with 35 dashboard module pages for configuration and live actions.</p>
+
+<CaseStudyMedia image={landing} alt="Aurelia product landing page with live server, member, uptime and command statistics" caption="01 / Aurelia’s public product surface and live system counters." />
+
+<h2>Product breadth</h2>
+
+<p><strong>Moderation.</strong> Warnings are tracked as numbered cases with escalation thresholds, AI-assisted automod and an audit trail.</p>
+
+<p><strong>Onboarding and engagement.</strong> Server owners can configure welcome cards, leveling and role rewards, daily streaks, questions, giveaways, starboard behavior and achievements.</p>
+
+<p><strong>Privacy controls.</strong> Members can export or delete their stored data. Privacy choices are enforced before provider calls where AI features are involved.</p>
+
+<p><strong>Dashboard.</strong> Discord OAuth identifies the user and the servers they manage. Configuration is written through an authenticated API, while live actions use the same permission and audit paths as bot commands.</p>
+
+<CaseStudyMedia image={dashboard} alt="Aurelia web dashboard showing configurable welcome settings and a live preview" caption="02 / A dashboard module used to configure the running bot without editing files." />
+
+<h2>System design</h2>
+
+<WorkflowDiagram
+  title="Aurelia system shape"
+  footer="The bot, dashboard and public surfaces share one data model; AI providers sit behind a routed boundary."
+  nodes={[
+    { label: 'Discord', detail: 'events · commands · members', kind: 'external' },
+    { label: 'Bot service', detail: '47 modular cogs' },
+    { label: 'AI router', detail: 'profiles · failover · breakers' },
+    { label: 'Data layer', detail: 'Supabase Postgres · JSON fallback', kind: 'data' },
+    { label: 'Dashboard', detail: 'Next.js · OAuth · live config' },
+    { label: 'Public surfaces', detail: 'docs · stats · changelog' },
+  ]}
+/>
+
+<p>The bot is built with Python and discord.py. Cogs own distinct concerns, which keeps new features from becoming one connected command file. The dashboard is a Next.js application backed by a server-side proxy so credentials stay outside client-side JavaScript.</p>
+
+<p>Configuration changes move through authenticated, CSRF-protected and rate-limited API paths. Mutations are audit logged. Public stats and documentation are separate from the authenticated server-management surface.</p>
+
+<CaseStudyMedia image={docs} alt="Aurelia documentation site with module guides and command reference" caption="03 / Public documentation for setup, modules, commands and API behavior." />
+
+<h2>AI routing</h2>
+
+<p>Aurelia uses four provider paths behind one router: Gemini, Mistral, OpenRouter for GLM, and Groq. The router chooses a provider chain by task profile, applies circuit breakers and falls through when a provider is unavailable or returns unusable content.</p>
+
+<p>No provider owns the feature logic. Adapters translate requests, the router owns fallback, and the shared sanitization layer enforces Discord length and output rules. Sensitive moderation paths use their own routing profile, and deployments can boot cleanly when only part of the provider set is configured.</p>
+
+<h2>Result</h2>
+
+<p>Aurelia now operates as a complete community-management product rather than a collection of commands. Server owners can configure the system visually, members have documented privacy controls, and public product surfaces show what is running.</p>
+
+<CaseStudyMedia image={stats} alt="Aurelia live statistics page with uptime, commands and growth information" caption="04 / The public statistics surface sourced from the running system." />
+
+<h2>Lesson</h2>
+
+<blockquote><p>Modularity matters most when one person maintains the whole product. Every boundary should make the next feature easier to add and safer to fail.</p></blockquote>
+
+</PostLayout>

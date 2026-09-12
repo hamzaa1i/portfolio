@@ -6,26 +6,26 @@ import Footer from '../../components/Footer.astro';
 const posts = [
   {
     slug: 'building-website-at-17',
-    title: 'How I Built a Production Website at 17',
-    date: 'November 2025',
+    title: 'What I Learned Building My First Production Platform',
+    date: 'March 12, 2026',
     readingTime: '5 min read',
-    excerpt: 'The story of how I built a full production website for a garment exporter shipping to the UK.',
+    excerpt: 'Lessons from turning a company website into a production platform with intake, operations, and client-facing workflows.',
     tags: ['Astro', 'GSAP', 'Supabase'],
   },
   {
     slug: 'erp-for-manufacturing',
     title: 'Implementing ERPNext for a Real Factory',
-    date: 'December 2025',
+    date: 'March 8, 2026',
     readingTime: '4 min read',
-    excerpt: 'How I replaced paper-based processes with a digital ERP system for a garment factory.',
+    excerpt: 'How I adapted ERPNext and Frappe to the constraints of day-to-day garment manufacturing operations.',
     tags: ['ERPNext', 'Python', 'PostgreSQL'],
   },
   {
     slug: 'first-brand-identity',
-    title: 'Designing a Brand Identity from Scratch',
-    date: 'October 2025',
+    title: 'Designing Brand Systems for Real-World Use',
+    date: 'March 3, 2026',
     readingTime: '4 min read',
-    excerpt: 'What I learned creating a complete visual identity for a garment exporter with no formal design training.',
+    excerpt: 'What production documents, printed collateral, and digital interfaces taught me about practical consistency.',
     tags: ['Brand Design', 'Figma', 'Strategy'],
   },
 ];
@@ -34,7 +34,7 @@ const posts = [
 <Layout title="Writing — Hamza Ali" description="Thoughts on building websites, ERP systems, and brand identities for real businesses.">
   <Header />
 
-  <main
+  <div
     class="min-h-screen px-6"
     style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);"
   >
@@ -76,7 +76,7 @@ const posts = [
         ))}
       </div>
     </div>
-  </main>
+  </div>
 
   <div class="py-10"></div>
   <Footer />

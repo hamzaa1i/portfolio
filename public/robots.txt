@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hamzaalidev.vercel.app/sitemap-index.xml

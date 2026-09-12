@@ -1,0 +1,157 @@
+---
+interface Node {
+  label: string;
+  detail: string;
+  kind?: 'default' | 'external' | 'data';
+}
+
+interface Props {
+  title: string;
+  nodes: Node[];
+  footer: string;
+}
+
+const { title, nodes, footer } = Astro.props;
+---
+
+<figure class="workflow glass" data-animate="fade-up">
+  <div class="workflow-head">
+    <span class="workflow-dot"></span>
+    <span>{title}</span>
+    <span class="workflow-status">live model</span>
+  </div>
+
+  <div class="workflow-grid">
+    {nodes.map((node, index) => (
+      <div class:list={['workflow-node', `workflow-node--${node.kind ?? 'default'}`]}>
+        <span class="workflow-index">{String(index + 1).padStart(2, '0')}</span>
+        <strong>{node.label}</strong>
+        <small>{node.detail}</small>
+        {index < nodes.length - 1 && <span class="workflow-link" aria-hidden="true">→</span>}
+      </div>
+    ))}
+  </div>
+
+  <figcaption>{footer}</figcaption>
+</figure>
+
+<style>
+  .workflow {
+    margin: 2rem 0;
+    overflow: hidden;
+  }
+
+  .workflow-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+  }
+
+  .workflow-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0.75rem var(--accent-glow);
+  }
+
+  .workflow-status {
+    margin-left: auto;
+    color: var(--accent);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+  }
+
+  .workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .workflow-node {
+    min-height: 7.25rem;
+    padding: 0.9rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: 1px solid var(--glass-border);
+    border-radius: 0.65rem;
+    background: var(--glass-bg);
+  }
+
+  .workflow-node--external { border-style: dashed; }
+  .workflow-node--data { border-color: var(--accent-dim); }
+
+  .workflow-index {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.8rem;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+  }
+
+  .workflow-node strong {
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+
+  .workflow-node small {
+    margin-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    line-height: 1.45;
+  }
+
+  .workflow-link {
+    position: absolute;
+    right: -0.7rem;
+    top: 50%;
+    z-index: 1;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    animation: linkPulse 2.2s ease-in-out infinite;
+  }
+
+  .workflow-node:nth-child(3n) .workflow-link { display: none; }
+
+  .workflow figcaption {
+    padding: 0 1rem 1rem;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    line-height: 1.5;
+  }
+
+  @keyframes linkPulse {
+    0%, 100% { opacity: 0.35; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(0.18rem); }
+  }
+
+  @media (max-width: 639px) {
+    .workflow-grid { grid-template-columns: 1fr; }
+    .workflow-node { min-height: 6.25rem; }
+    .workflow-link {
+      right: 50%;
+      top: auto;
+      bottom: -0.85rem;
+      transform: rotate(90deg);
+    }
+    .workflow-node:nth-child(3n) .workflow-link { display: block; }
+    .workflow-node:last-child .workflow-link { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .workflow-link { animation: none; }
+  }
+</style>

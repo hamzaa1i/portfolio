@@ -1,4 +1,4 @@
-# 🌌 Hamza Ali — Digital Solutions Architect Portfolio
+# Hamza Ali — Software & Systems Engineer Portfolio
 
 <p align="center">
   <a href="https://astro.build">
@@ -7,10 +7,6 @@
 
   <a href="https://tailwindcss.com/">
     <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="TailwindCSS Badge">
-  </a>
-
-  <a href="https://threejs.org/">
-    <img src="https://img.shields.io/badge/Three.js-000000?style=flat-square&logo=three.js&logoColor=white" alt="Three.js Badge">
   </a>
 
   <a href="https://greensock.com/gsap/">
@@ -23,8 +19,8 @@
 </p>
 
 <p align="center">
-  An immersive, story-driven developer portfolio featuring WebGL interactive backgrounds,
-  scroll-driven GSAP animations, cinematic transitions, and premium UI interactions.
+  A professional portfolio for production web platforms, ERP workflows,
+  e-commerce systems, and product development.
 </p>
 
 <p align="center">
@@ -36,20 +32,19 @@
 
 ## 🚀 About
 
-At 17, I built production systems for an international garment export business with zero prior coding experience.
-
-This portfolio documents that transformation — from digitizing a **300K+ monthly garment manufacturing operation** to designing premium digital systems and brand experiences for international exporters.
+This portfolio documents current work across the Reve Stitching digital platform,
+an ERPNext/Frappe manufacturing implementation, Haus Couture's Shopify rebuild,
+and the Aurelia automation platform.
 
 ### ✨ What Makes This Portfolio Different
 
-- Interactive Three.js particle system that reacts to cursor movement
-- Full-viewport section snapping powered by Lenis smooth scrolling
+- Full-viewport sections with Lenis smooth scrolling
 - GSAP magnetic buttons with radial glow interactions
-- Horizontal scrolling project showcase on desktop
+- Responsive project showcase with verified project media
 - Custom cursor with contextual interaction states
 - Animated typing effect with rotating developer roles
 - Liquid glassmorphism interface with ambient floating gradients
-- Mobile-optimized architecture with graceful WebGL fallback
+- Mobile-optimized architecture with graceful CSS fallbacks
 - Cinematic storytelling-focused section transitions
 - Performance-first animations with accessibility support
 
@@ -69,10 +64,9 @@ This portfolio documents that transformation — from digitizing a **300K+ month
 
 | Technology                                                                                                                  | Purpose                                      |
 | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| [GSAP 3.12](https://greensock.com/gsap/)                                                                                    | Scroll animations, magnetic effects, reveals |
-| [ScrollTrigger](https://greensock.com/scrolltrigger/)                                                                       | Scroll-driven timelines & section pinning    |
-| [Lenis 1.2](https://lenis.darkroom.engineering/)                                                                            | Smooth scrolling engine                      |
-| [Three.js](https://threejs.org/) + [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/getting-started/introduction) | WebGL particle rendering                     |
+| [GSAP 3](https://greensock.com/gsap/)                  | Scroll animations, magnetic effects, reveals |
+| [ScrollTrigger](https://greensock.com/scrolltrigger/) | Scroll-driven animations                     |
+| [Lenis 1](https://lenis.darkroom.engineering/)        | Smooth scrolling engine                      |
 
 ### 🚀 Deployment & Tooling
 
@@ -98,14 +92,14 @@ portfolio/
 │   ├── components/
 │   │   ├── Header.astro
 │   │   ├── Footer.astro
-│   │   ├── InteractiveBackground.tsx
-│   │   ├── MagneticButton.astro
+│   │   ├── CommandPalette.astro
+│   │   ├── ContactForm.tsx
 │   │   ├── ProjectCard.astro
 │   │   ├── SkillOrb.astro
 │   │   ├── TypeWriter.astro
-│   │   ├── CustomCursor.astro
-│   │   ├── ScrollProgress.astro
-│   │   ├── Lightbox.astro
+│   │   ├── MusicPlayer.astro
+│   │   ├── Preloader.astro
+│   │   ├── Terminal.astro
 │   │   ├── ScrollIndicator.astro
 │   │   └── DarkModeScript.astro
 │   │
@@ -174,7 +168,7 @@ portfolio/
 
 ### 📋 Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - npm
 - Git
 
@@ -224,15 +218,15 @@ npm run preview
 
 ### 🖥️ Desktop Experience (>1024px)
 
-- Full WebGL particle background
-- Section snapping enabled
+- Full animated ambient background
+- Full-viewport section layout
 - Custom cursor interactions
 - Magnetic hover effects
-- Horizontal project scrolling
+- Project-card hover interactions
 
 ### 📱 Mobile Experience (<1024px)
 
-- Static CSS gradient fallback
+- Motion-aware CSS fallbacks
 - Free scrolling with Lenis smoothing
 - Touch-optimized interactions
 - No magnetic hover effects
@@ -251,19 +245,18 @@ npm run preview
 
 ## 🎬 Key Interactive Features
 
-### 1️⃣ WebGL Particle Background
+### 1️⃣ Ambient Background
 
-- Mouse-reactive fluid particles
-- Cyan/purple gradient rendering
-- Adaptive particle count based on hardware tier
-- Mobile CSS fallback system
+- Layered gradients and floating ambient elements
+- Black-and-gold visual system
+- Mobile and reduced-motion fallbacks
 
-### 2️⃣ Section Snapping
+### 2️⃣ Smooth Section Scrolling
 
-- Full-screen immersive sections
+- Full-screen immersive sections on desktop
 - Lenis-powered smooth scrolling
-- GSAP ScrollTrigger snapping
-- Disabled on mobile for natural scroll
+- GSAP ScrollTrigger reveals
+- Natural document flow on mobile
 
 ### 3️⃣ Magnetic Glow Buttons
 
@@ -279,12 +272,12 @@ npm run preview
 - GSAP-powered typing animation
 - Configurable typing/deleting speeds
 
-### 5️⃣ Horizontal Project Scroll
+### 5️⃣ Project Showcase
 
-- Scroll-scrubbed horizontal track
-- Pinned section heading
-- Desktop cinematic interaction
-- Mobile vertical conversion fallback
+- Responsive project-card layout
+- Verified project media and case-study links
+- Desktop hover interactions
+- Mobile vertical layout
 
 ### 6️⃣ Custom Cursor
 
@@ -315,12 +308,6 @@ src/pages/index.astro
 
 ```astro
 <a href="https://github.com/YOUR_USERNAME">
-```
-
-#### WhatsApp
-
-```astro
-<a href="https://wa.me/YOUR_PHONE_NUMBER">
 ```
 
 Also update:
@@ -475,7 +462,7 @@ Every push to the `main` branch automatically triggers deployment.
 | ----------------- | --------------- |
 | Build Command     | `npm run build` |
 | Publish Directory | `dist`          |
-| Node Version      | `18+`           |
+| Node Version      | `20+`           |
 
 ---
 
@@ -515,17 +502,12 @@ Attribution appreciated but not required.
 
 <p align="center">
   <strong>Hamza Ali</strong><br>
-  Digital Solutions Architect
+  Software &amp; Systems Engineer
 </p>
 
 <p align="center">
   📧 Email:
   <a href="mailto:hamzaali.dev@proton.me">hamzaali.dev@proton.me</a>
-</p>
-
-<p align="center">
-  💬 WhatsApp:
-  <a href="https://wa.me/923329555786">+92 332 9555786</a>
 </p>
 
 <p align="center">
@@ -555,7 +537,6 @@ Attribution appreciated but not required.
 
 - [Astro](https://astro.build) — Framework
 - [GSAP](https://greensock.com/gsap/) — Animation engine
-- [Three.js](https://threejs.org/) — WebGL rendering
 - [Tailwind CSS](https://tailwindcss.com/) — Styling system
 - [Lenis](https://lenis.darkroom.engineering/) — Smooth scrolling
 
@@ -570,9 +551,7 @@ Attribution appreciated but not required.
 
 ## 🐛 Known Issues
 
-- WebGL particle performance on low-end devices
 - Safari <15 may show backdrop-filter rendering inconsistencies
-- Horizontal scroll requires GSAP ScrollTrigger horizontal support
 
 ### 🐞 Report Bugs
 
