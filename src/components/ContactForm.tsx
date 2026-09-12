@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -6,18 +6,49 @@ interface Props {
   turnstileSiteKey?: string;
 }
 
+interface TurnstileApi {
+  render: (container: HTMLElement, options: { sitekey: string }) => string;
+  reset: (widgetId?: string) => void;
+  remove: (widgetId: string) => void;
+}
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
+
 export default function ContactForm({ turnstileSiteKey = '' }: Props) {
   const [state, setState] = useState<FormState>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetIdRef = useRef<string>();
+
+  function renderTurnstile() {
+    if (!turnstileSiteKey || !window.turnstile || !turnstileContainerRef.current || turnstileWidgetIdRef.current) return;
+    turnstileWidgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
+      sitekey: turnstileSiteKey,
+    });
+  }
+
+  function resetTurnstile() {
+    if (turnstileWidgetIdRef.current) window.turnstile?.reset(turnstileWidgetIdRef.current);
+  }
 
   useEffect(() => {
-    if (!turnstileSiteKey || document.querySelector('script[data-turnstile-script]')) return;
-    const script = document.createElement('script');
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-    script.async = true;
-    script.defer = true;
-    script.dataset.turnstileScript = 'true';
-    document.head.appendChild(script);
+    if (!turnstileSiteKey) return;
+    let script = document.querySelector<HTMLScriptElement>('script[data-turnstile-script]');
+    if (!script) {
+      script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      script.async = true;
+      script.defer = true;
+      script.dataset.turnstileScript = 'true';
+      document.head.appendChild(script);
+    }
+    if (window.turnstile) renderTurnstile();
+    else script.addEventListener('load', renderTurnstile, { once: true });
+    return () => script?.removeEventListener('load', renderTurnstile);
   }, [turnstileSiteKey]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -34,13 +65,25 @@ export default function ContactForm({ turnstileSiteKey = '' }: Props) {
         body: JSON.stringify(payload),
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
       });
-      if (res.ok) { setState('success'); form.reset(); }
+      if (res.ok) {
+        if (turnstileWidgetIdRef.current) {
+          window.turnstile?.remove(turnstileWidgetIdRef.current);
+          turnstileWidgetIdRef.current = undefined;
+        }
+        setState('success');
+        form.reset();
+      }
       else {
         const json = await res.json();
         setErrorMsg(json?.message || 'Something went wrong. Please email hamzaali.dev@proton.me.');
+        resetTurnstile();
         setState('error');
       }
-    } catch { setErrorMsg('Network error.'); setState('error'); }
+    } catch {
+      setErrorMsg('Network error.');
+      resetTurnstile();
+      setState('error');
+    }
   }
 
   if (state === 'success') {
@@ -53,7 +96,14 @@ export default function ContactForm({ turnstileSiteKey = '' }: Props) {
         </div>
         <h3 className="font-heading text-lg font-semibold mb-2" style={{ color: '#FAFAFA' }}>Message sent.</h3>
         <p className="text-sm" style={{ color: '#A1A1AA' }}>I'll get back to you within 24-48 hours.</p>
-        <button onClick={() => setState('idle')} className="mt-4 text-sm font-mono font-medium" style={{ color: '#C8A24E' }}>
+        <button
+          onClick={() => {
+            setState('idle');
+            window.setTimeout(renderTurnstile, 0);
+          }}
+          className="mt-4 text-sm font-mono font-medium"
+          style={{ color: '#C8A24E' }}
+        >
           send another →
         </button>
       </div>
@@ -105,7 +155,7 @@ export default function ContactForm({ turnstileSiteKey = '' }: Props) {
         <textarea id="message" name="message" className="form-textarea" placeholder="Tell me about your project, timeline, and goals..." required disabled={state === 'submitting'} />
       </div>
 
-      {turnstileSiteKey && <div className="cf-turnstile" data-sitekey={turnstileSiteKey}></div>}
+      {turnstileSiteKey && <div ref={turnstileContainerRef} className="cf-turnstile"></div>}
 
       {state === 'error' && <p className="text-sm font-mono" style={{ color: '#EF4444' }}>{errorMsg}</p>}
 

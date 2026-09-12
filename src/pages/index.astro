@@ -9,7 +9,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import ContactForm from '../components/ContactForm.tsx';
 import CurrentlyWidget from '../components/CurrentlyWidget.astro';
 import SectionSkeleton from '../components/SectionSkeleton.astro';
-import { projects } from '../data/projects';
+import { flagshipProjects } from '../data/projects';
 
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
 
@@ -412,7 +412,7 @@ const categories = ['Web', 'Motion', 'Data', 'Systems', 'Tools'] as const;
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
-{projects.map((p) => (
+{flagshipProjects.map((p) => (
   <ProjectCard
     title={p.title}
     description={p.description}
