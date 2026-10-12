@@ -1,0 +1,109 @@
+{
+  "name": "Hamza Ali",
+  "title": "Software & Systems Engineer",
+  "secondaryTitle": "Full-Stack Developer",
+  "location": "Faisalabad, Pakistan",
+  "website": "https://hamzaalikhurram.com",
+  "github": "https://github.com/hamzaa1i",
+  "updatedDate": "2026-10-12",
+  "summary": "I build web platforms and operational software, combining full-stack development with firsthand garment-manufacturing experience. My work spans structured enquiry workflows, ERPNext customization, factory application engineering and e-commerce.",
+  "experience": [
+    {
+      "heading": "Reve Stitching - Software and operational systems",
+      "period": "Website/software project work: 2025-Present",
+      "scope": "Company platform and Fabric Store workflows.",
+      "bullets": [
+        "Build and maintain the company digital platform across public intake, administration and client-facing workflows.",
+        "Configure and customize ERPNext/Frappe for Fabric Store stock movements, batch traceability, gate passes and reporting.",
+        "Use direct operational experience to define workflows, validate interfaces and investigate integration constraints."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Reve Stitching Digital Platform",
+      "href": "/work/reve-stitching",
+      "scope": "Company project | 2025-Present",
+      "description": "Astro, TypeScript, Supabase and Turso/Drizzle platform for structured quote/sample intake, admin operations, client access and ERP integration."
+    },
+    {
+      "name": "REVE ONE",
+      "href": "/work/reve-one",
+      "scope": "Company application development | 2026-Present",
+      "description": "Vue 3, TypeScript and Frappe application on ERPNext for orders, planning, materials, cutting consumption and quality. Development and staged integration; production adoption is not claimed."
+    },
+    {
+      "name": "Reve Manufacturing ERP",
+      "href": "/work/erp-system",
+      "scope": "Company systems work | Ongoing",
+      "description": "ERPNext/Frappe configuration and Python/JavaScript customization for Fabric Store stock, batches, gate passes and operational reports."
+    },
+    {
+      "name": "Haus Couture",
+      "href": "/work/haus-couture",
+      "scope": "Independent client project | 2026",
+      "description": "Designed a custom Astro storefront, then rebuilt on Shopify to support client-managed commerce, catalogue administration and GBP sales."
+    },
+    {
+      "name": "Aurelia",
+      "href": "/work/aurelia",
+      "scope": "Independent product | Ongoing",
+      "description": "Python/discord.py community platform with a Next.js dashboard, moderation, onboarding, privacy controls and multi-provider AI routing."
+    }
+  ],
+  "education": [
+    {
+      "heading": "Undergraduate studies - In progress",
+      "institution": "Faisalabad Institute of Science and Technology (FIST)",
+      "detail": "Affiliated with COMSATS University Islamabad (CUI).",
+      "period": "2026-Present"
+    },
+    {
+      "heading": "Intermediate in Computer Science (ICS)",
+      "institution": "",
+      "detail": "Computer science and mathematics.",
+      "period": ""
+    },
+    {
+      "heading": "Matriculation (Secondary School Certificate)",
+      "institution": "",
+      "detail": "",
+      "period": ""
+    }
+  ],
+  "skills": [
+    {
+      "group": "Web & interface",
+      "items": [
+        "Astro",
+        "React",
+        "Vue 3",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "Tailwind CSS",
+        "GSAP"
+      ]
+    },
+    {
+      "group": "Systems & data",
+      "items": [
+        "Python",
+        "Frappe",
+        "ERPNext",
+        "Supabase/PostgreSQL",
+        "Turso/Drizzle",
+        "Shopify"
+      ]
+    },
+    {
+      "group": "Delivery & tools",
+      "items": [
+        "Git/GitHub",
+        "Vercel",
+        "Playwright",
+        "Figma"
+      ]
+    }
+  ]
+}

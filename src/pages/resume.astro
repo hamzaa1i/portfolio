@@ -1,163 +1,87 @@
 ---
+import { publicContactEmail } from '../config/contact';
+import resume from '../data/resume.json';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-
-const experience = [
-  {
-    title: 'Software & Systems Engineer',
-    company: 'Reve Stitching',
-    period: 'October 2024 — Present',
-    current: true,
-    points: [
-      'Built and maintain the Reve Stitching platform across public, admin, and client-facing workflows',
-      'Adapted ERPNext/Frappe for stock movement, batch references, gate passes, and reporting',
-      'Delivered a two-phase Haus Couture e-commerce project, including a Shopify production rebuild',
-      'Built Aurelia, a modular Discord automation platform with dashboard, privacy, and AI routing systems',
-    ],
-  },
-  {
-    title: 'Store Assistant',
-    company: 'Reve Stitching',
-    period: 'October 2025 — Present',
-    current: false,
-    points: [
-      'Worked directly with fabric inventory and daily store operations',
-      'Supported ERP rollout with operational context and user feedback',
-      'Tested workflows against real production constraints',
-    ],
-  },
-];
-
-const education = [
-  {
-    degree: 'ICS (Intermediate in Computer Science)',
-    school: 'Punjab Board',
-    period: '2024 — 2026',
-    current: false,
-    detail: 'Computer science, mathematics, and statistics.',
-  },
-];
-
-const skillGroups = [
-  { name: 'Frontend', skills: ['Astro', 'React', 'TypeScript', 'Tailwind CSS', 'JavaScript'] },
-  { name: 'Animation', skills: ['GSAP', 'ScrollTrigger', 'Lenis'] },
-  { name: 'Systems', skills: ['ERPNext', 'Frappe', 'Python', 'Supabase', 'PostgreSQL', 'Turso/Drizzle'] },
-  { name: 'Commerce', skills: ['Shopify', 'Product Information', 'Collection Architecture'] },
-  { name: 'Tools', skills: ['Git/GitHub', 'Vercel', 'Figma', 'VS Code'] },
-];
 ---
-
-<Layout title="Resume — Hamza Ali">
+<Layout title="Résumé — Hamza Ali" description="Hamza Ali’s résumé: software and systems engineering, project contributions, education and technical skills. Read online or download the PDF.">
   <Header />
-
   <div class="min-h-screen px-6" style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);">
-    <div class="max-w-2xl mx-auto">
-      <!-- Header -->
-      <div class="mb-10">
-        <a href="/" class="inline-flex items-center gap-1.5 text-text-dim font-mono text-xs hover:text-accent-primary transition-colors mb-6">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          back to home
-        </a>
-
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-2">
+    <article class="max-w-2xl mx-auto resume-content" id="resume-content">
+      <header class="mb-10">
+        <a href="/" class="inline-flex items-center gap-1.5 text-text-dim font-mono text-xs hover:text-accent-primary transition-colors mb-6">← back to home</a>
+        <h1 class="text-heading-1 font-heading font-bold text-text-primary">{resume.name}</h1>
+        <p class="text-body text-text-secondary mt-1">{resume.title} · {resume.secondaryTitle}</p>
+        <div class="flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs text-text-secondary mt-4">
+          <span>{resume.location}</span>
+          <a href={`mailto:${publicContactEmail}`}>{publicContactEmail}</a>
+          <a href={resume.github} target="_blank" rel="noopener noreferrer">github.com/hamzaa1i</a>
+          <a href={resume.website}>hamzaalikhurram.com</a>
+        </div>
+        <div class="flex flex-wrap gap-3 mt-6 resume-actions">
+          <a href="#resume-summary" class="btn-secondary btn-sm">View Résumé</a>
+          <a href="/Hamza_Ali_Resume.pdf" download="Hamza_Ali_Resume.pdf" class="btn-secondary btn-sm" aria-label="Download Hamza Ali’s résumé as PDF">Download PDF ↓</a>
+        </div>
+      </header>
+      <section class="mb-8" id="resume-summary" aria-labelledby="summary-heading">
+        <h2 id="summary-heading" class="resume-heading">Summary</h2>
+        <p class="text-body-sm text-text-secondary leading-relaxed">{resume.summary}</p>
+      </section>
+      <section class="mb-8" aria-labelledby="experience-heading">
+        <h2 id="experience-heading" class="resume-heading">Relevant Experience</h2>
+        {resume.experience.map(item => (
           <div>
-            <h1 class="text-heading-1 font-heading font-bold text-text-primary">Hamza Ali</h1>
-            <p class="text-body text-text-secondary mt-1">Software & Systems Engineer · Full-Stack Developer · Product Builder</p>
+            <h3 class="font-heading text-sm font-semibold text-text-primary">{item.heading}</h3>
+            <p class="font-mono text-xs text-text-secondary mt-1">{item.period}</p>
+            <p class="text-xs text-text-muted mt-2">{item.scope}</p>
+            <ul class="resume-bullets text-body-sm text-text-secondary mt-3">{item.bullets.map(point => <li>{point}</li>)}</ul>
           </div>
-          <a href="/work" class="btn-primary btn-sm flex-shrink-0 self-start sm:self-auto">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            <span>view case studies</span>
-          </a>
-        </div>
-
-        <div class="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[0.65rem] text-text-dim mt-3">
-          <span>hamzaali.dev@proton.me</span>
-          <span>github.com/hamzaa1i</span>
-          <span>Faisalabad, Pakistan</span>
-        </div>
+        ))}
+      </section>
+      <section class="mb-8" aria-labelledby="projects-heading">
+        <h2 id="projects-heading" class="resume-heading">Selected Projects</h2>
+        <div class="space-y-5">{resume.projects.map(project => (
+          <div>
+            <h3 class="font-heading text-sm font-semibold text-text-primary"><a href={project.href}>{project.name} ↗</a></h3>
+            <p class="font-mono text-xs text-text-secondary mt-1">{project.scope}</p>
+            <p class="text-body-sm text-text-secondary mt-2 leading-relaxed">{project.description}</p>
+          </div>
+        ))}</div>
+      </section>
+      <section class="mb-8" aria-labelledby="education-heading">
+        <h2 id="education-heading" class="resume-heading">Education</h2>
+        <div class="space-y-4">{resume.education.map(item => (
+          <div>
+            <h3 class="font-heading text-sm font-semibold text-text-primary">{item.heading}</h3>
+            <p class="text-body-sm text-text-secondary mt-1">{item.institution}{item.period && ` · ${item.period}`}</p>
+            {item.detail && <p class="text-body-sm text-text-secondary">{item.detail}</p>}
+          </div>
+        ))}</div>
+      </section>
+      <section class="mb-10" aria-labelledby="skills-heading">
+        <h2 id="skills-heading" class="resume-heading">Technical Skills</h2>
+        <div class="space-y-3">{resume.skills.map(group => (
+          <p class="text-body-sm text-text-secondary"><strong class="text-text-primary">{group.group}: </strong>{group.items.join(', ')}</p>
+        ))}</div>
+      </section>
+      <div class="glass p-5 mb-10 flex flex-wrap items-center justify-between gap-4 resume-actions">
+        <a href="/work" class="btn-secondary btn-sm">View all projects →</a>
+        <a href="/#contact" class="btn-primary btn-sm">get in touch ↗</a>
       </div>
-
-      <!-- Experience -->
-      <section class="mb-10">
-        <h2 class="font-heading text-sm font-semibold text-accent-primary tracking-wider uppercase mb-5">Experience</h2>
-        <div class="space-y-6">
-          {experience.map((exp) => (
-            <div class="relative pl-6 border-l border-white/[0.06]">
-              <div class="absolute left-0 top-1.5 w-2 h-2 rounded-full -translate-x-[4.5px]"
-                   style={exp.current ? 'background: var(--accent);' : 'background: var(--text-dim);'}></div>
-              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 mb-2">
-                <h3 class="font-heading text-sm font-semibold text-text-primary">{exp.title}</h3>
-                <span class="font-mono text-[0.6rem] text-text-dim">{exp.period}</span>
-              </div>
-              <p class="font-mono text-xs text-text-muted mb-2">{exp.company}</p>
-              <ul class="space-y-1">
-                {exp.points.map((point) => (
-                  <li class="flex items-start gap-2 text-body-sm text-text-secondary">
-                    <span class="text-accent-primary mt-1.5 flex-shrink-0 text-[0.4rem]">●</span>
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Education -->
-      <section class="mb-10">
-        <h2 class="font-heading text-sm font-semibold text-accent-primary tracking-wider uppercase mb-5">Education</h2>
-        <div class="space-y-4">
-          {education.map((edu) => (
-            <div class="relative pl-6 border-l border-white/[0.06]">
-              <div class="absolute left-0 top-1.5 w-2 h-2 rounded-full -translate-x-[4.5px]"
-                   style={edu.current ? 'background: var(--accent);' : 'background: var(--text-dim);'}></div>
-              <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 mb-1">
-                <h3 class="font-heading text-sm font-semibold text-text-primary">{edu.degree}</h3>
-                <span class="font-mono text-[0.6rem] text-text-dim">{edu.period}</span>
-              </div>
-              <p class="font-mono text-xs text-text-muted">{edu.school}</p>
-              {edu.detail && <p class="text-body-sm text-text-secondary mt-1">{edu.detail}</p>}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Skills -->
-      <section class="mb-10">
-        <h2 class="font-heading text-sm font-semibold text-accent-primary tracking-wider uppercase mb-5">Skills</h2>
-        <div class="space-y-3">
-          {skillGroups.map((group) => (
-            <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
-              <span class="font-mono text-[0.65rem] text-text-dim tracking-wide min-w-[5rem]">{group.name}</span>
-              <div class="flex flex-wrap gap-1.5">
-                {group.skills.map((skill) => (
-                  <span class="font-mono text-[0.6rem] tracking-wider px-2.5 py-1 rounded-full border border-white/[0.06] text-text-secondary">{skill}</span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Contact -->
-      <section class="glass p-5 mb-10">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
-          <div>
-            <p class="text-sm font-heading font-semibold text-text-primary mb-1">Interested in working together?</p>
-            <p class="text-xs text-text-secondary">I'm currently available for freelance projects.</p>
-          </div>
-          <a href="/#contact" class="btn-primary btn-sm flex-shrink-0">
-            <span>get in touch</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-          </a>
-        </div>
-      </section>
-    </div>
+    </article>
   </div>
-
   <div class="py-10"></div>
   <Footer />
 </Layout>
+<style>
+  .resume-heading { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.85rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+  .resume-content a:not(.btn-primary):not(.btn-secondary) { text-decoration: underline; text-underline-offset: 3px; }
+  .resume-content { overflow-wrap: anywhere; }
+  .resume-bullets { list-style: disc; padding-left: 1.1rem; }
+  .resume-bullets li + li { margin-top: 0.5rem; }
+  @media print {
+    .resume-actions { display: none; }
+    .resume-content { color: black; }
+  }
+</style>

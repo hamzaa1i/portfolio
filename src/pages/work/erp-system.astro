@@ -9,15 +9,15 @@ import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
   date="Ongoing"
   readingTime="6 min read"
   tags={['ERPNext', 'Frappe', 'Python', 'JavaScript']}
-  description="Implementing and customizing ERPNext around the material, order and reporting workflows of a working garment factory."
+  description="Configuring ERPNext and Frappe around Fabric Store movements, batch traceability, gate passes and reporting."
   backUrl="/work"
   backLabel="back to case studies"
 >
 
 <CaseStudyMeta
-  role="IT & Digital Systems Lead"
+  role="ERPNext Configuration & Customization"
   timeline="2025–Present"
-  status="Internal production system"
+  status="Fabric Store workflows in use"
 />
 
 <h2>Context</h2>
@@ -40,7 +40,6 @@ import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
     { label: 'Batch / LOT', detail: 'roll identity and attributes', kind: 'data' },
     { label: 'Gate pass', detail: 'dyeing and external processing', kind: 'external' },
     { label: 'Transfer / issue', detail: 'store to production' },
-    { label: 'Critical Path', detail: 'order-stage visibility' },
     { label: 'Reporting', detail: 'live stock and operations', kind: 'data' },
   ]}
 />
@@ -53,7 +52,7 @@ import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
 
 <p><strong>Gate passes.</strong> Dyeing and inward movement use digital gate-pass workflows instead of isolated handwritten records. This connects external processing to the same traceability model.</p>
 
-<p><strong>Critical Path and order visibility.</strong> Production stages are tracked in one place so status can be read from the system rather than reconstructed from separate department updates.</p>
+<p><strong>Scope boundary.</strong> The legacy system was used chiefly for Fabric Store stock, batches, gate passes and Stock Entries. Broader order, production and quality modules included prototypes and configuration; they are not evidence of factory-wide adoption. <a href="/work/reve-one">REVE ONE</a> is the separate application built to develop those workflows.</p>
 
 <p><strong>Reports and workspaces.</strong> Custom reports such as the Fabric Stock Register expose live operational data. Frappe desk and workspace customization keeps the relevant tasks visible without forcing staff through unrelated ERP modules.</p>
 
@@ -67,7 +66,7 @@ import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
 
 <h2>Result</h2>
 
-<p>Material movement, batch traceability, gate passes, order progress and stock reporting now share one operational system. The work continues as production needs change. Planned ideas remain separate from shipped functionality.</p>
+<p>The operational work established stock movement, batch traceability, gate-pass and reporting workflows. Historical ledger balances still require physical reconciliation and approved valuation before any new system cutover; internal consistency alone does not prove current stock accuracy.</p>
 
 <h2>Lesson</h2>
 

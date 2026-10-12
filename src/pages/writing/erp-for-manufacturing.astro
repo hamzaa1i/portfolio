@@ -5,6 +5,7 @@ import PostLayout from '../../layouts/PostLayout.astro';
 <PostLayout
   title="Implementing ERPNext for a Real Factory"
   date="March 8, 2026"
+  publishedDate="2026-03-08"
   readingTime="4 min read"
   tags={['ERPNext', 'Frappe', 'Python']}
   description="How I adapted ERPNext and Frappe to the constraints of day-to-day garment manufacturing operations."
@@ -35,7 +36,7 @@ import PostLayout from '../../layouts/PostLayout.astro';
   <li><strong>Stock movement</strong> aligned with receipt, transfer, and issuance events</li>
   <li><strong>Batch and LOT references</strong> that follow material through processing</li>
   <li><strong>Gate passes</strong> for controlled movement outside the facility</li>
-  <li><strong>Critical Path fields and reports</strong> for production visibility</li>
+  <li><strong>Operational reports</strong> for investigating Fabric Store movements and batches</li>
   <li><strong>Scripts and barcode-assisted steps</strong> where they reduce repeated entry</li>
 </ul>
 
@@ -43,18 +44,16 @@ import PostLayout from '../../layouts/PostLayout.astro';
 
 <h2>The Adoption Challenge</h2>
 
-<p>Building the system was one thing. Getting a team of factory workers to actually use it was another. Most of them had never used anything beyond WhatsApp on their phones.</p>
+<p>Introducing a workflow meant showing the relevant task clearly and listening to the people using it. A control that added unnecessary friction was unlikely to survive daily use.</p>
 
 <p>I handled this by walking through each role's specific workflow, reducing unnecessary decisions in the interface, and treating operator feedback as part of the implementation.</p>
 
 <h2>What the System Improves</h2>
 
-<p>The system creates a consistent operational trail between stock events, batch references, gate passes, and reports. It gives the team one structure for investigating discrepancies and reviewing work in progress.</p>
+<p>The system creates a consistent operational trail between stock events, batch references, gate passes, and reports. It gives the team one structure for investigating discrepancies and reviewing Fabric Store work.</p>
 
 <p>Because the system is internal, this portfolio uses an architecture diagram rather than exposing production records or employee data.</p>
 
-<blockquote>
-  <p>The hardest part of an ERP implementation isn't the code. It's getting people to trust the new system.</p>
-</blockquote>
+<p>That operational scope is important: the legacy Fabric Store workflows were used, while broader ERP modules included prototypes. <a href="/work/reve-one">REVE ONE</a> develops the wider factory application separately. Neither a matching ledger nor a passing software test proves the current physical inventory.</p>
 
 </PostLayout>

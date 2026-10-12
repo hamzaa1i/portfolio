@@ -1,4 +1,5 @@
 ---
+import { publicContactEmail } from '../config/contact';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -51,12 +52,6 @@ const roles = [
   'Product Builder',
 ];
 
-const stats = [
-  { value: 4,   suffix: '', label: 'Flagship Builds' },
-  { value: 38,  suffix: '', label: 'API Routes' },
-  { value: 173, suffix: '', label: 'Command Paths' },
-  { value: 47,  suffix: '', label: 'Cog Modules' },
-];
 
 /* ── Skills with professional SVG icons ── */
 
@@ -227,20 +222,7 @@ const categories = ['Web', 'Motion', 'Data', 'Systems', 'Tools'] as const;
               <p class="text-body-sm text-text-secondary leading-relaxed mb-5">
                 Software & Systems Engineer building production systems for real businesses. Web platforms, ERP, e-commerce and operational tooling.
               </p>
-              <div class="grid grid-cols-3 gap-4 border-t border-white/5 pt-4">
-                <div class="text-center">
-                  <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">4</div>
-                  <div class="font-mono text-[0.6rem] text-text-muted tracking-wider uppercase mt-1.5">flagship builds</div>
-                </div>
-                <div class="text-center border-x border-white/5">
-                  <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">38</div>
-                  <div class="font-mono text-[0.6rem] text-text-muted tracking-wider uppercase mt-1.5">API routes</div>
-                </div>
-                <div class="text-center">
-                  <div class="font-heading text-xl sm:text-2xl font-bold text-accent-primary leading-none">173</div>
-                  <div class="font-mono text-[0.6rem] text-text-muted tracking-wider uppercase mt-1.5">command paths</div>
-                </div>
-              </div>
+
             </div>
               <CurrentlyWidget />
           </div>
@@ -280,38 +262,20 @@ const categories = ['Web', 'Motion', 'Data', 'Systems', 'Tools'] as const;
 
             <div class="space-y-5">
               <p data-story-line class="text-body text-text-secondary leading-relaxed">
-                Working inside a garment manufacturing business put me close to the problems software has to solve: stock movement, order tracking, quoting, client communication and production visibility.
+                Working inside a <span class="story-accent">garment manufacturing business</span> showed me where software can help: receiving fabric, tracing stock movements, handling enquiries and making the next task clear.
               </p>
-
               <p data-story-line class="text-body text-text-secondary leading-relaxed">
-                That experience shaped how I build. I care about systems that survive real workflows, not just polished demos. The strongest work starts by understanding the operation before choosing the stack.
+                I start by <span class="story-accent">understanding the operation</span>. A useful system has to fit the people using it, including the exceptions and handoffs that rarely appear in a demo.
               </p>
-
               <p data-story-line class="text-body text-text-secondary leading-relaxed">
-                My current work spans a production digital platform, ERPNext workflows, a Shopify storefront and a community management product with a web dashboard and multi-provider AI routing.
+                That approach connects my work on the Reve digital platform, <span class="story-accent">ERPNext workflows</span> and REVE ONE. Alongside that work, I build Shopify storefronts and maintain Aurelia, an independent community-management platform.
               </p>
-
               <p data-story-line class="text-body text-text-secondary leading-relaxed">
-                I move between product decisions, implementation and day-to-day operations. That range helps me make software practical, maintainable and clear to the people who run it.
+                I move between interface design, implementation and day-to-day operations to build <span class="story-accent">practical software</span> that people can understand and maintain.
               </p>
-
-              <blockquote data-story-line class="glass p-4 sm:p-5 mt-2" style="border-left: 2px solid var(--accent); border-radius: 0 0.75rem 0.75rem 0;">
-                <p class="text-sm text-text-primary italic leading-relaxed font-body">
-                  "The interface matters. The workflow behind it matters more."
-                </p>
-              </blockquote>
             </div>
+            <a href="/resume" class="btn-secondary btn-sm mt-6">View Résumé →</a>
 
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 sm:mt-10" data-animate="stagger">
-              {stats.map((s) => (
-                <div class="stat-card glass">
-                  <div class="stat-number">
-                    <span data-counter={s.value.toString()} data-counter-suffix={s.suffix}>0{s.suffix}</span>
-                  </div>
-                  <div class="stat-label">{s.label}</div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
@@ -407,7 +371,7 @@ const categories = ['Web', 'Motion', 'Data', 'Systems', 'Tools'] as const;
           <span data-scramble class="section-label mb-2 block">Portfolio</span>
           <h2 data-split data-parallax="0.8" class="text-heading-1 font-heading font-bold text-text-primary mb-3">Selected Works</h2>
           <p data-animate="fade-up" class="text-body-sm text-text-secondary max-w-md">
-            Production systems and products, presented with genuine project evidence.
+            Web platforms, factory workflows and independent products, with their scope and status explained.
           </p>
         </div>
 
@@ -438,11 +402,14 @@ const categories = ['Web', 'Motion', 'Data', 'Systems', 'Tools'] as const;
             <p class="text-xs text-text-secondary mb-4 leading-relaxed max-w-[200px]">
               Got something that needs building? Let's talk.
             </p>
-            <a href="#contact" data-nav-link data-magnetic class="btn-primary btn-sm" onclick="event.stopPropagation()">
+            <a href="#contact" data-nav-link data-magnetic class="btn-primary btn-sm" >
               <span>start a conversation</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
           </div>
+        </div>
+        <div class="mt-6 sm:mt-8" data-animate="fade-up">
+          <a href="/work" class="btn-secondary btn-sm">View all projects →</a>
         </div>
       </div>
     </div>
@@ -507,7 +474,8 @@ const categories = ['Web', 'Motion', 'Data', 'Systems', 'Tools'] as const;
 
             <!-- Email -->
   <a
-    href="mailto:hamzaali.dev@proton.me"
+    href={`mailto:${publicContactEmail}`}
+    data-copy-email
     class="contact-link glass laser-glow p-4 flex items-center gap-3.5 group"
     data-laser="accent"
   >
@@ -518,7 +486,7 @@ const categories = ['Web', 'Motion', 'Data', 'Systems', 'Tools'] as const;
               </div>
               <div class="min-w-0">
                 <span class="text-sm font-semibold text-text-primary block leading-tight">Email</span>
-                <span class="font-mono text-[0.6rem] tracking-wider text-text-dim truncate">hamzaali.dev@proton.me</span>
+                <span class="font-mono text-[0.6rem] tracking-wider text-text-dim truncate">{publicContactEmail}</span>
               </div>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-dim ml-auto opacity-0 group-hover:opacity-100 transition-opacity"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
@@ -622,6 +590,8 @@ const categories = ['Web', 'Motion', 'Data', 'Systems', 'Tools'] as const;
 </script>
 
 <style>
+  @media (min-width: 1024px) { #story { min-height: 75dvh; } }
+  .story-accent { color: var(--accent-readable, var(--accent)); font-weight: 500; }
   #hero {
     padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 2rem);
   }

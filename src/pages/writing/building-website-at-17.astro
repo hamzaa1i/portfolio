@@ -5,6 +5,7 @@ import PostLayout from '../../layouts/PostLayout.astro';
 <PostLayout
   title="What I Learned Building My First Production Platform"
   date="March 12, 2026"
+  publishedDate="2026-03-12"
   readingTime="5 min read"
   tags={['Astro', 'Tailwind', 'GSAP', 'Supabase']}
   description="Lessons from evolving a company website into a production platform with intake, operations, and client-facing workflows."
@@ -51,9 +52,9 @@ import PostLayout from '../../layouts/PostLayout.astro';
 
 <h2>Architecture Is Also Product Work</h2>
 
-<p>The current codebase contains 38 API route files, 13 admin pages, and 13 portal pages. Those numbers matter only because they expose the real shape of the product: the system has multiple audiences, permissions, and operational handoffs.</p>
+<p>The platform has multiple audiences, permissions and operational handoffs. That shape matters more than the number of pages or endpoints.</p>
 
-<p>Counting pages is not a substitute for outcomes. It is a reminder to design navigation, data ownership, and error handling before small implementation decisions harden into constraints.</p>
+<p>I learned to decide navigation, data ownership and failure handling before adding more features.</p>
 
 <h2>What I'd Do Differently</h2>
 

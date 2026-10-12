@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hamzaalidev.vercel.app/sitemap-index.xml
+Sitemap: https://hamzaalikhurram.com/sitemap-index.xml

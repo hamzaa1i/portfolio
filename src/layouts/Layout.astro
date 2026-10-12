@@ -1,6 +1,14 @@
 ---
 import { activeTheme as t } from '../config/theme';
 import { themes } from '../config/theme';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-500.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/inter/latin-700.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import '@fontsource/jetbrains-mono/latin-600.css';
+import '@fontsource/jetbrains-mono/latin-700.css';
 import '../styles/global.css';
 
 import Terminal from '../components/Terminal.astro';
@@ -21,7 +29,8 @@ const {
   description = 'Software and systems engineer building production web platforms, operational software, ERP workflows, and e-commerce experiences.',
 } = Astro.props;
 
-const siteURL = 'https://hamzaalidev.vercel.app';
+const siteURL = Astro.site?.origin || 'https://hamzaalikhurram.com';
+const noindex = process.env.VERCEL_ENV === 'preview' || Astro.url.pathname.startsWith('/404');
 const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const themeStyle = [
@@ -41,6 +50,7 @@ const themeStyle = [
   `--text-muted:${t.textMuted}`,
   `--text-dim:${t.textDim}`,
   `--accent:${t.accent}`,
+  `--accent-readable:${t.accentReadable || t.accent}`,
   `--accent-hover:${t.accentHover}`,
   `--accent-dim:${t.accentDim}`,
   `--accent-glow:${t.accentGlow}`,
@@ -89,6 +99,7 @@ h.style.setProperty('--text-secondary', th.textSecondary);
 h.style.setProperty('--text-muted', th.textMuted);
 h.style.setProperty('--text-dim', th.textDim);
 h.style.setProperty('--accent', th.accent);
+    h.style.setProperty('--accent-readable', th.accentReadable || th.accent);
 h.style.setProperty('--accent-hover', th.accentHover);
 h.style.setProperty('--accent-dim', th.accentDim);
 h.style.setProperty('--accent-glow', th.accentGlow);
@@ -113,13 +124,13 @@ h.classList.add('light');
 </script>
 
 <meta charset="UTF-8" />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
 <title>{title}</title>
 
 <meta name="description" content={description} />
 <meta name="author" content="Hamza Ali" />
-<meta name="robots" content="index, follow" />
 <link rel="canonical" href={canonicalURL} />
 
 <meta name="theme-color" content={t.void} />
@@ -150,15 +161,10 @@ h.classList.add('light');
 
 <DynamicFavicon />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-rel="stylesheet"
-/>
 
-<script
+
+<script is:inline
 type="application/ld+json"
 set:html={JSON.stringify({
 "@context": "https://schema.org",

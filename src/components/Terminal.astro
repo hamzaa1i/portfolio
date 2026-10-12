@@ -1,4 +1,5 @@
 ---
+import { publicContactEmail } from '../config/contact';
 import { themes, activeTheme } from '../config/theme';
 
 const initialTheme = Object.keys(themes).find(
@@ -255,7 +256,7 @@ const themesJSON = JSON.stringify(themes);
   }
 </style>
 
-<script is:inline define:vars={{ themesJSON, initialTheme }}>
+<script is:inline define:vars={{ themesJSON, initialTheme, publicContactEmail }}>
 (function() {
   const overlay = document.getElementById('terminal-overlay');
   const output = document.getElementById('terminal-output');
@@ -379,7 +380,7 @@ const themesJSON = JSON.stringify(themes);
     addEmpty();
     addLine('<span class="t-accent">The operation comes before the stack.</span>');
     addLine('<span class="t-primary">→ Reve digital platform + client portal</span>');
-    addLine('<span class="t-primary">→ ERPNext factory workflows</span>');
+    addLine('<span class="t-primary">→ ERPNext Fabric Store workflows</span>');
     addLine('<span class="t-primary">→ Haus Couture + Aurelia</span>');
     addEmpty();
     addLine('<span class="t-dim">"The interface matters. The workflow</span>');
@@ -393,7 +394,7 @@ const themesJSON = JSON.stringify(themes);
     addLine('<span class="t-muted">─────────────────────────────────────</span>');
     addEmpty();
     var groups = [
-      { name: 'Web',      items: 'Astro · TypeScript · React · Tailwind CSS' },
+      { name: 'Web',      items: 'Astro · TypeScript · React · Vue · Tailwind CSS' },
       { name: 'Motion',   items: 'GSAP · ScrollTrigger · Lenis' },
       { name: 'Data',     items: 'Python · Supabase · PostgreSQL · Turso/Drizzle' },
       { name: 'Systems',  items: 'ERPNext · Frappe · Shopify' },
@@ -419,9 +420,15 @@ const themesJSON = JSON.stringify(themes);
         url: 'https://www.revestitching.com'
       },
       {
+        name: 'REVE ONE',
+        desc: 'Factory application development and staged ERPNext integration',
+        stack: 'Vue 3 · TypeScript · Frappe · ERPNext · Python',
+        url: '/work/reve-one'
+      },
+      {
         name: 'Reve Manufacturing ERP',
         desc: 'Material movement, batch traceability, gate passes and reporting',
-        stack: 'ERPNext · Frappe · Python · PostgreSQL',
+        stack: 'ERPNext · Frappe · Python · JavaScript',
         url: null
       },
       {
@@ -451,7 +458,7 @@ const themesJSON = JSON.stringify(themes);
     addLine('<span class="t-accent t-bold">Contact</span>');
     addLine('<span class="t-muted">─────────────────────────────────────</span>');
     addEmpty();
-    addLine('  <span class="t-primary">Email     </span><a href="mailto:hamzaali.dev@proton.me">hamzaali.dev@proton.me</a>');
+    addLine('  <span class="t-primary">Email     </span><a href="mailto:' + publicContactEmail + '">' + publicContactEmail + '</a>');
     addLine('  <span class="t-primary">GitHub    </span><a href="https://github.com/hamzaa1i" target="_blank" rel="noopener">@hamzaa1i</a>');
     addEmpty();
     addLine('  <span class="t-success">● Available for selected projects</span>');
@@ -489,15 +496,10 @@ const themesJSON = JSON.stringify(themes);
 
 function cmdStats() {
   addEmpty();
-  addLine('<span class="t-accent t-bold">~/hamza — dev stats</span>');
-  addLine('<span class="t-muted">─────────────────────────────────────</span>');
-  addEmpty();
-  addLine('  <span class="t-secondary">flagship builds</span>   <span class="t-primary t-bold">4</span>');
-  addLine('  <span class="t-secondary">Reve API routes</span>   <span class="t-primary t-bold">38</span>');
-  addLine('  <span class="t-secondary">Aurelia commands</span>  <span class="t-primary t-bold">173</span>');
-  addLine('  <span class="t-secondary">Aurelia cogs</span>      <span class="t-primary t-bold">47</span>');
-  addEmpty();
-  addLine('  <span class="t-dim">counts verified against current project source</span>');
+  addLine('<span class="t-accent t-bold">~/hamza — project notes</span>');
+  addLine('<span class="t-secondary">Web platforms · factory workflows · commerce</span>');
+  addLine('<span class="t-secondary">Scope and release status are recorded in each case study.</span>');
+  addLine('<a href="/work">Explore the complete project catalogue →</a>');
   addEmpty();
 }
 
@@ -541,6 +543,7 @@ function cmdStats() {
     html.style.setProperty('--text-muted', th.textMuted);
     html.style.setProperty('--text-dim', th.textDim);
     html.style.setProperty('--accent', th.accent);
+    html.style.setProperty('--accent-readable', th.accentReadable || th.accent);
     html.style.setProperty('--accent-hover', th.accentHover);
     html.style.setProperty('--accent-dim', th.accentDim);
     html.style.setProperty('--accent-glow', th.accentGlow);

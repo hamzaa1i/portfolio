@@ -227,6 +227,7 @@ const initialTheme = Object.keys(themes).find(
     h.style.setProperty('--text-muted', th.textMuted);
     h.style.setProperty('--text-dim', th.textDim);
     h.style.setProperty('--accent', th.accent);
+    h.style.setProperty('--accent-readable', th.accentReadable || th.accent);
     h.style.setProperty('--accent-hover', th.accentHover);
     h.style.setProperty('--accent-dim', th.accentDim);
     h.style.setProperty('--accent-glow', th.accentGlow);

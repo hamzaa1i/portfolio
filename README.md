@@ -25,7 +25,7 @@
 
 <p align="center">
   🌐 <strong>Live Site:</strong>
-  <a href="https://hamzaalidev.vercel.app">hamzaalidev.vercel.app</a>
+  <a href="https://hamzaalikhurram.com">hamzaalikhurram.com</a>
 </p>
 
 ---
@@ -56,7 +56,7 @@ and the Aurelia automation platform.
 
 | Technology                                    | Purpose                                |
 | --------------------------------------------- | -------------------------------------- |
-| [Astro 5](https://astro.build)                | Static site generation + React islands |
+| [Astro 7](https://astro.build)                | Static site generation + React islands |
 | [Tailwind CSS 3](https://tailwindcss.com/)    | Utility-first styling system           |
 | [TypeScript](https://www.typescriptlang.org/) | Type safety & maintainability          |
 
@@ -168,7 +168,7 @@ portfolio/
 
 ### 📋 Prerequisites
 
-- Node.js 20+
+- Node.js 24.15+ (24.x)
 - npm
 - Git
 
@@ -417,52 +417,38 @@ const projects = [
 
 ---
 
+## Résumé and release QA
+
+The HTML résumé and real PDF share `src/data/resume.json`. `npm run build` regenerates
+`public/Hamza_Ali_Resume.pdf`; see [résumé maintenance](docs/RESUME.md).
+The project catalogue includes REVE ONE as a separate flagship and Brand Identity as secondary.
+See [public content maintenance](docs/CONTENT-REVIEW.md).
+
+Run `npm run check:site` after a build. For browser checks, install Playwright Chromium once
+(`npx playwright install chromium`), then run `npm run test:browser`. The browser suite tests
+the local production build. It does not prove deployed provider calls or inbox delivery.
+
 ## 🌐 Deployment
 
-## ▲ Deploy to Vercel (Recommended)
+Production: https://hamzaalikhurram.com. Vercel project `portfolio`, team `qxcz1`.
+The existing Git integration deploys `main`; PR #2 on
+`feat/portfolio-professional-refresh` remains the release candidate until owner approval.
+Do not merge the superseded PR #1.
 
-### Push to GitHub
+See [the deployment runbook](docs/DEPLOYMENT.md) for required environment variables,
+two-recipient Resend delivery, mandatory Turnstile, durable Vercel rate limiting,
+custom-domain/inbound-email setup, troubleshooting, release gates and rollback.
+See [the release audit](docs/RELEASE-AUDIT.md) for executed checks and remaining blockers.
 
 ```bash
-git add .
-git commit -m "Initial portfolio build"
-git push origin main
+npm ci
+npm test
+npm run check
+npm run build
 ```
 
-### Import to Vercel
-
-1. Visit: https://vercel.com/new
-2. Import `hamzaa1i/portfolio`
-3. Framework auto-detects Astro
-4. Click **Deploy**
-
-### 🌍 Custom Domain
-
-```text
-Project Settings → Domains
-```
-
-Add:
-
-```text
-hamzaalidev.vercel.app
-```
-
-or your own custom domain.
-
-### 🔄 Auto Deployments
-
-Every push to the `main` branch automatically triggers deployment.
-
----
-
-## 🌐 Deploy to Netlify (Alternative)
-
-| Setting           | Value           |
-| ----------------- | --------------- |
-| Build Command     | `npm run build` |
-| Publish Directory | `dist`          |
-| Node Version      | `20+`           |
+The contact endpoint requires the Vercel adapter. A static-only host cannot send inquiries.
+Keep credentials server-only and redeploy after environment changes.
 
 ---
 
@@ -524,8 +510,8 @@ Attribution appreciated but not required.
 
 <p align="center">
   🌐 Portfolio:
-  <a href="https://hamzaalidev.vercel.app">
-    hamzaalidev.vercel.app
+  <a href="https://hamzaalikhurram.com">
+    hamzaalikhurram.com
   </a>
 </p>
 

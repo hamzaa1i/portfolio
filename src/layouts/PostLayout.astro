@@ -6,6 +6,7 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title: string;
   date: string;
+  publishedDate?: string;
   readingTime: string;
   tags?: string[];
   description?: string;
@@ -16,6 +17,7 @@ interface Props {
 const {
   title,
   date,
+  publishedDate,
   readingTime,
   tags = [],
   description = '',
@@ -28,11 +30,11 @@ const articleSchema = JSON.stringify({
   "@type": "Article",
   "headline": title,
   "description": description,
-  "datePublished": date,
+  ...(publishedDate ? { datePublished: publishedDate } : {}),
   "author": {
     "@type": "Person",
     "name": "Hamza Ali",
-    "url": "https://hamzaalidev.vercel.app"
+    "url": "https://hamzaalikhurram.com"
   },
   "publisher": {
     "@type": "Person",
@@ -62,7 +64,7 @@ const articleSchema = JSON.stringify({
 
       <header class="mb-10">
         <div class="flex items-center gap-3 font-mono text-xs text-text-dim mb-4">
-          <time>{date}</time>
+          <time datetime={publishedDate}>{date}</time>
           <span class="text-text-dim/30">·</span>
           <span>{readingTime}</span>
         </div>
@@ -103,7 +105,7 @@ const articleSchema = JSON.stringify({
   <div class="py-10"></div>
   <Footer />
 
-  <script type="application/ld+json" set:html={articleSchema}></script>
+  <script is:inline type="application/ld+json" set:html={articleSchema}></script>
 
   <script>
     (function() {

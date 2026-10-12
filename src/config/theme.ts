@@ -12,6 +12,7 @@ export interface ThemeConfig {
   void: string; midnight: string; surface: string; elevated: string;
   glassBg: string; glassBorder: string; glassHover: string; glassHoverBorder: string;
   textPrimary: string; textSecondary: string; textMuted: string; textDim: string;
+  accentReadable?: string;
   accent: string; accentHover: string; accentDim: string;
   accentGlow: string; accentSubtle: string; accentContrast: string;
   success: string;
@@ -176,4 +177,26 @@ export const themes: Record<string, ThemeConfig> = {
 /* ╔═══════════════════════════════════════════════╗
    ║   👇  CHANGE THIS TO SWITCH DEFAULT  👇       ║
    ╚═══════════════════════════════════════════════╝ */
+// Keep accent text readable without changing decorative/accent backgrounds.
+function readableAccent(accent: string, background: string, foreground: string): string {
+  const channels = (hex: string) => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+  const luminance = (values: number[]) => values.map(v => {
+    const n = v / 255;
+    return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
+  }).reduce((sum, n, i) => sum + n * [0.2126, 0.7152, 0.0722][i], 0);
+  const bg = luminance(channels(background));
+  const original = channels(accent), target = channels(foreground);
+  for (let amount = 0; amount <= 1; amount += 0.05) {
+    const mixed = original.map((value, i) => Math.round(value + (target[i] - value) * amount));
+    const fg = luminance(mixed);
+    if ((Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05) >= 5) {
+      return '#' + mixed.map(n => n.toString(16).padStart(2, '0')).join('');
+    }
+  }
+  return foreground;
+}
+Object.values(themes).forEach(theme => {
+  theme.accentReadable = readableAccent(theme.accent, theme.void, theme.textPrimary);
+});
+
 export const activeTheme: ThemeConfig = themes['midnight-gold'];
