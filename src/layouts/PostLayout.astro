@@ -1,11 +1,14 @@
 ---
 import Layout from './Layout.astro';
+import '../styles/post-content.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
   date: string;
+  publishedDate?: string;
+  modifiedDate?: string;
   readingTime: string;
   tags?: string[];
   description?: string;
@@ -16,6 +19,8 @@ interface Props {
 const {
   title,
   date,
+  publishedDate,
+  modifiedDate,
   readingTime,
   tags = [],
   description = '',
@@ -28,11 +33,12 @@ const articleSchema = JSON.stringify({
   "@type": "Article",
   "headline": title,
   "description": description,
-  "datePublished": date,
+  ...(publishedDate ? { datePublished: publishedDate } : {}),
+  ...(modifiedDate ? { dateModified: modifiedDate } : {}),
   "author": {
     "@type": "Person",
     "name": "Hamza Ali",
-    "url": "https://hamzaalidev.vercel.app"
+    "url": "https://hamzaalikhurram.com"
   },
   "publisher": {
     "@type": "Person",
@@ -47,7 +53,7 @@ const articleSchema = JSON.stringify({
 
   <div class="reading-progress" id="reading-progress"></div>
 
-  <main
+  <div
     class="min-h-screen px-6"
     style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);"
   >
@@ -62,7 +68,7 @@ const articleSchema = JSON.stringify({
 
       <header class="mb-10">
         <div class="flex items-center gap-3 font-mono text-xs text-text-dim mb-4">
-          <time>{date}</time>
+          <time datetime={modifiedDate || publishedDate}>{date}</time>
           <span class="text-text-dim/30">·</span>
           <span>{readingTime}</span>
         </div>
@@ -88,8 +94,8 @@ const articleSchema = JSON.stringify({
       <div class="border-t border-white/[0.06] mt-14 pt-8 pb-4">
         <div class="glass p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div class="flex-1">
-            <p class="text-sm font-heading font-semibold text-text-primary mb-1">Enjoyed this post?</p>
-            <p class="text-xs text-text-secondary">Got a project in mind? I'd love to hear about it.</p>
+            <p class="text-sm font-heading font-semibold text-text-primary mb-1">Continue the conversation</p>
+            <p class="text-xs text-text-secondary">Have a system or product to build? Send the context.</p>
           </div>
           <a href="/#contact" class="btn-primary btn-sm flex-shrink-0">
             <span>get in touch</span>
@@ -98,19 +104,20 @@ const articleSchema = JSON.stringify({
         </div>
       </div>
     </article>
-  </main>
+  </div>
 
   <div class="py-10"></div>
   <Footer />
 
-  <script type="application/ld+json" set:html={articleSchema}></script>
+  <script is:inline type="application/ld+json" set:html={articleSchema}></script>
 
   <script>
     (function() {
-      var bar = document.getElementById('reading-progress');
+      var bar = document.getElementById('reading-progress') as HTMLElement | null;
       if (!bar) return;
 
       function update() {
+        if (!bar) return;
         var scrollTop = window.scrollY;
         var docHeight = document.documentElement.scrollHeight - window.innerHeight;
         if (docHeight <= 0) return;
@@ -136,105 +143,4 @@ const articleSchema = JSON.stringify({
     transition: width 0.1s linear;
   }
 
-  .post-content h2 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(1.25rem, 3vw, 1.5rem);
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-    line-height: 1.3;
-  }
-  .post-content h3 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(1.05rem, 2.5vw, 1.2rem);
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
-  }
-  .post-content p {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: clamp(0.9rem, 1.5vw, 1rem);
-    color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: 1.25rem;
-  }
-  .post-content strong {
-    color: var(--text-primary);
-    font-weight: 600;
-  }
-  .post-content em {
-    font-style: italic;
-    color: var(--text-secondary);
-  }
-  .post-content a {
-    color: var(--accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color 0.2s;
-  }
-  .post-content a:hover {
-    color: var(--accent-hover);
-  }
-  .post-content ul, .post-content ol {
-    padding-left: 1.5rem;
-    margin-bottom: 1.25rem;
-  }
-  .post-content li {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: clamp(0.9rem, 1.5vw, 1rem);
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 0.5rem;
-  }
-  .post-content ul li { list-style-type: disc; }
-  .post-content ol li { list-style-type: decimal; }
-  .post-content ul li::marker { color: var(--accent); }
-  .post-content ol li::marker { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
-  .post-content blockquote {
-    border-left: 2px solid var(--accent);
-    padding: 0.75rem 1.25rem;
-    margin: 1.5rem 0;
-    background: var(--glass-bg);
-    border-radius: 0 0.5rem 0.5rem 0;
-  }
-  .post-content blockquote p {
-    color: var(--text-primary);
-    font-style: italic;
-    margin-bottom: 0;
-  }
-  .post-content code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85em;
-    background: rgba(255, 255, 255, 0.06);
-    padding: 0.15em 0.4em;
-    border-radius: 4px;
-    color: var(--accent);
-  }
-  .post-content pre {
-    background: rgba(9, 9, 11, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 0.5rem;
-    padding: 1.25rem;
-    overflow-x: auto;
-    margin: 1.5rem 0;
-  }
-  .post-content pre code {
-    background: none;
-    padding: 0;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-  }
-  .post-content hr {
-    border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    margin: 2rem 0;
-  }
-  .post-content img {
-    max-width: 100%;
-    border-radius: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    margin: 1.5rem 0;
-  }
 </style>

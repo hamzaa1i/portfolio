@@ -1,19 +1,22 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
+import tailwind from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  site: 'https://hamzaalidev.vercel.app',
+  site: 'https://hamzaalikhurram.com',
   output: 'static',
+  adapter: vercel(),
 
   integrations: [
     react(),
-    tailwind({ applyBaseStyles: false }),
     sitemap(),
   ],
 
   vite: {
+    css: { postcss: { plugins: [tailwind(), autoprefixer()] } },
     ssr: {
       noExternal: ['gsap', 'lenis'],
     },

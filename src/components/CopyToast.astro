@@ -72,11 +72,13 @@
 
   window.__showToast = showToast;
 
-  document.querySelectorAll('a[href^="mailto:"]').forEach(function(link) {
+  document.querySelectorAll('a[href^="mailto:"][data-copy-email]').forEach(function(link) {
     var clickCount = 0;
     var clickTimer = null;
 
     link.addEventListener('click', function(e) {
+      // Keyboard/modifier activation and ordinary email links keep native mail behavior.
+      if (e.detail === 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || !navigator.clipboard) return;
       e.preventDefault();
       clickCount++;
 
@@ -86,7 +88,7 @@
           if (navigator.clipboard) {
             navigator.clipboard.writeText(email).then(function() {
               showToast('Email copied — double-click to open mail app', 'copy');
-            });
+            }).catch(function() { showToast('Copy unavailable — double-click to open mail app', 'copy'); });
           }
           clickCount = 0;
         }, 300);

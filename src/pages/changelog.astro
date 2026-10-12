@@ -5,9 +5,22 @@ import Footer from '../components/Footer.astro';
 
 const versions = [
   {
+    version: 'Professional refresh candidate',
+    date: 'October 12, 2026',
+    tag: 'preview',
+    changes: [
+      'Five flagship projects, including a separate REVE ONE case study',
+      'Audited résumé with desktop/mobile access and a shared-data PDF download',
+      'Theme-aware About highlights and direct access to the complete project catalogue',
+      'Music category chips, preserved search, keyboard controls and reduced-motion support',
+      'Hardened multi-recipient contact delivery; live security and inbox acceptance remain gated',
+      'Canonical domain and metadata corrections; production release awaits owner approval',
+    ],
+  },
+  {
     version: 'v1.6',
     date: 'March 19, 2026',
-    tag: 'latest',
+    tag: null,
     changes: [
       'Rewrote all content for consistency and natural tone',
       'Added case study links to project cards',
@@ -101,7 +114,7 @@ const versions = [
 <Layout title="Changelog — Hamza Ali" description="Version history of my portfolio site. What's new, what's fixed, what's changed.">
   <Header />
 
-  <main
+  <div
     class="min-h-screen px-6"
     style="padding-top: calc(var(--header-height) + var(--header-margin) * 2 + 3rem);"
   >
@@ -144,7 +157,7 @@ const versions = [
         ))}
       </div>
     </div>
-  </main>
+  </div>
 
   <div class="py-10"></div>
   <Footer />

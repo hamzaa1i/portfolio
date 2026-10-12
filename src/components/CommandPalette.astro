@@ -231,7 +231,7 @@ var actions = [
 
   { id: 'act-terminal', label: 'Open Terminal',    cat: 'Actions', icon: '>', hint: '`',           action: function() { document.dispatchEvent(new CustomEvent('terminal:toggle')); } },
   { id: 'act-music', label: 'Toggle Music', cat: 'Actions', icon: '♫', hint: '', action: function() { var btn = document.getElementById('music-toggle'); if (btn) btn.click(); } },
-  { id: 'act-resume',   label: 'Download Resume',  cat: 'Actions', icon: '↓', hint: '.pdf',        action: function() { window.open('/resume.pdf', '_blank'); } },
+  { id: 'act-resume',   label: 'Open Resume',  cat: 'Actions', icon: '↓', hint: '/resume',        action: function() { goTo('/resume'); } },
   { id: 'act-top',      label: 'Scroll to Top',    cat: 'Actions', icon: '↑', hint: '',            action: function() { window.scrollTo({ top: 0, behavior: 'smooth' }); } },
 ];
 

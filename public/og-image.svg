@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Hamza Ali — Software and Systems Engineer</title>
+  <desc id="desc">Dark portfolio card with gold technical accents and flagship project names.</desc>
+  <defs>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C8A24E" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#C8A24E" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#FAFAFA" stroke-opacity=".035"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#09090B"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="1020" cy="100" r="430" fill="url(#glow)"/>
+  <rect x="56" y="48" width="1088" height="534" rx="28" fill="#FFFFFF" fill-opacity=".018" stroke="#FFFFFF" stroke-opacity=".08"/>
+  <text x="96" y="116" fill="#C8A24E" font-family="JetBrains Mono,monospace" font-size="22">~/hamza</text>
+  <text x="96" y="294" fill="#FAFAFA" font-family="JetBrains Mono,monospace" font-size="82" font-weight="700" letter-spacing="-4">Hamza Ali</text>
+  <text x="100" y="354" fill="#A1A1AA" font-family="Inter,Arial,sans-serif" font-size="30">Software &amp; Systems Engineer</text>
+  <line x1="100" y1="414" x2="1100" y2="414" stroke="#FFFFFF" stroke-opacity=".08"/>
+  <text x="100" y="468" fill="#71717A" font-family="JetBrains Mono,monospace" font-size="19">REVE PLATFORM  ·  ERP SYSTEMS  ·  HAUS COUTURE  ·  AURELIA</text>
+  <text x="100" y="528" fill="#C8A24E" font-family="JetBrains Mono,monospace" font-size="18">build systems that connect interface and operation.</text>
+</svg>

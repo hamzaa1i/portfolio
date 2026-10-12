@@ -1900,16 +1900,9 @@ function initEasterEggs() {
       'max-width:340px;width:90%;box-shadow:0 25px 60px rgba(0,0,0,0.5);">' +
       '<div style="color:' +
       accent +
-      ';font-weight:600;font-size:0.85rem;margin-bottom:0.75rem;">~/hamza dev stats</div>' +
+      ';font-weight:600;font-size:0.85rem;margin-bottom:0.75rem;">~/hamza project notes</div>' +
       '<div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:0.75rem;"></div>' +
-      '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">lines of code</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="12847">0</span></div>' +
-      '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">cups of chai</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="2341">0</span></div>' +
-      '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">bugs squashed</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="847">0</span></div>' +
-      '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">git commits</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="394">0</span></div>' +
-      '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">mass prayers</span><span style="color:#FAFAFA;font-size:0.75rem;" data-egg-count="1">0</span></div>' +
-      '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;"><span style="color:#A1A1AA;font-size:0.75rem;">sleep lost</span><span style="color:' +
-      accent +
-      ';font-size:0.75rem;">&#8734; hrs</span></div>' +
+      '<div style="color:var(--text-secondary);font-size:0.75rem;line-height:1.8;">web platforms<br>factory workflows<br>independent products</div>' +
       '<div style="border-top:1px solid rgba(255,255,255,0.06);margin-top:0.5rem;padding-top:0.75rem;">' +
       '<span style="color:#52525B;font-size:0.65rem;">powered by chai &amp; dua</span>' +
       "</div>" +

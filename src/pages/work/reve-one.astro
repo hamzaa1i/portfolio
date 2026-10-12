@@ -1,0 +1,73 @@
+---
+import CaseStudyMedia from '../../components/CaseStudyMedia.astro';
+import architecture from '../../assets/projects/reve-one/architecture.svg';
+import PostLayout from '../../layouts/PostLayout.astro';
+import CaseStudyMeta from '../../components/CaseStudyMeta.astro';
+import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
+---
+
+<PostLayout
+  title="REVE ONE"
+  date="2026–Present"
+  readingTime="5 min read"
+  tags={['Vue 3', 'TypeScript', 'Frappe', 'ERPNext', 'Python', 'Tailwind CSS']}
+  description="Engineering a factory-operations application on ERPNext, with a focused operator interface and controlled integration of materials, production and quality workflows."
+  backUrl="/work"
+  backLabel="back to case studies"
+>
+<CaseStudyMeta role="Application Engineering" timeline="2026–Present" status="Development and staged integration" />
+
+<CaseStudyMedia image={architecture} alt="Illustration of REVE ONE frontend, API and record ownership" caption="Architecture illustration based on the application structure. It is not a running-interface screenshot." label="illustration — not a screenshot" />
+
+<h2>Why a separate application</h2>
+<p>My earlier ERPNext work focused on Fabric Store stock, batch and gate-pass workflows. I started REVE ONE to bring related garment-manufacturing tasks into a focused application interface, while retaining ERPNext as the transactional foundation.</p>
+<p>I started REVE ONE to build that application layer: an operator should be able to find a factory order, understand its next step and follow related materials or quality work without navigating unrelated ERP screens. It is distinct from the <a href="/work/erp-system">legacy ERPNext customization</a>.</p>
+
+<h2>Architecture and ownership</h2>
+<p>A Vue 3 and TypeScript interface runs on a Frappe application backed by Python APIs and ERPNext. Vue Router separates the workspaces; Tailwind and Frappe UI support a consistent shell and reusable record interfaces. Frappe sessions, CSRF checks and server permissions remain the authority for access.</p>
+<WorkflowDiagram
+  title="REVE ONE architecture — illustrative diagram"
+  footer="Source-based architecture, not a production screenshot. No factory records or internal endpoints are shown."
+  nodes={[
+    { label: 'Operator interface', detail: 'Vue 3 · TypeScript · route workspaces' },
+    { label: 'Application API', detail: 'Frappe sessions · CSRF · permissions' },
+    { label: 'Factory workflows', detail: 'orders · production · materials · quality' },
+    { label: 'Canonical records', detail: 'ERPNext stock · masters · accounting', kind: 'data' },
+    { label: 'Shared context', detail: 'Order 360 · activity · notifications' },
+  ]}
+/>
+<p>ERPNext owns native stock and accounting records. REVE ONE adds garment-specific interfaces and related workflow context. Keeping those responsibilities distinct avoids maintaining a competing inventory ledger.</p>
+
+<h2>Interface engineering</h2>
+<p>The application shell provides grouped navigation, dark and light themes, session-aware controls, search and notifications. Record pages share headers, list controls and clear loading, empty, error and permission states. The interface is designed around the next action and the relevant evidence, rather than a dashboard full of disconnected totals.</p>
+<p>Order 360 gathers related activity and operational context in one place. Navigation visibility follows role capabilities, but hiding a button is never treated as a security boundary: the backend checks the action too.</p>
+
+<h2>Application workspaces</h2>
+<p><strong>Factory orders, planning and production.</strong> Factory orders, planning and production are connected workspaces. The interface brings related order context and production progress together so users can follow the work across stages.</p>
+<p><strong>Materials and store operations.</strong> Material requirements, stock visibility, batches, physical rolls, scanning, issues, transfers and returns are organized as operator tasks. Stock postings use native ERPNext transactions.</p>
+<p><strong>Cutting consumption and remnants.</strong> Cutting interfaces connect issued fabric with returned remnants and related order context. The aim is to make consumption understandable while keeping the supporting stock transactions traceable.</p>
+<p><strong>Quality and corrective actions.</strong> Checks, defects and follow-up actions have explicit ownership and state. They connect to Order 360 and related production context so an unresolved quality issue can be followed through the workflow.</p>
+<p><strong>Shared workflows.</strong> Activity, notifications and search help users find related records. Workforce, packing and reporting workspaces extend the same application structure. Implemented modules are not a claim that every department has adopted them.</p>
+
+<h2>Gate passes, rolls and inventory review</h2>
+<p>Gate-pass and physical-roll interfaces connect material handling with inventory context. Stocktake and reconciliation work provide a separate place to review counted stock and differences. These are software capabilities and development areas; their inclusion here does not imply accepted physical balances or production adoption.</p>
+<WorkflowDiagram
+  title="Material workflows — illustrative overview"
+  footer="Conceptual interface relationships, not a production screenshot or operational record."
+  nodes={[
+    { label: 'Material intake', detail: 'gate passes · receipt context' },
+    { label: 'Physical rolls', detail: 'identity · scanning' },
+    { label: 'Stock transactions', detail: 'ERPNext records', kind: 'data' },
+    { label: 'Cutting workspace', detail: 'issues · remnants · consumption' },
+    { label: 'Inventory review', detail: 'stocktake · reconciliation' },
+  ]}
+/>
+
+<h2>Engineering trade-offs and validation</h2>
+<p>Building on ERPNext preserves a shared transactional foundation, but it makes integration testing important. I separate interface feedback from server validation, keep loading and failure states explicit, and use role-aware controls without relying on navigation visibility for authorization.</p>
+<p>Backend tests and Playwright interface tests support the development process. Testing software behavior is distinct from confirming deployment, data quality and day-to-day operational use. This portfolio does not present historical project tests as a fresh production acceptance run.</p>
+
+<h2>Current status</h2>
+<p>REVE ONE is application-development and staged-integration work. Production deployment and factory-wide adoption are not independently established, so I do not describe it as a fully operational factory system. The public overview intentionally omits internal rollout records and compatibility findings.</p>
+<p>Both diagrams are illustrative. They show the engineering relationships without displaying company records, internal endpoints or production screenshots.</p>
+</PostLayout>

@@ -1,6 +1,14 @@
 ---
 import { activeTheme as t } from '../config/theme';
 import { themes } from '../config/theme';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-500.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/inter/latin-700.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import '@fontsource/jetbrains-mono/latin-600.css';
+import '@fontsource/jetbrains-mono/latin-700.css';
 import '../styles/global.css';
 
 import Terminal from '../components/Terminal.astro';
@@ -18,10 +26,12 @@ interface Props {
 
 const {
   title = 'Hamza Ali — Portfolio',
-  description = '17-year-old developer who builds production websites, ERP systems, and brand identities for international businesses.',
+  description = 'Software and systems engineer building production web platforms, operational software, ERP workflows, and e-commerce experiences.',
 } = Astro.props;
 
-const siteURL = 'https://hamzaalidev.vercel.app';
+const siteURL = Astro.site?.origin || 'https://hamzaalikhurram.com';
+const noindex = process.env.VERCEL_ENV === 'preview' || Astro.url.pathname.startsWith('/404');
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
 
 const themeStyle = [
   `background-color:${t.void}`,
@@ -40,6 +50,7 @@ const themeStyle = [
   `--text-muted:${t.textMuted}`,
   `--text-dim:${t.textDim}`,
   `--accent:${t.accent}`,
+  `--accent-readable:${t.accentReadable || t.accent}`,
   `--accent-hover:${t.accentHover}`,
   `--accent-dim:${t.accentDim}`,
   `--accent-glow:${t.accentGlow}`,
@@ -88,6 +99,7 @@ h.style.setProperty('--text-secondary', th.textSecondary);
 h.style.setProperty('--text-muted', th.textMuted);
 h.style.setProperty('--text-dim', th.textDim);
 h.style.setProperty('--accent', th.accent);
+    h.style.setProperty('--accent-readable', th.accentReadable || th.accent);
 h.style.setProperty('--accent-hover', th.accentHover);
 h.style.setProperty('--accent-dim', th.accentDim);
 h.style.setProperty('--accent-glow', th.accentGlow);
@@ -112,60 +124,60 @@ h.classList.add('light');
 </script>
 
 <meta charset="UTF-8" />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
 <title>{title}</title>
 
 <meta name="description" content={description} />
 <meta name="author" content="Hamza Ali" />
-<meta name="robots" content="index, follow" />
+<link rel="canonical" href={canonicalURL} />
 
 <meta name="theme-color" content={t.void} />
 
 <link rel="manifest" href="/manifest.json" />
-<meta name="theme-color" content="#C8A24E" />
+
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={siteURL} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content="Hamza Ali — Portfolio" />
+<meta property="og:locale" content="en_US" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={`${siteURL}/og-image.png`} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Hamza Ali — Software & Systems Engineer" />
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={`${siteURL}/og-image.png`} />
+<meta name="twitter:image:alt" content="Hamza Ali — Software & Systems Engineer" />
 
 <DynamicFavicon />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-rel="stylesheet"
-/>
 
-<script
+
+<script is:inline
 type="application/ld+json"
 set:html={JSON.stringify({
 "@context": "https://schema.org",
 "@type": "Person",
 "name": "Hamza Ali",
-"jobTitle": "Digital Solutions Architect",
+"jobTitle": "Software and Systems Engineer",
 "url": siteURL,
 "sameAs": ["https://github.com/hamzaa1i"],
 "knowsAbout": [
-"Web Development",
-"ERP Systems",
-"UI/UX Design",
-"Brand Identity"
+"Full-stack Web Development",
+"Operational Software",
+"ERPNext and Frappe",
+"E-commerce Development"
 ],
 "address": {
 "@type": "PostalAddress",
@@ -180,6 +192,8 @@ set:html={JSON.stringify({
 
 <body class="bg-void text-text-primary font-body antialiased overflow-x-hidden">
 
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
 <Preloader />
 
 <div class="css-bg-fallback" aria-hidden="true"></div>
@@ -190,7 +204,7 @@ set:html={JSON.stringify({
 
 <div class="page-blur-overlay" aria-hidden="true"></div>
 
-<main class="content-layer relative z-content">
+<main id="main-content" class="content-layer relative z-content">
 <slot />
 </main>
 
