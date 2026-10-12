@@ -13,6 +13,7 @@ interface Props {
   placeholderClass?: string;
   image?: ImageMetadata;
   imageAlt?: string;
+  imageLabel?: string;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   placeholderClass = 'project-placeholder-1',
   image,
   imageAlt = '',
+  imageLabel = 'verified project capture',
 } = Astro.props;
 const hasLive = !!liveUrl;
 const hasGithub = !!githubUrl;
@@ -46,7 +48,7 @@ const hasCaseStudy = !!caseStudyUrl;
           loading="lazy"
           decoding="async"
         />
-        <span class="project-media-label">verified project capture</span>
+        <span class="project-media-label">{imageLabel}</span>
       </div>
     ) : (
       <div class={`project-placeholder ${placeholderClass}`}>

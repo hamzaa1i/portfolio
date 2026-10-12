@@ -15,12 +15,15 @@
     "check:site": "node scripts/check-built-site.mjs",
     "resume:pdf": "node scripts/generate-resume.mjs",
     "prebuild": "npm run resume:pdf",
-    "test:browser": "node scripts/browser-qa.mjs"
+    "test:browser": "node scripts/browser-qa.mjs",
+    "test:runtime": "node scripts/test-function-runtime.mjs",
+    "postbuild": "npm run test:runtime",
+    "test:release": "node scripts/release-qa.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^7.0.1",
     "@astrojs/sitemap": "^3.7.1",
-    "@astrojs/vercel": "^11.0.13",
+    "@astrojs/vercel": "11.0.14",
     "@vercel/firewall": "^1.2.6",
     "astro": "^7.3.8",
     "gsap": "^3.12.7",

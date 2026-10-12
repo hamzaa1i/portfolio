@@ -1,58 +1,49 @@
-# Portfolio release candidate validation — 12 October 2026
+# Runtime repair and release checkpoint — 13 October 2026
 
-PR #2 remains the candidate on the existing feature branch. The earlier local work was
-preserved. No Production merge, promotion or deployment was performed by this task.
+This supersedes the earlier checkpoint where facts differ. Production remains unchanged.
 
-## Completed implementation
+## Runtime fix
 
-- Five ordered flagship projects, with REVE ONE distinct from the legacy ERP work and
-  Brand Identity secondary. Illustrative diagrams are labeled and contain no company records.
-- Removed homepage numerical cards, refined About copy and added four theme-aware highlights.
-- Corrected website/software history to 2025 and separated company, client and independent work.
-- Shared résumé data, responsive HTML, desktop/mobile access and a valid downloadable A4 PDF.
-- Visible project-catalogue CTA while retaining the homepage Work navigation.
-- Fixed dynamically generated music controls, category scrolling/focus, search intersection,
-  selected states, keyboard controls and reduced-motion decoration.
-- Self-hosted existing font families/weights, corrected editorial metadata and added privacy information.
-- Preserved the existing bounded, validated contact service and accessible direct-email fallback.
+The isolated deployable function reproduced the native-binding crash under adapter
+11.0.13. Its runtime entry imported adapter build code, which loaded Rolldown even though
+its dynamic native binding was not traced. The official **11.0.14** patch separates
+zero-import runtime constants from build code and lazy-loads build middleware tooling.
+The adapter is pinned to that patch; no framework downgrade or WASM workaround is added.
 
-## Local validation executed
+`npm run build` now runs an isolated packaged-function smoke check as `postbuild`.
+It copies the emitted function away from repository dependencies, asserts server chunks
+have no build-only imports, clears delivery/security credentials in its child process,
+and exercises real request handling: **405, 403, 415, 400, 422, 503**. No real mail is sent.
+Existing contact protection and the owner-confirmed published rule are preserved.
 
-| Check | Result |
-| --- | --- |
-| Clean lockfile install | Passed, 501 packages |
-| Automated unit/component tests | 55 passed |
-| Astro check | 0 errors, 0 warnings, 8 existing hints |
-| Build | Passed; 16 HTML pages plus server contact function |
-| Built site scan | 398 internal references; no failures |
-| Preview indexing build | All 16 pages have one noindex/nofollow directive |
-| PDF integrity and rendering | One nonempty A4 page; selectable text, embedded fonts and links; visual review passed |
-| Production dependency audit | No vulnerabilities |
-| Full dependency audit | 7 build-tool findings: 5 high, 2 moderate; no critical |
-| Whitespace and client credential checks | Passed |
+## Content and visuals
 
-No separate lint script exists. The full dependency findings concern repository-controlled
-build globs/CSS in the existing Tailwind/PostCSS toolchain. This is not an all-green audit;
-remediation and risk review remain required. Do not build unreviewed source with credentials.
+- Confirmed BSCS/FIST affiliation and 2026 start are in shared résumé data and PDF.
+  Functional company responsibilities remain distinct from formal employment chronology.
+- Redundant résumé-page view action removed; actual PDF download retained.
+- Shared article CSS is loaded by Privacy, fixing missing section/paragraph spacing.
+- Unsupported Brand Identity sales impact removed; completed design and printing distinguished.
+- Unconfirmed article publication dates omitted. Visible metadata and JSON-LD now consistently
+  identify the current modification date; repository presence is not asserted as publication.
+- Duplicate theme-color tag removed. Existing About, music and animation systems retained.
+- New REVE ONE and legacy ERP SVGs are explicitly **illustrations**, not screenshots.
+  See `VISUAL-EVIDENCE.md`. Private captures and sessions have not been published.
 
-The local Chromium 153 suite passed **364 assertions** across 320×568, 390×844, 768×1024,
-1366×900 and 1920×1080 viewports. It exercised all 16 routes, project navigation/lightbox,
-HTML/PDF résumé access and actual download, six music categories and their counts/search,
-playback engine state, keyboard tools, mobile menu, twelve themes, contact fallback,
-cold/warm loads, missing routes and short reduced-motion layouts with doubled root font size.
-There were no JavaScript page errors or failed requests; one expected console 404 was
-produced by the deliberately missing route. PDF visual inspection used Poppler; native
-PDF-viewer rendering and audible output are not claimed.
+## Validation and gates
 
-## Limits and acceptance gates
+Fresh unit/SDK tests: **61 passed**. Framework check: **0 errors, 0 warnings, 8 hints**.
+Build and isolated function startup passed; site scan: **16 pages, 402 references, no failures**.
+Production audit: **zero vulnerabilities**. Full audit: **7 build-tool findings (5 high,
+2 moderate)**. These concern controlled build inputs; risk review/remediation remains needed.
+PDF: one valid A4 page, selectable text and embedded fonts; final render inspected.
+Focused interaction checks: **40 passed**. Changed-page desktop/mobile checks: **77 passed**,
+exercising downloads,
+spacing, illustrations/lightbox, honest dates and heading completion. The prior 364-assertion
+full suite is retained as earlier evidence and is not presented as a fresh run.
 
-Local static browser tests and mocked provider tests do not prove live infrastructure or
-mailbox delivery. **Deployed Preview end-to-end QA at the updated head: NOT RUN.**
-Authorized account access, actual security enforcement, complete form delivery, inbound
-public-mail routing, current environment values, domain headers/redirects and deployment
-health must be verified before release. Outstanding résumé facts require owner review.
-Operational evidence and account details are intentionally kept outside public documentation.
-
-**NOT READY — live acceptance gates remain.** Use `DEPLOYMENT.md` for the generic launch
-and rollback sequence, `CONTENT-REVIEW.md` for content guidelines and `RESUME.md` for
-keeping HTML/PDF synchronized. Obtain explicit owner approval before Production release.
+Deployed acceptance remains gated by authorized Preview access, actual challenge/rate-limit
+behavior, complete delivery and inbound routing. A READY build alone does not establish any
+of those. The requested genuine REVE ONE capture set remains unavailable for privacy review.
+**Production readiness: NOT READY.** Obtain explicit owner release approval only after the
+remaining acceptance gates. Follow `DEPLOYMENT.md`; preserve the current healthy deployment
+and Git history for rollback. Private operational evidence stays outside public documentation.

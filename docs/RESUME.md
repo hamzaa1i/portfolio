@@ -2,9 +2,9 @@
 
 1. Edit verified facts in `src/data/resume.json`. The HTML route imports this data directly.
 2. Review any new timeline, employment, degree or deployment claim against its evidence.
-   See `CONTENT-REVIEW.md` for unresolved facts. Keep independent/client work separate. The exact current degree program and awarding
-   wording need a personal academic record before publication; the current résumé says
-   undergraduate studies at the confirmed institution.
+   Keep independent/client work separate from company contributions. Preserve the distinction
+   between an affiliated institute and direct campus attendance. A functional role description
+   and project-work period must not imply an unverified formal title or employment start.
 3. Run `npm run resume:pdf` (also run automatically by `npm run build`). It generates
    `public/Hamza_Ali_Resume.pdf` with the same data and public contact selection as the site.
 4. Run `pdfinfo`, `pdftotext` or a PDF reader; require one readable A4 page, selectable text,

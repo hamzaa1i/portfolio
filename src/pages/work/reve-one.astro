@@ -1,4 +1,6 @@
 ---
+import CaseStudyMedia from '../../components/CaseStudyMedia.astro';
+import architecture from '../../assets/projects/reve-one/architecture.svg';
 import PostLayout from '../../layouts/PostLayout.astro';
 import CaseStudyMeta from '../../components/CaseStudyMeta.astro';
 import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
@@ -14,6 +16,8 @@ import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
   backLabel="back to case studies"
 >
 <CaseStudyMeta role="Application Engineering" timeline="2026–Present" status="Development and staged integration" />
+
+<CaseStudyMedia image={architecture} alt="Illustration of REVE ONE frontend, API and record ownership" caption="Architecture illustration based on the application structure. It is not a running-interface screenshot." label="illustration — not a screenshot" />
 
 <h2>Why a separate application</h2>
 <p>My earlier ERPNext work focused on Fabric Store stock, batch and gate-pass workflows. I started REVE ONE to bring related garment-manufacturing tasks into a focused application interface, while retaining ERPNext as the transactional foundation.</p>

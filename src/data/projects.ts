@@ -3,6 +3,8 @@ import type { ImageMetadata } from 'astro';
 import aureliaLanding from '../assets/projects/aurelia/landing.png';
 import hausHome from '../assets/projects/haus-couture/home-desktop.png';
 import reveHome from '../assets/projects/reve-platform/home-desktop.png';
+import reveOneArchitecture from '../assets/projects/reve-one/architecture.svg';
+import legacyErp from '../assets/projects/reve-one/legacy-erp.svg';
 
 export interface Project {
   slug: string;
@@ -18,6 +20,7 @@ export interface Project {
   caseStudyUrl: string;
   image?: ImageMetadata;
   imageAlt?: string;
+  imageLabel?: string;
   placeholderClass?: string;
   secondary?: boolean;
 }
@@ -49,6 +52,9 @@ export const projects: Project[] = [
     timeline: '2026–Present',
     stack: ['Vue 3', 'TypeScript', 'Frappe', 'ERPNext', 'Python'],
     caseStudyUrl: '/work/reve-one',
+    image: reveOneArchitecture,
+    imageAlt: 'Illustration of REVE ONE’s Vue/TypeScript interface, Frappe APIs and ERPNext records',
+    imageLabel: 'architecture illustration',
     placeholderClass: 'project-placeholder-2',
   },
   {
@@ -62,6 +68,9 @@ export const projects: Project[] = [
     timeline: 'Ongoing',
     stack: ['ERPNext', 'Frappe', 'Python', 'JavaScript'],
     caseStudyUrl: '/work/erp-system',
+    image: legacyErp,
+    imageAlt: 'Illustrative legacy Fabric Store workflow: Stock Entries, batches and gate passes',
+    imageLabel: 'legacy workflow illustration',
     placeholderClass: 'project-placeholder-2',
   },
   {

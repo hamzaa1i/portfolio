@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import '../styles/post-content.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 ---
@@ -12,12 +13,12 @@ import Footer from '../components/Footer.astro';
     <p>The form sends your name, email address, inquiry type, optional budget and message to my notification inboxes through Resend so I can respond. Your email is used as Reply-To. Please include only information needed for the inquiry, and avoid passwords, confidential records or sensitive personal information.</p>
     <p>The application does not store inquiries in a portfolio database or log their contents. The email service and receiving inboxes process and retain the messages. Hosting and security providers may retain operational request information according to their own policies.</p>
     <h2>Security checks</h2>
-    <p>Cloudflare Turnstile checks the visitor’s browser for abuse. The backend verifies its token, hostname and action. Vercel’s rate-limit service uses request information, including a client-IP bucket, to limit repeated attempts.</p>
+    <p>Cloudflare Turnstile checks the visitor’s browser for abuse. The backend verifies its token, hostname and action. The contact endpoint is configured to check Vercel’s rate-limit service using request information, including a client-IP bucket. If security or delivery services cannot be verified, it fails closed and offers direct email instead. A published rule alone does not establish successful end-to-end form delivery.</p>
     <h2>Local preferences and assets</h2>
     <p>Your theme and music preferences are stored in your browser. Music begins only after interaction. A service worker provides a small offline fallback for the homepage and favicon. It does not cache contact submissions. Fonts are served by this site. Following external links involves requests to their respective providers.</p>
     <h2>Questions or removal requests</h2>
     <p>Email <a href="mailto:hamzaali.dev@proton.me">hamzaali.dev@proton.me</a> to ask about an inquiry or request removal from my retained correspondence. Third-party retention is governed by each provider.</p>
-    <p class="text-sm text-text-secondary">Updated October 12, 2026.</p>
+    <p class="text-sm text-text-secondary">Updated October 13, 2026.</p>
   </article>
   <div class="py-10"></div><Footer />
 </Layout>
